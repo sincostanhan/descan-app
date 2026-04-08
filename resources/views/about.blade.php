@@ -7,7 +7,7 @@
         <div class="hero-content text-center py-8">
             {{-- <div class="max-w-md"> --}}
             <div class="max-w-3xl">
-                <h1 class="text-5xl font-bold">Tentang Kamiaaaa</h1>
+                <h1 class="text-5xl font-bold">Tentang Kami</h1>
                 <p class="py-6">
                     {{ $about->deskripsi }}
                 </p>
