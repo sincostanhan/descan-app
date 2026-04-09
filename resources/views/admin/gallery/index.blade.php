@@ -117,7 +117,8 @@
                                                     w-fit">
                                                         @foreach($gallery->photos as $photo)
                                                             <div class="carousel-item">
-                                                                <img src="{{ Storage::url($photo->foto_path) }}" 
+                                                                <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                                                {{-- <img src="{{ Storage::url($photo->foto_path) }}"  --}}
                                                                     alt="Foto {{ $gallery->nama_kegiatan }}"
                                                                     {{-- class="rounded-box" /> --}}
                                                                     class="rounded-box 

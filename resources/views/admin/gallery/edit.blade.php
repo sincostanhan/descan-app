@@ -109,8 +109,8 @@
                             @foreach($gallery->photos as $photo)
                                 <div class="carousel-item 
                                 relative group rounded-box overflow-hidden">
-                                    
-                                    <img src="{{ Storage::url($photo->foto_path) }}" 
+                                    <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                    {{-- <img src="{{ Storage::url($photo->foto_path) }}"  --}}
                                          alt="Foto {{ $gallery->nama_kegiatan }}"
                                          class="h-72 md:h-96 object-cover" />
                                     
