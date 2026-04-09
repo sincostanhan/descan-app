@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Actions\CreateGallery;
 use App\Actions\DeleteGallery;
+use App\Actions\DeleteGalleryPhoto;
+use App\Actions\UpdateGallery;
 use App\Http\Requests\StoreGalleryRequest;
+use App\Http\Requests\UpdateGalleryRequest;
 use App\Models\Gallery;
+use App\Models\GalleryPhoto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -64,15 +68,33 @@ class GalleryController extends Controller
      */
     public function edit(Gallery $gallery)
     {
-        //
+        // dd($gallery);
+        // Load relasi foto agar bisa ditampilkan di halaman edit
+        $gallery->load('photos');
+        return view('admin.gallery.edit', compact('gallery'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Gallery $gallery)
+    public function update(UpdateGalleryRequest $request, Gallery $gallery, UpdateGallery $updateGallery)
     {
-        //
+        // Panggil Action Class Update
+        $updateGallery->handle($gallery, $request->validated());
+
+        return redirect()->route('admin.gallery.index');
+    }
+
+    /**
+     * Remove SPECIFIC photo from storage. (Method Baru)
+     */
+    public function destroyPhoto(GalleryPhoto $photo, DeleteGalleryPhoto $deleteGalleryPhoto)
+    {
+        // Panggil Action Class untuk hapus 1 foto fisik & database
+        $deleteGalleryPhoto->handle($photo);
+
+        // Kembali ke halaman edit yang sama (refresh)
+        return back();
     }
 
     /**

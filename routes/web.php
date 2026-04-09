@@ -44,6 +44,8 @@ Route::prefix('admin')->name('admin.')->group(function () {
         ->name('gallery.edit');
     Route::patch('/galeri/{gallery}', [GalleryController::class, 'update'])
         ->name('gallery.update');
+    Route::delete('/galeri/foto/{photo}', [GalleryController::class, 'destroyPhoto'])
+        ->name('gallery.photo.destroy');
     Route::delete('/galeri/{gallery}', [GalleryController::class, 'destroy'])
         ->name('gallery.destroy');
 });
