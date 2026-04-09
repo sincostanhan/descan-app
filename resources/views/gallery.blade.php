@@ -12,8 +12,7 @@
                 
                 <div>
                     @foreach($gallery->photos as $photo)
-                        {{-- <img src="{{ asset('storage/' . $photo->foto_path) }}" alt="Foto {{ $gallery->nama_kegiatan }}" width="200"> --}}
-                        <img src="{{ asset('storage/app/public/' . $photo->foto_path) }}" alt="Foto {{ $gallery->nama_kegiatan }}" width="200">
+                        <img src="{{ asset('storage/' . $photo->foto_path) }}" alt="Foto {{ $gallery->nama_kegiatan }}" width="200">
                     @endforeach
                 </div>
             </div>
