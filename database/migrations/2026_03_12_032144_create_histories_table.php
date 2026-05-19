@@ -16,6 +16,7 @@ return new class extends Migration
             
             $table->string('penulis')->nullable();
             $table->text('konten');
+            $table->boolean('is_active')->default(false);
             
             $table->timestamps();
         });

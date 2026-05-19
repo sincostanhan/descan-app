@@ -2,9 +2,13 @@
     'title' => 'Kelurahan Baadia'
 ])
 
+@php
+    $activeTheme = \App\Models\Setting::first()->theme_name ?? 'emerald';
+@endphp
+
 <!DOCTYPE html>
 {{-- <html lang="en" data-theme="emerald"> --}}
-<html lang="id" data-theme="emerald">
+<html lang="id" data-theme="{{ $activeTheme }}">
 {{-- <html lang="en" data-theme="dark"> --}}
 <head>
     <meta charset="UTF-8">

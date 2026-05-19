@@ -22,7 +22,8 @@ class UpdateGalleryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'nama_kegiatan' => ['required', 'string', 'max:255'],
+            // 'nama_kegiatan' => ['required', 'string', 'max:255'],
+            'judul' => ['required', 'string', 'max:255'],
             'photos' => ['required', 'array'], // Pastikan input foto berupa array
             'photos.*' => ['image', 'mimes:jpeg,png,jpg', 'max:2048'] // Validasi per-file max 2MB
         ];

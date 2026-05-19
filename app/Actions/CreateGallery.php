@@ -12,7 +12,8 @@ class CreateGallery
 
         // 1. Simpan nama kegiatan (otomatis memicu Observer)
         $gallery = Gallery::create([
-            'nama_kegiatan' => $attributes['nama_kegiatan']
+            // 'nama_kegiatan' => $attributes['nama_kegiatan']
+            'judul' => $attributes['judul']
         ]);
 
         // 2. Logika upload fisik file gambar

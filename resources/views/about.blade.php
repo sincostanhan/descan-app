@@ -1,19 +1,9 @@
 <x-layout title="Tentang Kami">
-    {{--o Centered hero --}}
-    {{-- <div class="hero bg-base-200 min-h-screen"> --}}
-    {{-- <div class="hero bg-base-200 mb-8"> --}}
-    <div class="hero bg-base-100">
-        {{-- <div class="hero-content text-center"> --}}
-        <div class="hero-content text-center py-8">
-            {{-- <div class="max-w-md"> --}}
-            <div class="max-w-3xl">
-                <h1 class="text-5xl font-bold">Tentang Kami</h1>
-                <p class="py-6">
-                    {{ $about->deskripsi }}
-                </p>
-            </div>
-        </div>
-    </div>
+    <x-hero 
+        title="Tentang Kami"
+        {{-- subtitle="$about->deskripsi" --}}
+        :subtitle="$about->deskripsi"
+    />
 
     {{-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8"> --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">

@@ -1,11 +1,7 @@
-<x-layout-admin title="Tambah Kegiatan Baru">
-    <div class="hero bg-base-100">
-        <div class="hero-content text-center py-8">
-            <div class="max-w-3xl">
-                <h1 class="text-5xl font-bold">Tambah Kegiatan Baru</h1>
-            </div>
-        </div>
-    </div>
+<x-layout-admin title="Tambah Galeri Kegiatan">
+    <x-hero
+        title="Tambah Galeri Kegiatan"
+    />
 
     <div class="max-w-4xl mx-auto px-4 lg:px-0 mb-12">
     {{-- <div class="max-w-4xl mx-auto px-4 lg:px-0 mb-12
@@ -25,17 +21,22 @@
                     mb-6">
                         {{-- <legend class="fieldset-legend">Nama Kegiatan</legend> --}}
                         <legend class="fieldset-legend 
-                        text-base">Nama Kegiatan</legend>
+                        text-base">Judul Galeri</legend>
                         <input type="text" 
-                               id="nama_kegiatan" 
-                               name="nama_kegiatan" 
-                               value="{{ old('nama_kegiatan') }}" 
+                               {{-- id="nama_kegiatan"  --}}
+                               id="judul" 
+                               {{-- name="nama_kegiatan"  --}}
+                               name="judul" 
+                               {{-- value="{{ old('nama_kegiatan') }}"  --}}
+                               value="{{ old('judul') }}" 
                                required 
-                               placeholder="Masukkan nama kegiatan ..." 
+                               {{-- placeholder="Masukkan nama kegiatan ..."  --}}
+                               placeholder="Masukkan judul galeri ..." 
                                class="input w-full 
                                {{-- @error('nama_kegiatan') input-error @enderror"  --}}
                                "/>
-                        <x-forms.error name="nama_kegiatan" />
+                        {{-- <x-forms.error name="nama_kegiatan" /> --}}
+                        <x-forms.error name="judul" />
                     </fieldset>
 
                     <fieldset class="fieldset w-full 

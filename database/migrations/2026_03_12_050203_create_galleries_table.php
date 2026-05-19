@@ -13,7 +13,8 @@ return new class extends Migration
     {
         Schema::create('galleries', function (Blueprint $table) {
             $table->id();
-            $table->string('nama_kegiatan');
+            // $table->string('nama_kegiatan');
+            $table->string('judul');
             $table->timestamps();
         });
     }

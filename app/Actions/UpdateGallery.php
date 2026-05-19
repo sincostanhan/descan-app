@@ -10,7 +10,8 @@ class UpdateGallery
     {
         // 1. Update nama kegiatan
         $gallery->update([
-            'nama_kegiatan' => $attributes['nama_kegiatan']
+            // 'nama_kegiatan' => $attributes['nama_kegiatan']
+            'judul' => $attributes['judul']
         ]);
 
         // 2. Jika ada tambahan foto baru, simpan seperti biasa

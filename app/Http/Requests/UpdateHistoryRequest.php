@@ -15,6 +15,13 @@ class UpdateHistoryRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        // Ubah input checkbox menjadi boolean
+        $this->merge([
+            'is_active' => $this->has('is_active'),
+        ]);
+    }
     /**
      * Get the validation rules that apply to the request.
      *
@@ -25,6 +32,7 @@ class UpdateHistoryRequest extends FormRequest
         return [
             'penulis' => ['nullable', 'string', 'max:255'],
             'konten' => ['required', 'string'],
+            'is_active' => ['boolean'],
         ];
     }
 }

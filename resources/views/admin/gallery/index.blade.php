@@ -1,11 +1,7 @@
-<x-layout-admin title="Kelola Galeri Kegiatan">
-    <div class="hero bg-base-100">
-        <div class="hero-content text-center py-8">
-            <div class="max-w-3xl">
-                <h1 class="text-5xl font-bold">Galeri Kegiatan</h1>
-            </div>
-        </div>
-    </div>
+<x-layout-admin title="Kelola Galeri">
+    <x-hero
+        title="Galeri"
+    />
     
     <div class="max-w-6xl mx-auto px-4 lg:px-0 mb-12">
         <x-flash-message />
@@ -18,7 +14,8 @@
             btn-secondary"
             href="{{ route('admin.gallery.create') }}">
                 <x-lucide-plus class="w-5 h-5" />
-                Tambah Kegiatan Baru
+                {{-- Tambah Galeri Baru --}}
+                Tambah Galeri
             </a>
         </div>
 
@@ -27,15 +24,10 @@
         shadow-lg">
             <div class="card-body">
                 <h2 class="card-title text-secondary 
-                text-xl mb-4 border-b pb-2">Daftar Kegiatan</h2>
+                text-xl mb-4 border-b pb-2">Daftar Galeri</h2>
 
                 @if($galleries->isEmpty())
-                    <div role="alert" class="alert alert-warning">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 shrink-0 stroke-current" fill="none" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                        </svg>
-                        <span>Belum ada galeri.</span>
-                    </div>
+                    <x-empty-alert message="Belum ada galeri." />
                 @else
                     <div class="overflow-x-auto 
                     rounded-box border-base-200 
@@ -46,7 +38,8 @@
                             text-sm">
                                 <tr>
                                     <th class="w-16">No</th>
-                                    <th>Nama Kegiatan</th>
+                                    {{-- <th>Nama Kegiatan</th> --}}
+                                    <th>Judul Galeri</th>
                                     <th>Jumlah Foto</th>
                                     <th>Tanggal Update</th>
                                     <th class="text-center">Aksi</th>
@@ -56,14 +49,16 @@
                                 @foreach($galleries as $gallery)
                                     <tr>
                                         <th>{{ $loop->iteration }}</th>
-                                        <td class="font-medium">{{ $gallery->nama_kegiatan }}</td>
+                                        {{-- <td class="font-medium">{{ $gallery->nama_kegiatan }}</td> --}}
+                                        <td class="font-medium">{{ $gallery->judul }}</td>
                                         <td>
                                             <div class="badge badge-outline badge-secondary">{{ $gallery->photos->count() }} Foto</div>
                                         </td>
                                         <td>
                                             {{ $gallery->updated_at->format('d M Y') }}
                                         </td>
-                                        <td class="text-center space-x-1">
+                                        <td class="text-center space-x-1
+                                        whitespace-nowrap">
                                             {{-- <a href="{{ route('admin.gallery.show', $gallery->id) }}" class="btn btn-info btn-sm 
                                                 text-white">
                                                 Lihat
@@ -77,7 +72,7 @@
                                                 text-white">
                                                 Edit
                                             </a>
-                                            <form action="{{ route('admin.gallery.destroy', $gallery->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus kegiatan ini beserta semua fotonya?');" class="inline-block">
+                                            <form action="{{ route('admin.gallery.destroy', $gallery->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus galeri ini?');" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-error btn-sm
@@ -97,7 +92,7 @@
                                             
                                             {{-- <h3 class="text-lg font-bold mb-1">{{ $gallery->nama_kegiatan }}</h3> --}}
                                             {{-- <h3 class="text-xl font-bold mb-1">{{ $gallery->nama_kegiatan }}</h3> --}}
-                                            <h3 class="text-2xl font-bold mb-1">{{ $gallery->nama_kegiatan }}</h3>
+                                            <h3 class="text-2xl font-bold mb-1">{{ $gallery->judul }}</h3>
                                             {{-- <p class="text-base text-base-content/70 mb-6">Diperbarui pada: {{ $gallery->updated_at->format('d F Y, H:i') }}</p> --}}
                                             <p class="text-sm text-base-content/70 mb-6">Diperbarui pada: {{ $gallery->updated_at->format('d F Y, H:i') }}</p>
                                             
@@ -119,7 +114,7 @@
                                                             <div class="carousel-item">
                                                                 <img src="{{ asset('storage/' . $photo->foto_path) }}"
                                                                 {{-- <img src="{{ Storage::url($photo->foto_path) }}"  --}}
-                                                                    alt="Foto {{ $gallery->nama_kegiatan }}"
+                                                                    alt="Foto {{ $gallery->judul }}"
                                                                     {{-- class="rounded-box" /> --}}
                                                                     class="rounded-box 
                                                                     h-72 md:h-96 object-cover" />

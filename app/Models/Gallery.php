@@ -2,11 +2,16 @@
 
 namespace App\Models;
 
+use App\Traits\BelongsToVillage;
 use Illuminate\Database\Eloquent\Model;
 
 class Gallery extends Model
 {
-    protected $fillable = ['nama_kegiatan'];
+    use BelongsToVillage; // Gunakan Trait
+
+    // protected $guarded = ['id'];
+    // protected $fillable = ['nama_kegiatan'];
+    protected $fillable = ['judul'];
 
     // Relasi: Satu Gallery punya banyak Photo
     public function photos()

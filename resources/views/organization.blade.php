@@ -1,11 +1,7 @@
 <x-layout title="Struktur Organisasi">
-    <div class="hero bg-base-100">
-        <div class="hero-content text-center py-8">
-            <div class="max-w-3xl">
-                <h1 class="text-5xl font-bold">Struktur Organisasi</h1>
-            </div>
-        </div>
-    </div>
+    <x-hero
+        title="Struktur Organisasi"
+    />
 
     {{-- <div class="max-w-6xl mx-auto px-4 lg:px-0 space-y-6 mb-8"> --}}
     <div class="max-w-6xl mx-auto px-4 lg:px-0 space-y-6">
