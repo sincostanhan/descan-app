@@ -10,17 +10,62 @@ use App\Http\Requests\PreviewStatisticalTableRequest;
 use App\Http\Requests\StoreStatisticalTableRequest;
 use App\Http\Requests\UpdateStatisticalTableRequest;
 use App\Models\StatisticalTable;
+use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
 
 class StatisticalTableController extends Controller
 {
+    use HasPaginationLimit;
+
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // public function index(Request $request)
+    // {
+    //     $perPage = $this->getPaginationLimit($request);
+
+    //     $tables = StatisticalTable::latest()
+    //         ->paginate($perPage);
+        
+    //     return view('admin.statistical-table.index', compact('tables', 'perPage'));
+    // }
+    public function index(Request $request)
     {
-        $tables = StatisticalTable::latest()->get();
-        return view('admin.statistical-table.index', compact('tables'));
+        $perPage = $this->getPaginationLimit($request);
+
+        $sortBy = $request->get('sort_by');
+        $sortDir = strtolower($request->get('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        // $search = $request->get('search');
+
+        // $query = StatisticalTable::query();
+
+        // if ($search) {
+        //     $query->where('title', 'like', '%' . $search . '%');
+        // }
+
+        $query = StatisticalTable::query()
+            ->when($request->get('search'), function ($query, $search) {
+                $query->where('title', 'like', '%' . $search . '%');
+            });
+
+        if ($sortBy) {
+            $allowedSorts = ['publication', 'title', 'updated_at'];
+            if (in_array($sortBy, $allowedSorts)) {
+                if ($sortBy === 'publication') {
+                    $query->orderBy('publication', $sortDir)->orderBy('chapter', 'asc');
+                } else {
+                    $query->orderBy($sortBy, $sortDir);
+                }
+            }
+        } else {
+            // Default sorting
+            $query->orderBy('chapter', 'asc')->orderBy('created_at', 'desc');
+        }
+
+        $tables = $query->paginate($perPage);
+
+        return view('admin.statistical-table.index', compact('tables', 'perPage'));
     }
 
     /**
@@ -66,11 +111,15 @@ class StatisticalTableController extends Controller
      */
     public function edit(StatisticalTable $statistical_table)
     {
+        // Muat relasi chart agar bisa dipakai di form
+        $statistical_table->load('chart');
+
         // Mengirim data tabel yang sudah ada ke view edit
         return view('admin.statistical-table.edit', [
             'table' => $statistical_table,
             'columns' => $statistical_table->columns,
             'content' => $statistical_table->content,
+            'chart' => $statistical_table->chart,
         ]);
     }
 

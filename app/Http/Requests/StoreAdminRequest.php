@@ -31,11 +31,37 @@ class StoreAdminRequest extends FormRequest
         ];
     }
     
+    /**
+     * Menerjemahkan nama field/kolom
+     */
+    public function attributes(): array
+    {
+        return [
+            'name'       => 'Nama Lengkap',
+            'username'   => 'Username',
+            'password'   => 'Password',
+            'village_id' => 'Kelurahan/Desa',
+        ];
+    }
+
+    /**
+     * Menentukan format pesan error-nya
+     */
     public function messages(): array
     {
         return [
-            'username.alpha_dash' => 'Username hanya boleh berisi huruf, angka, strip (-), dan garis bawah (_), tanpa spasi.',
-            'username.unique' => 'Username ini sudah digunakan, silakan pilih yang lain.'
+            'required'   => ':attribute wajib diisi.',
+            'string'     => ':attribute harus berupa teks.',
+            'max'        => ':attribute maksimal :max karakter.',
+            
+            // Aturan spesifik
+            'min'        => ':attribute minimal :min karakter.',
+            'confirmed'  => 'Konfirmasi :attribute tidak cocok.',
+            'exists'     => ':attribute yang dipilih tidak valid atau tidak terdaftar.',
+            
+            // Aturan yang Anda buat sebelumnya, disesuaikan dengan :attribute
+            'alpha_dash' => ':attribute hanya boleh berisi huruf, angka, strip (-), dan garis bawah (_), tanpa spasi.',
+            'unique'     => ':attribute ini sudah digunakan. Silakan pilih yang lain.',
         ];
     }
 }

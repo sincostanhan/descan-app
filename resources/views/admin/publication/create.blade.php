@@ -1,4 +1,4 @@
-<x-layout-admin title="Tambah Publikasi Baru">
+<x-layout-admin title="Tambah Publikasi">
     <x-hero
         title="Tambah Publikasi Baru"
     />

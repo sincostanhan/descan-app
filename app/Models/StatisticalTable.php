@@ -3,12 +3,14 @@
 namespace App\Models;
 
 use App\Traits\BelongsToVillage;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Str;
 
 class StatisticalTable extends Model
 {
-    use BelongsToVillage; // Gunakan Trait
+    use HasFactory, BelongsToVillage;
 
     protected $guarded = ['id'];
 
@@ -28,5 +30,14 @@ class StatisticalTable extends Model
         static::creating(function ($table) {
             $table->slug = Str::slug($table->title);
         });
+    }
+
+    /**
+     * Relasi One-to-One ke model StatisticChart.
+     * Satu tabel statistik HANYA memiliki SATU grafik.
+     */
+    public function chart(): HasOne
+    {
+        return $this->hasOne(StatisticChart::class);
     }
 }

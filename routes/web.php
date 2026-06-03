@@ -11,7 +11,9 @@ use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InfographicController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\PublicStatisticController;
 use App\Http\Controllers\StatisticalTableController;
+use App\Http\Controllers\StatisticChartController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -57,6 +59,8 @@ Route::get('/organisasi', [OrganizationController::class, 'index'])->name('organ
 Route::get('/galeri', [GalleryController::class, 'indexPublik'])->name('gallery.index');
 Route::get('/publikasi', [PublicationController::class, 'indexPublic'])->name('publication.index');
 Route::get('/infografis', [InfographicController::class, 'indexPublic'])->name('infographic.index');
+Route::get('/statistik', [PublicStatisticController::class, 'index'])->name('public.statistic.index');
+Route::get('/statistik/{statistic}', [PublicStatisticController::class, 'show'])->name('public.statistic.show');
 
 // Route::middleware('guest')->group(function () {
 //     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -111,10 +115,19 @@ Route::middleware(['auth'])->group(function () {
         // 1. custom route (pratinjau)
         Route::post('/statistik/pratinjau', [StatisticalTableController::class, 'preview'])
             ->name('statistical-table.preview');
+        // 2. Resource tabel statistik utama
         Route::resource('statistik', StatisticalTableController::class)
             ->names('statistical-table')
             ->parameters(['statistik' => 'statistical_table'])
             ->except(['show']);
+        // 3. Nested resource untuk grafik (Disesuaikan agar seragam dengan parent-nya)
+        Route::resource('statistik.charts', StatisticChartController::class)
+            ->names('statistic-chart') // Nanti kita bisa panggil route('statistic-chart.create')
+            ->parameters([
+                'statistik' => 'statistical_table', // Mengambil ID dari tabel statistik
+                'charts' => 'statistic_chart'
+            ])
+            ->except(['index', 'show']);
 
         Route::get('/pengaturan', [SettingController::class, 'edit'])->name('setting.edit');
         Route::patch('/pengaturan', [SettingController::class, 'update'])->name('setting.update');

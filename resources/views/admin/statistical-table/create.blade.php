@@ -1,4 +1,4 @@
-<x-layout-admin title="Tambah Tabel Statistik Baru">
+<x-layout-admin title="Tambah Tabel Statistik">
     <x-hero
         title="Tambah Tabel Statistik"
     />

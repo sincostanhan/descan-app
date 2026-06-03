@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Observers\GalleryObserver;
 use App\Observers\HistoryObserver;
+use Illuminate\Pagination\Paginator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -29,6 +30,8 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Publication::observe(\App\Observers\PublicationObserver::class);
         \App\Models\Infographic::observe(\App\Observers\InfographicObserver::class);
         \App\Models\StatisticalTable::observe(\App\Observers\StatisticalTableObserver::class);
+        // Gunakan view pagination custom DaisyUI
+        Paginator::defaultView('vendor.pagination.daisyui');
 
         // Bagikan data setting hanya ke komponen nav dan nav-admin
         View::composer(['components.nav', 'components.nav-admin'], function ($view) {

@@ -1,9 +1,24 @@
 @props([
-    'title' => 'Kelurahan Baadia'
+    'title' => ''
 ])
 
 @php
     $activeTheme = \App\Models\Setting::first()->theme_name ?? 'emerald';
+
+    if (isset($currentVillage)) {
+        $nama = trim($currentVillage->name);
+        
+        if (str_contains(strtolower($nama), 'kelurahan')) {
+            $displayTitle = ucwords($nama);
+        } else {
+            $displayTitle = 'Kelurahan ' . ucwords($nama);
+        }
+    } else {
+        $displayTitle = 'Kelurahan Cantik';
+    }
+    
+    // Format untuk Publik
+    $pageTitle = $title ? "{$displayTitle} | {$title}" : $displayTitle;
 @endphp
 
 <!DOCTYPE html>
@@ -13,7 +28,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title }}</title>
+    {{-- <title>{{ $title }}</title> --}}
+    <title>{{ $pageTitle }}</title>
     <style>
     </style>
 

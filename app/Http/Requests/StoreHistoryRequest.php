@@ -26,4 +26,29 @@ class StoreHistoryRequest extends FormRequest
             'konten' => ['required', 'string'],
         ];
     }
+
+    /**
+     * Menerjemahkan nama field/kolom
+     */
+    public function attributes(): array
+    {
+        return [
+            'penulis' => 'Penulis',
+            // Anda bisa menggunakan 'Konten' atau 'Isi Sejarah' 
+            // agar lebih deskriptif di sisi pengguna
+            'konten'  => 'Konten Sejarah', 
+        ];
+    }
+
+    /**
+     * Menentukan format pesan error-nya
+     */
+    public function messages(): array
+    {
+        return [
+            'required' => ':attribute wajib diisi.',
+            'string'   => ':attribute harus berupa teks.',
+            'max'      => ':attribute maksimal :max karakter.',
+        ];
+    }
 }

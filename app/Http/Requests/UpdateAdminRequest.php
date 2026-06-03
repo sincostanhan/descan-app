@@ -37,12 +37,39 @@ class UpdateAdminRequest extends FormRequest
             'village_id' => ['required', 'exists:villages,id'],
         ];
     }
-    
+
+    /**
+     * Menerjemahkan nama field/kolom
+     */
+    public function attributes(): array
+    {
+        return [
+            'name'       => 'Nama Lengkap',
+            'username'   => 'Username',
+            'password'   => 'Password baru', // Diperjelas karena ini form edit
+            'village_id' => 'Kelurahan/Desa',
+        ];
+    }
+
+    /**
+     * Menentukan format pesan error-nya secara dinamis
+     */
     public function messages(): array
     {
         return [
-            'username.alpha_dash' => 'Username hanya boleh berisi huruf, angka, strip, dan garis bawah.',
-            'username.unique' => 'Username sudah digunakan.',
+            // Aturan Umum
+            'required'   => ':attribute wajib diisi.',
+            'string'     => ':attribute harus berupa teks.',
+            'max'        => ':attribute maksimal :max karakter.',
+            
+            // Aturan Spesifik
+            'min'        => ':attribute minimal :min karakter.',
+            'confirmed'  => 'Konfirmasi :attribute tidak cocok.',
+            'exists'     => ':attribute yang dipilih tidak valid atau tidak terdaftar.',
+            
+            // Aturan Khusus Username
+            'alpha_dash' => ':attribute hanya boleh berisi huruf, angka, strip (-), dan garis bawah (_).',
+            'unique'     => ':attribute sudah digunakan. Silakan pilih yang lain.',
         ];
     }
 }

@@ -1,4 +1,4 @@
-<x-layout title="Sejarah Kelurahan">
+<x-layout title="Sejarah">
     <div class="hero bg-base-100">
         <div class="hero-content text-center py-8">
             <div class="max-w-3xl">

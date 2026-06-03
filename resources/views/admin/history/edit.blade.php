@@ -1,4 +1,4 @@
-<x-layout-admin title="Pengaturan Sejarah Kelurahan">
+<x-layout-admin title="Sejarah Kelurahan">
     <x-hero
         title="Sejarah Kelurahan"
     />

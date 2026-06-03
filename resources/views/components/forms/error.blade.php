@@ -4,6 +4,7 @@
 ])
 
 @error($name)
-    <br>
-    <span style="color: red; font-size: 12px;">{{ $message }}</span>
+    {{-- <br>
+    <span style="color: red; font-size: 12px;">{{ $message }}</span> --}}
+    <p class="label text-error text-xs mt-1">{{ $message }}</p>
 @enderror

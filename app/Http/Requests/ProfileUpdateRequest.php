@@ -28,4 +28,32 @@ class ProfileUpdateRequest extends FormRequest
             ],
         ];
     }
+
+    /**
+     * Menerjemahkan nama field/kolom
+     */
+    public function attributes(): array
+    {
+        return [
+            'name'  => 'Nama Lengkap',
+            'email' => 'Alamat Email',
+        ];
+    }
+
+    /**
+     * Menentukan format pesan error-nya
+     */
+    public function messages(): array
+    {
+        return [
+            'required'  => ':attribute wajib diisi.',
+            'string'    => ':attribute harus berupa teks.',
+            'max'       => ':attribute maksimal :max karakter.',
+            
+            // Pesan untuk rule spesifik email
+            'lowercase' => ':attribute harus menggunakan huruf kecil semua.',
+            'email'     => 'Format :attribute tidak valid.',
+            'unique'    => ':attribute ini sudah digunakan oleh pengguna lain. Silakan gunakan yang berbeda.',
+        ];
+    }
 }

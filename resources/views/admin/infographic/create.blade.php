@@ -1,4 +1,4 @@
-<x-layout-admin title="Tambah Infografis Baru">
+<x-layout-admin title="Tambah Infografis">
     <x-hero
         title="Tambah Infografis Baru"
     />

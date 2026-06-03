@@ -27,4 +27,28 @@ class LoginRequest extends FormRequest
             'password' => ['required', 'string'],
         ];
     }
+
+    /**
+     * Menerjemahkan nama field/kolom
+     */
+    public function attributes(): array
+    {
+        return [
+            // Anda bisa menggunakan 'Nama Pengguna' dan 'Kata Sandi' 
+            // jika ingin menggunakan bahasa Indonesia yang lebih baku.
+            'username' => 'Username', 
+            'password' => 'Password',
+        ];
+    }
+
+    /**
+     * Menentukan format pesan error
+     */
+    public function messages(): array
+    {
+        return [
+            'required' => ':attribute wajib diisi.',
+            'string'   => ':attribute format tidak valid.', // Disesuaikan agar lebih natural untuk form login
+        ];
+    }
 }

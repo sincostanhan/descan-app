@@ -1,4 +1,4 @@
-<x-layout-admin title="Kelola Galeri">
+<x-layout-admin title="Galeri">
     <x-hero
         title="Galeri"
     />

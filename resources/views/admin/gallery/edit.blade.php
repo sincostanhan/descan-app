@@ -1,4 +1,4 @@
-<x-layout-admin title="Edit Kegiatan">
+<x-layout-admin title="Edit Galeri Kegiatan">
     <x-hero
         title="Edit Galeri Kegiatan"
     />

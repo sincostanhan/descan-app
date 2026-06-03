@@ -1,4 +1,4 @@
-<x-layout-admin-bps title="Tambah Admin Kelurahan">
+<x-layout-admin-bps title="Panel Admin BPS | Tambah Admin">
     <x-hero
         title="Tambah Admin"
     />

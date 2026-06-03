@@ -1,4 +1,4 @@
-<x-layout-admin-bps title="Edit Admin Kelurahan">
+<x-layout-admin-bps title="Panel Admin BPS | Edit Admin">
     <x-hero
         title="Edit Admin"
     />

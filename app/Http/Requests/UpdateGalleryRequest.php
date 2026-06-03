@@ -28,4 +28,38 @@ class UpdateGalleryRequest extends FormRequest
             'photos.*' => ['image', 'mimes:jpeg,png,jpg', 'max:2048'] // Validasi per-file max 2MB
         ];
     }
+
+    /**
+     * Menerjemahkan nama field/kolom
+     */
+    public function attributes(): array
+    {
+        return [
+            'judul'    => 'Judul',
+            'photos'   => 'Daftar Foto',
+            'photos.*' => 'Foto',
+        ];
+    }
+
+    /**
+     * Menentukan format pesan error-nya
+     */
+    public function messages(): array
+    {
+        return [
+            // Pesan umum
+            'required' => ':attribute wajib diisi.',
+            'string'   => ':attribute harus berupa teks.',
+            'array'    => ':attribute format tidak valid.',
+            
+            // Pesan spesifik untuk array file gambar
+            'photos.required' => 'Minimal satu foto wajib diunggah.', // Jika dikembalikan ke required
+            'image'           => ':attribute harus berupa file gambar yang valid.',
+            'mimes'           => 'Format :attribute hanya boleh: :values.',
+            
+            // Memisahkan pesan 'max' antara string (judul) dan file (foto)
+            'judul.max'    => ':attribute maksimal :max karakter.',
+            'photos.*.max' => 'Ukuran :attribute maksimal :max KB (2 MB).',
+        ];
+    }
 }

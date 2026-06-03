@@ -28,4 +28,27 @@ class UpdateHomeRequest extends FormRequest
             'output' => ['required', 'string'],
         ];
     }
+
+    /**
+     * Menerjemahkan nama field/kolom
+     */
+    public function attributes(): array
+    {
+        return [
+            'latar_belakang' => 'Latar Belakang',
+            'tujuan'         => 'Tujuan',
+            'output'         => 'Output',
+        ];
+    }
+
+    /**
+     * Menentukan format pesan error-nya secara dinamis
+     */
+    public function messages(): array
+    {
+        return [
+            'required' => ':attribute wajib diisi.',
+            'string'   => ':attribute harus berupa teks.',
+        ];
+    }
 }

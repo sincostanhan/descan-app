@@ -6,6 +6,7 @@ use App\Models\Village;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\View;
 use Symfony\Component\HttpFoundation\Response;
 
 class InitializeTenancy
@@ -28,6 +29,9 @@ class InitializeTenancy
                 // Simpan ID kelurahan ke container aplikasi
                 app()->instance('current_village_id', $village->id);
                 
+                // Bagikan data village ke semua view agar mudah diakses di layout
+                View::share('currentVillage', $village);
+
                 // Set default parameter url untuk seluruh aplikasi
                 URL::defaults(['subdomain' => $subdomain]);
 

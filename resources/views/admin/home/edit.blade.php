@@ -1,4 +1,4 @@
-<x-layout-admin title="Kelurahan Cantik">
+<x-layout-admin title="Beranda">
     <x-hero 
         title="Kelurahan Cantik" 
         subtitle="Kelola informasi Latar Belakang, Tujuan, dan Output Kelurahan Cantik" 

@@ -33,12 +33,35 @@ class UpdateAboutRequest extends FormRequest
         ];
     }
 
+    /**
+     * Menerjemahkan nama field/kolom agar lebih deskriptif
+     */
+    public function attributes(): array
+    {
+        return [
+            // Menambahkan kata 'kelurahan' sesuai dengan preferensi yang Anda tulis sebelumnya
+            'deskripsi'     => 'Deskripsi kelurahan', 
+            'batas_utara'   => 'Batas Utara',
+            'batas_barat'   => 'Batas Barat',
+            'batas_selatan' => 'Batas Selatan',
+            'batas_timur'   => 'Batas Timur',
+            'visi'          => 'Visi kelurahan',
+            'misi'          => 'Misi kelurahan',
+        ];
+    }
+
+    /**
+     * Menentukan format pesan error-nya secara dinamis
+     */
     public function messages(): array
     {
         return [
-            'deskripsi.required' => 'Deskripsi kelurahan tidak boleh kosong.',
-            'visi.required'      => 'Visi kelurahan tidak boleh kosong.',
-            'visi.max'           => 'Teks Visi terlalu panjang, maksimal 255 karakter.',
+            // Anda sebelumnya menggunakan 'tidak boleh kosong', kita bisa menerapkannya di sini
+            'required' => ':attribute tidak boleh kosong.',
+            'string'   => ':attribute harus berupa teks.',
+            
+            // Format dinamis untuk aturan max
+            'max'      => 'Teks :attribute terlalu panjang, maksimal :max karakter.',
         ];
     }
 }

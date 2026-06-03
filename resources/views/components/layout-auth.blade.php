@@ -1,5 +1,5 @@
 @props([
-    'title' => 'Login'
+    'title' => 'Login Sistem'
 ])
 
 {{-- @php

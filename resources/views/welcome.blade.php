@@ -1,4 +1,4 @@
-<x-layout title="Kelurahan Cantik">
+<x-layout title="Beranda">
     <x-hero 
         title="Kelurahan Cantik" 
     />

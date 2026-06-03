@@ -35,4 +35,29 @@ class UpdateHistoryRequest extends FormRequest
             'is_active' => ['boolean'],
         ];
     }
+
+    /**
+     * Menerjemahkan nama field/kolom
+     */
+    public function attributes(): array
+    {
+        return [
+            'penulis'   => 'Penulis',
+            'konten'    => 'Konten Sejarah',
+            'is_active' => 'Status Aktif',
+        ];
+    }
+
+    /**
+     * Menentukan format pesan error-nya secara dinamis
+     */
+    public function messages(): array
+    {
+        return [
+            'required' => ':attribute wajib diisi.',
+            'string'   => ':attribute harus berupa teks.',
+            'max'      => ':attribute maksimal :max karakter.',
+            'boolean'  => 'Pilihan :attribute tidak valid.',
+        ];
+    }
 }

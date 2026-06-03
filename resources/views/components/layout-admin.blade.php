@@ -1,10 +1,27 @@
 @props([
-    'title' => 'Panel Admin Kelurahan Baadia',
+    // 'title' => 'Panel Admin Kelurahan Baadia',
+    'title' => '',
     'showNav' => true
 ])
 
 @php
     $activeTheme = \App\Models\Setting::first()->theme_name ?? 'emerald';
+
+    if (isset($currentVillage)) {
+        $nama = trim($currentVillage->name);
+        
+        if (str_contains(strtolower($nama), 'kelurahan')) {
+            $displayTitle = ucwords($nama);
+        } else {
+            $displayTitle = 'Kelurahan ' . ucwords($nama);
+        }
+    } else {
+        $displayTitle = 'Kelurahan Cantik';
+    }
+    
+    // Format untuk Admin (Ada tambahan string "Panel Admin")
+    // $pageTitle = $title ? "Panel Admin {$displayTitle} | {$title}" : "Panel Admin {$displayTitle}";
+    $pageTitle = "Admin | {$title}";
 @endphp
 
 <!DOCTYPE html>
@@ -12,7 +29,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ $title }}</title>
+    {{-- <title>{{ $title }}</title> --}}
+    <title>{{ $pageTitle }}</title>
     <style>
     </style>
 

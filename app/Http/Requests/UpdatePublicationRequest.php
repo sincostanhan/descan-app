@@ -30,4 +30,37 @@ class UpdatePublicationRequest extends FormRequest
             'cover_base64' => ['nullable', 'string']
         ];
     }
+
+    /**
+     * Menerjemahkan nama field/kolom
+     */
+    public function attributes(): array
+    {
+        return [
+            'title'        => 'Judul Publikasi',
+            'description'  => 'Deskripsi',
+            'file'         => 'Dokumen Publikasi',
+            'cover_base64' => 'Sampul (Cover)',
+        ];
+    }
+
+    /**
+     * Menentukan format pesan error-nya secara dinamis
+     */
+    public function messages(): array
+    {
+        return [
+            // Pesan umum untuk input teks
+            'required' => ':attribute wajib diisi.',
+            'string'   => ':attribute harus berupa teks.',
+            
+            // Pesan spesifik untuk unggahan file (jika admin memutuskan untuk mengubah dokumen)
+            'file'     => ':attribute harus berupa file yang valid.',
+            'mimes'    => 'Format :attribute hanya boleh berupa PDF.',
+            
+            // Pemisahan aturan batas (max)
+            'title.max' => ':attribute maksimal :max karakter.',
+            'file.max'  => 'Ukuran :attribute maksimal :max KB (5 MB).',
+        ];
+    }
 }

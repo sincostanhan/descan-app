@@ -8,25 +8,83 @@ use App\Actions\UpdatePublication;
 use App\Http\Requests\StorePublicationRequest;
 use App\Http\Requests\UpdatePublicationRequest;
 use App\Models\Publication;
+use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
 
 class PublicationController extends Controller
 {
+    use HasPaginationLimit;
 
     // Halaman Publik
-    public function indexPublic()
+    public function indexPublic(Request $request)
     {
-        $publications = Publication::latest()->get();
-        return view('publication', compact('publications'));
+        $perPage = $this->getPaginationLimit($request);
+        // $search = $request->get('search');
+
+        // $query = Publication::query();
+
+        // if ($search) {
+        //     $query->where('title', 'like', '%' . $search . '%');
+        // }
+
+        $query = Publication::query()
+            ->when($request->get('search'), function ($query, $search) {
+                $query->where('title', 'like', '%' . $search . '%');
+            });
+
+        // $publications = Publication::latest()
+        $publications = $query
+            ->orderBy('id', 'desc')
+            ->paginate($perPage);
+            
+        return view('publication', compact('publications', 'perPage'));
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    // public function index(Request $request)
+    // {
+    //     $perPage = $this->getPaginationLimit($request);
+
+    //     $publications = Publication::latest()
+    //         ->orderBy('id', 'desc')
+    //         ->paginate($perPage);
+
+    //     return view('admin.publication.index', compact('publications', 'perPage'));
+    // }
+    public function index(Request $request)
     {
-        $publications = Publication::latest()->get();
-        return view('admin.publication.index', compact('publications'));
+        $perPage = $this->getPaginationLimit($request);
+
+        $sortBy = $request->get('sort_by');
+        $sortDir = strtolower($request->get('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
+        // $search = $request->get('search');
+
+        // $query = Publication::query();
+
+        // if ($search) {
+        //     $query->where('title', 'like', '%' . $search . '%');
+        // }
+
+        $query = Publication::query()
+            ->when($request->get('search'), function ($query, $search) {
+                $query->where('title', 'like', '%' . $search . '%');
+            });
+
+        if ($sortBy) {
+            $allowedSorts = ['title', 'updated_at'];
+            if (in_array($sortBy, $allowedSorts)) {
+                $query->orderBy($sortBy, $sortDir);
+            }
+        } else {
+            // Default urutan terbaru
+            $query->orderBy('created_at', 'desc');
+        }
+
+        $publications = $query->paginate($perPage);
+
+        return view('admin.publication.index', compact('publications', 'perPage'));
     }
 
     /**

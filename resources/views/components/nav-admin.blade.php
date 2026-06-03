@@ -16,7 +16,8 @@ sticky top-0 z-50">
                 {{-- <li><a href="{{ route('admin.history.edit', 1) }}">Sejarah</a></li> --}}
                 <li><a href="{{ route('admin.history.edit') }}">Sejarah</a></li>
                 <li><a href="{{ route('admin.organization.edit', 1) }}">Organisasi</a></li>
-                <li><a href="{{ route('admin.gallery.index', 1) }}">Galeri</a></li>
+                {{-- <li><a href="{{ route('admin.gallery.index', 1) }}">Galeri</a></li> --}}
+                <li><a href="{{ route('admin.gallery.index') }}">Galeri</a></li>
             </ul>
             </li>
             <li>
@@ -48,7 +49,8 @@ sticky top-0 z-50">
                 {{-- <li><a href="{{ route('admin.history.edit', 1) }}">Sejarah</a></li> --}}
                 <li><a href="{{ route('admin.history.edit') }}">Sejarah</a></li>
                 <li><a href="{{ route('admin.organization.edit', 1) }}">Organisasi</a></li>
-                <li><a href="{{ route('admin.gallery.index', 1) }}">Galeri</a></li>
+                {{-- <li><a href="{{ route('admin.gallery.index', 1) }}">Galeri</a></li> --}}
+                <li><a href="{{ route('admin.gallery.index') }}">Galeri</a></li>
             </ul>
             </details>
         </li>

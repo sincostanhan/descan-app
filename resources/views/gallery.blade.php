@@ -1,4 +1,4 @@
-<x-layout title="Galeri Kelurahan">
+<x-layout title="Galeri">
     <x-hero
         title="Galeri Kelurahan"
         subtitle="Dokumentasi berbagai acara, kegiatan, dan momen penting yang telah dilaksanakan di kelurahan kami."

@@ -31,4 +31,32 @@ class StoreAboutRequest extends FormRequest
             'misi' => ['required', 'string'],
         ];
     }
+
+    /**
+     * Menerjemahkan nama field/kolom agar lebih ramah dibaca
+     */
+    public function attributes(): array
+    {
+        return [
+            'deskripsi' => 'Deskripsi',
+            'batas_utara' => 'Batas Utara',
+            'batas_barat' => 'Batas Barat',
+            'batas_selatan' => 'Batas Selatan',
+            'batas_timur' => 'Batas Timur',
+            'visi' => 'Visi',
+            'misi' => 'Misi',
+        ];
+    }
+
+    /**
+     * Menentukan format pesan error-nya
+     */
+    public function messages(): array
+    {
+        return [
+            'required' => ':attribute wajib diisi.',
+            'string'   => ':attribute harus berupa teks.',
+            'max'      => ':attribute maksimal :max karakter.',
+        ];
+    }
 }
