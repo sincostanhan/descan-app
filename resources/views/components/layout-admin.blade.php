@@ -1,3 +1,5 @@
+{{-- resources\views\components\layout-admin.blade.php --}}
+
 @props([
     // 'title' => 'Panel Admin Kelurahan Baadia',
     'title' => '',
@@ -54,7 +56,7 @@
 
     {{-- <main class="mx-2"> --}}
     {{-- <main class="mx-2 lg:mx-8 fflex-grow"> --}}
-    <main class="mx-2 lg:mx-8 grow mb-8">
+    <main class="mx-2 md:mx-8 grow mb-8">
         {{ $slot }}
     </main>
 

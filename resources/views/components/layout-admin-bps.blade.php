@@ -1,3 +1,5 @@
+{{-- resources\views\components\layout-admin-bps.blade.php --}}
+
 @props([
     'title' => 'Panel Admin BPS'
 ])

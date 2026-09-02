@@ -1,3 +1,5 @@
+{{-- resources\views\admin-bps\users\edit.blade.php --}}
+
 <x-layout-admin-bps title="Panel Admin BPS | Edit Admin">
     <x-hero
         title="Edit Admin"

@@ -1,4 +1,6 @@
-<!-- @props(['name']) -->
+{{-- resources\views\components\forms\error.blade.php --}}
+
+<!-- s@props(['name']) -->
 @props([
     'name' => 'required'
 ])

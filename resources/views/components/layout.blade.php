@@ -1,3 +1,5 @@
+{{-- resources\views\components\layout.blade.php --}}
+
 @props([
     'title' => ''
 ])

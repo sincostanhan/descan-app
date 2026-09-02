@@ -1,3 +1,5 @@
+{{-- resources\views\components\nav-admin.blade.php --}}
+
 <div class="navbar bg-base-100 shadow-sm
 sticky top-0 z-50">
     <div class="navbar-start">
@@ -10,27 +12,34 @@ sticky top-0 z-50">
             class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">
             <li><a href="{{ route('admin.home.edit') }}">Beranda</a></li>
             <li>
-            <a>Profil</a>
-            <ul class="p-2">
-                <li><a href="{{ route('admin.about.edit', 1) }}">Tentang Kami</a></li>
-                {{-- <li><a href="{{ route('admin.history.edit', 1) }}">Sejarah</a></li> --}}
-                <li><a href="{{ route('admin.history.edit') }}">Sejarah</a></li>
-                <li><a href="{{ route('admin.organization.edit', 1) }}">Organisasi</a></li>
-                {{-- <li><a href="{{ route('admin.gallery.index', 1) }}">Galeri</a></li> --}}
-                <li><a href="{{ route('admin.gallery.index') }}">Galeri</a></li>
-            </ul>
+                <a>Profil</a>
+                <ul class="p-2">
+                    <li><a href="{{ route('admin.about.edit', 1) }}">Tentang Kami</a></li>
+                    {{-- <li><a href="{{ route('admin.history.edit', 1) }}">Sejarah</a></li> --}}
+                    <li><a href="{{ route('admin.history.edit') }}">Sejarah</a></li>
+                    <li><a href="{{ route('admin.organization.edit', 1) }}">Organisasi</a></li>
+                    {{-- <li><a href="{{ route('admin.gallery.index', 1) }}">Galeri</a></li> --}}
+                    <li><a href="{{ route('admin.gallery.index') }}">Galeri</a></li>
+                </ul>
             </li>
             <li>
-            <a>Data</a>
-            <ul class="p-2">
-                <li><a href="{{ route('admin.statistical-table.index') }}">Tabel dan Grafik</a></li>
-                <li><a href="{{ route('admin.publication.index') }}">Publikasi</a></li>
-                <li><a href="{{ route('admin.infographic.index') }}">Infografis</a></li>
-                <li><a href="#">Metadata</a></li>
-            </ul>
+                <a>Data</a>
+                <ul class="p-2">
+                    <li><a href="{{ route('admin.statistical-table.index') }}">Tabel dan Grafik</a></li>
+                    <li><a href="{{ route('admin.publication.index') }}">Publikasi</a></li>
+                    <li><a href="{{ route('admin.infographic.index') }}">Infografis</a></li>
+                    <li><a href="#">Metadata</a></li>
+                </ul>
             </li>
             {{-- <li><a href="#">#</a></li> --}}
             <li><a href="{{ route('admin.setting.edit') }}">Pengaturan Web</a></li>
+
+            <li class="mt-2 pt-2 border-t border-base-200">
+                <a href="{{ route('home.index') }}" target="_blank" class="text-info">
+                    Lihat Web Publik
+                    <x-lucide-external-link class="w-4 h-4 ml-auto" />
+                </a>
+            </li>
         </ul>
         </div>
         <a class="btn btn-ghost text-xl">Panel Admin</a>
@@ -76,12 +85,15 @@ sticky top-0 z-50">
             {{-- href="{{ route('home.index', 1) }}"  --}}
             href="{{ route('home.index') }}" 
             target="_blank" 
-            class="btn btn-primary btn-sm 
-                mr-4 text-white hidden sm:inline-flex"
+            {{-- class="btn btn-primary btn-sm  --}}
+            class="btn btn-outline btn-sm 
+                {{-- mr-4 text-white hidden sm:inline-flex" --}}
+                mr-4 hidden sm:inline-flex"
         >Lihat Web Publik</a>
         <form action="{{ route('logout') }}" method="POST" class="m-0 flex items-center">
             @csrf
-            <button type="submit" class="btn btn-error btn-sm text-white">
+            {{-- <button type="submit" class="btn btn-error btn-sm text-white"> --}}
+            <button type="submit" class="btn btn-soft btn-error btn-sm">
                 Keluar
             </button>
         </form>

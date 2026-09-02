@@ -1,3 +1,5 @@
+{{-- resources\views\components\pagination-dropdown.blade.php --}}
+
 @props(['perPage' => 20])
 
 <div class="flex items-center gap-2">

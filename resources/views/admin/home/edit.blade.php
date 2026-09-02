@@ -1,3 +1,5 @@
+{{-- resources\views\admin\home\edit.blade.php --}}
+
 <x-layout-admin title="Beranda">
     <x-hero 
         title="Kelurahan Cantik" 

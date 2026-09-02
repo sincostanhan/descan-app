@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Organization;
+use App\Models\Village;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +14,11 @@ class OrganizationSeeder extends Seeder
      */
     public function run(): void
     {
+        // Cari kelurahan Baadia
+        $village = Village::where('name', 'Baadia')->first();
+
         Organization::create([
+            'village_id' => $village->id,
             'lurah' => 'La Ode Muhamad Baharudin, S.Pd.',
             'sekretaris_lurah' => 'Murifa, S.IP.',
             'kasi_pemerintahan' => 'La Ode Husni, S.Sos.',

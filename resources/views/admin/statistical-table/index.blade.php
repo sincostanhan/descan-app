@@ -29,7 +29,9 @@
                 </form>
             </div>
 
-            <div class="flex flex-row justify-between items-center">
+            <div class="flex 
+            flex-col-reverse items-end gap-3
+            md:flex-row md:justify-between md:items-center">
                 <x-pagination-dropdown :perPage="$perPage" />
 
                 <a 
@@ -142,6 +144,12 @@
                                         {{-- <th>{{ $loop->iteration }}</th> --}}
                                         <th>{{ $tables->firstItem() + $loop->index }}</th>
                                         
+                                        <td>
+                                            <div class="font-medium
+                                            whitespace-nowrap">{{ $table->publication }}</div>
+                                            <div class="badge badge-secondary badge-outline badge-sm mt-1">Bab {{ $table->chapter }}</div>
+                                        </td>
+                                        
                                         {{-- <td>
                                             <div class="font-medium max-w-50 md:max-w-xs text-wrap wrap-break-words">
                                                 {{ $table->title }}
@@ -149,24 +157,16 @@
                                         </td> --}}
                                         <td class="font-medium
                                         whitespace-nowrap">{{ $table->title }}</td>
-                                        
-                                        <td>
-                                            <div class="font-medium
-                                            whitespace-nowrap">{{ $table->publication }}</div>
-                                            <div class="badge badge-secondary badge-outline badge-sm mt-1">Bab {{ $table->chapter }}</div>
-                                        </td>
 
                                         <td>{{ $table->updated_at->format('d M Y') }}</td>
 
                                         <td class="text-center space-x-1 
                                         whitespace-nowrap">
-                                            <a href="{{ route('admin.statistical-table.edit', $table->id) }}" class="btn btn-warning btn-sm 
-                                                text-white">Edit</a>
+                                            <a href="{{ route('admin.statistical-table.edit', $table->id) }}" class="btn btn-soft btn-warning btn-sm">Edit</a>
                                             <form action="{{ route('admin.statistical-table.destroy', $table->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus tabel statistik ini?');" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-error btn-sm 
-                                                text-white">Hapus</button>
+                                                <button type="submit" class="btn btn-soft btn-error btn-sm">Hapus</button>
                                             </form>
                                         </td>
                                     </tr>

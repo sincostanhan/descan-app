@@ -1,3 +1,5 @@
+{{-- resources\views\admin\about\edit.blade.php --}}
+
 <x-layout-admin title="Edit Tentang Kami">
     <x-hero
         title="Tentang Kami"
@@ -28,7 +30,8 @@
                             id="deskripsi" 
                             name="deskripsi" 
                             class="textarea  
-                                h-22 w-full text-base" 
+                                {{-- h-22 w-full text-base"  --}}
+                                h-24 w-full text-base" 
                             placeholder="Masukkan deskripsi kelurahan ..."
                         >{{ old('deskripsi', $about->deskripsi) }}</textarea>
                         <x-forms.error name="deskripsi" />

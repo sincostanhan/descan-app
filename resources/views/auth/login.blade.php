@@ -1,10 +1,13 @@
+{{-- resources\views\auth\login.blade.php --}}
+
 <x-layout-auth>
     {{-- <div class="card bg-base-100 shadow-xl border border-base-200"> --}}
     <div class="card bg-base-100 card-border shadow-xl">
         <div class="card-body">
             <div class="text-center mb-2">
                 {{-- <span class="text gradient font-bold tracking-wide block">Gen-Descan 695</span> --}}
-                <span class="text gradient font-bold tracking-wide block">Gen-Descan 695</span>
+                {{-- <span class="text gradient font-bold tracking-wide block">Gen-Descan 695</span> --}}
+                <span class="text gradient font-bold tracking-wide block">Gen-Descan 7472</span>
             </div>
 
             {{-- <h2 class="card-title text-2xl font-bold mb-4 justify-center">Login Sistem</h2> --}}

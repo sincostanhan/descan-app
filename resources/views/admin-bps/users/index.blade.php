@@ -1,3 +1,5 @@
+{{-- resources\views\admin-bps\users\index.blade.php --}}
+
 <x-layout-admin-bps>
     <x-hero
         title="Admin Kelurahan"
@@ -51,15 +53,19 @@
                                         @endif
                                     </td>
                                     <td class="flex justify-center gap-2">
-                                        <a href="{{ route('admin-bps.users.edit', $admin) }}" class="btn btn-warning btn-sm 
-                                            text-white">Edit</a>
+                                        {{-- <a href="{{ route('admin-bps.users.edit', $admin) }}" class="btn btn-warning btn-sm  --}}
+                                        <a href="{{ route('admin-bps.users.edit', $admin) }}" class="btn btn-soft btn-warning btn-sm 
+                                            {{-- text-white">Edit</a> --}}
+                                            ">Edit</a>
                                         <form action="{{ route('admin-bps.users.destroy', $admin) }}" method="POST" 
                                         onsubmit="return confirm('Apakah Anda yakin ingin menghapus admin ini?')"
                                         class="inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-error btn-sm 
-                                            text-white">Hapus</button>
+                                            {{-- <button type="submit" class="btn btn-error btn-sm  --}}
+                                            <button type="submit" class="btn btn-soft btn-error btn-sm 
+                                            {{-- text-white">Hapus</button> --}}
+                                            ">Hapus</button>
                                         </form>
                                     </td>
                                 </tr>
@@ -70,4 +76,4 @@
             @endif
         </div>
     </div>
-</x-layout-admin>
+</x-layout-admin-bps>

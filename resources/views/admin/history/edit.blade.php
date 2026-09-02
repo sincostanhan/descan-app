@@ -1,3 +1,5 @@
+{{-- resources\views\admin\history\edit.blade.php --}}
+
 <x-layout-admin title="Sejarah Kelurahan">
     <x-hero
         title="Sejarah Kelurahan"
@@ -14,8 +16,9 @@
             card-border 
             shadow-sm 
             {{-- mb-6 border-l-4 border-l-secondary"> --}}
-            {{-- mb-6 border-l-4 border-secondary"> --}}
-            mb-6 border-l-4">
+            mb-6 border-l-4 border-secondary"
+            {{-- mb-6 border-l-4" --}}
+            >
                 <div class="card-body 
                 py-4 flex flex-row justify-between items-center">
                     <div>
@@ -60,7 +63,8 @@
                         <textarea 
                             name="konten" 
                             id="konten" 
-                            class="textarea h-90 w-full text-base leading-relaxed" 
+                            {{-- class="textarea h-90 w-full text-base leading-relaxed"  --}}
+                            class="textarea h-96 w-full text-base leading-relaxed" 
                             placeholder="Tuliskan sejarah kelurahan di sini ..." 
                             required
                         >{{ old('konten', $history->konten) }}</textarea>

@@ -29,7 +29,9 @@
                 </form>
             </div>
 
-            <div class="flex flex-row justify-between items-center">
+            <div class="flex 
+            flex-col-reverse items-end gap-3
+            md:flex-row md:justify-between md:items-center">
                 <x-pagination-dropdown :perPage="$perPage" />
 
                 
@@ -160,7 +162,8 @@
                                                 href="{{ asset('storage/' . $pub->file_path) }}" 
                                                 target="_blank" 
                                                 {{-- class="link link-primary" --}}
-                                                class="btn btn-info btn-sm text-white"
+                                                {{-- class="btn btn-info btn-sm text-white" --}}
+                                                class="btn btn-soft btn-info btn-sm"
                                             >
                                                 {{-- Lihat PDF --}}
                                                 <x-lucide-external-link class="w-4 h-4 mr-1"/> Lihat File
@@ -169,13 +172,11 @@
                                         <td>{{ $pub->updated_at->format('d M Y') }}</td>
                                         <td class="text-center space-x-1 
                                         whitespace-nowrap">
-                                            <a href="{{ route('admin.publication.edit', $pub->id) }}" class="btn btn-warning btn-sm 
-                                                text-white">Edit</a>
+                                            <a href="{{ route('admin.publication.edit', $pub->id) }}" class="btn btn-soft btn-warning btn-sm">Edit</a>
                                             <form action="{{ route('admin.publication.destroy', $pub->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus publikasi ini?');" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-error btn-sm 
-                                                text-white">Hapus</button>
+                                                <button type="submit" class="btn btn-soft btn-error btn-sm ">Hapus</button>
                                             </form>
                                         </td>
                                     </tr>

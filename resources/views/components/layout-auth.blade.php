@@ -1,3 +1,5 @@
+{{-- resources\views\components\layout-auth.blade.php --}}
+
 @props([
     'title' => 'Login Sistem'
 ])

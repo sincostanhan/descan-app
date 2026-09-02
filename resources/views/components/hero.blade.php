@@ -1,3 +1,5 @@
+{{-- resources\views\components\hero.blade.php --}}
+
 @props(['title', 'subtitle' => null])
 
 {{--o Centered hero --}}

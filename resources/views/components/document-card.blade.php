@@ -1,3 +1,5 @@
+{{-- resources\views\components\document-card.blade.php --}}
+
 @props(['title', 'description', 'date', 'coverUrl' => null, 'fileUrl', 'buttonText' => 'Lihat Dokumen'])
 
 <div class="card bg-base-100 

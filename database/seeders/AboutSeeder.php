@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\About;
+use App\Models\Village;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -13,7 +14,12 @@ class AboutSeeder extends Seeder
      */
     public function run(): void
     {
-        About::create(['deskripsi'  => 'Baadia adalah Kelurahan yang berada di Kecamatan Murhum, Kota Baubau, Indonesia. Kelurahan Baadia berlokasi di luar Benteng Keraton Buton.',
+        // Cari kelurahan Baadia
+        $village = Village::where('name', 'Baadia')->first();
+
+        About::create([
+            'village_id'    => $village->id,
+            'deskripsi'  => 'Baadia adalah Kelurahan yang berada di Kecamatan Murhum, Kota Baubau, Indonesia. Kelurahan Baadia berlokasi di luar Benteng Keraton Buton.',
             'batas_utara'   => 'Kelurahan Melai',
             'batas_barat'   => 'Kelurahan Lipu',
             'batas_selatan' => 'Kelurahan Waborobo',

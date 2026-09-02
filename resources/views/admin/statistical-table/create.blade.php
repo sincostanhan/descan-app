@@ -16,7 +16,8 @@
                     @csrf
 
                     <fieldset class="fieldset w-full 
-                    mb-8">
+                    mb-8
+                    min-w-0">
                         <legend class="fieldset-legend 
                         text-base">File Dokumen (Excel / CSV)</legend>
                         <input type="file" 
@@ -26,7 +27,8 @@
                                accept=".xlsx, .xls, .csv" 
                                required />
                         
-                        <p class="label">
+                        <p class="label
+                        text-wrap break-words">
                             Format didukung: XLSX, XLS, CSV (Maks. 5MB). Pastikan baris pertama (header) adalah nama kolom.
                         </p>
                         

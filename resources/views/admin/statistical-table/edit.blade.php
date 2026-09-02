@@ -234,7 +234,8 @@
                     border-t border-base-200">
                         <a 
                             href="{{ route('admin.statistical-table.index') }}" class="btn btn-ghost">Batal</a>
-                        <button type="submit" class="btn btn-warning text-white">
+                        {{-- <button type="submit" class="btn btn-warning text-white"> --}}
+                        <button type="submit" class="btn btn-secondary text-white">
                             {{-- <x-lucide-save class="w-5 h-5 mr-1" /> Perbarui Data --}}
                             <x-lucide-save class="w-5 h-5 mr-1" />Simpan Perubahan</button>
                     </div>

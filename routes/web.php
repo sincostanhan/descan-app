@@ -22,7 +22,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 });
 
-Route::domain(env('APP_URL_BASE', 'descan.scth.tech'))->group(function () {
+Route::domain(env('APP_URL_BASE', 'descan.scthan.tech'))->group(function () {
     // untuk melempar user kembali ke halaman login setelah logout
     Route::get('/', function () {
         return redirect()->route('login');
@@ -30,7 +30,8 @@ Route::domain(env('APP_URL_BASE', 'descan.scth.tech'))->group(function () {
 
     Route::middleware('guest')->group(function () {
         Route::get('/login', [AuthController::class, 'login'])->name('login');
-        Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
+        Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate')
+            ->middleware('throttle:5,1');
     });
 
     Route::middleware(['auth'])->group(function () {
@@ -46,8 +47,8 @@ Route::domain(env('APP_URL_BASE', 'descan.scth.tech'))->group(function () {
     });
 });
 
-// Rute untuk spesifik kelurahan (baadia.descan.scth.tech)
-Route::domain('{subdomain}.' . env('APP_URL_BASE', 'descan.scth.tech'))->group(function () {
+// Rute untuk spesifik kelurahan (baadia.descan.scthan.tech)
+Route::domain('{subdomain}.' . env('APP_URL_BASE', 'descan.scthan.tech'))->group(function () {
 
 // Route::get('/', function () {
 //     return view('welcome');

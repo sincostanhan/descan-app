@@ -1,3 +1,5 @@
+{{-- resources\views\components\nav.blade.php --}}
+
 @php
     // Cek apakah sejarah aktif
     $isHistoryActive = \App\Models\History::first()?->is_active ?? false;
@@ -85,7 +87,8 @@ sticky top-0 z-50">
         </ul>
     </div>
     <div class="navbar-end">
-        <a href="{{ route('login') }}" class="btn btn-primary btn-sm text-white">
+        {{-- <a href="{{ route('login') }}" class="btn btn-primary btn-sm text-white"> --}}
+        <a href="{{ route('login') }}" class="btn btn-sm btn-outline">
             Login
         </a>
     </div>

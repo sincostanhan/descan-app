@@ -1,3 +1,5 @@
+{{-- resources\views\admin\gallery\index.blade.php --}}
+
 <x-layout-admin title="Galeri">
     <x-hero
         title="Galeri"
@@ -64,19 +66,27 @@
                                                 Lihat
                                             </a> --}}
                                             <button onclick="document.getElementById('modal_show_{{ $gallery->id }}').showModal()" 
-                                                class="btn btn-info btn-sm 
-                                                text-white">
+                                                {{-- class="btn btn-info btn-sm  --}}
+                                                class="btn btn-soft btn-info btn-sm 
+                                                {{-- text-white --}}
+                                                ">
                                                 Lihat
                                             </button>
-                                            <a href="{{ route('admin.gallery.edit', $gallery->id) }}" class="btn btn-warning btn-sm 
-                                                text-white">
+                                            <a href="{{ route('admin.gallery.edit', $gallery->id) }}" 
+                                                {{-- class="btn btn-warning btn-sm  --}}
+                                                class="btn btn-soft btn-warning btn-sm 
+                                                {{-- text-white --}}
+                                                ">
                                                 Edit
                                             </a>
                                             <form action="{{ route('admin.gallery.destroy', $gallery->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus galeri ini?');" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" class="btn btn-error btn-sm
-                                                text-white">
+                                                <button type="submit" 
+                                                {{-- class="btn btn-error btn-sm --}}
+                                                class="btn btn-soft btn-error btn-sm
+                                                {{-- text-white --}}
+                                                ">
                                                     Hapus
                                                 </button>
                                             </form>

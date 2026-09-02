@@ -1,3 +1,5 @@
+{{-- resources\views\admin-bps\users\create.blade.php --}}
+
 <x-layout-admin-bps title="Panel Admin BPS | Tambah Admin">
     <x-hero
         title="Tambah Admin"

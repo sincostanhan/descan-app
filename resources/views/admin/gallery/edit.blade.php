@@ -1,3 +1,5 @@
+{{-- resources\views\admin\gallery\edit.blade.php --}}
+
 <x-layout-admin title="Edit Galeri Kegiatan">
     <x-hero
         title="Edit Galeri Kegiatan"
@@ -58,7 +60,8 @@
                                {{-- required /> --}}
                                />
                         
-                        <p class="label">
+                        <p class="label
+                        text-wrap break-words">
                             Format didukung: JPG, PNG (Maks. 2MB). Anda dapat mengupload lebih dari satu foto kegiatan. <span class="text-error">Abaikan jika tidak ingin menambah foto baru.</span>
                         </p>
                         

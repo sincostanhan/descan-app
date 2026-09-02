@@ -1,3 +1,5 @@
+{{-- resources\views\admin\gallery\create.blade.php --}}
+
 <x-layout-admin title="Tambah Galeri Kegiatan">
     <x-hero
         title="Tambah Galeri Kegiatan"
@@ -54,7 +56,8 @@
                                accept="image/*" 
                                required />
                         
-                        <p class="label">
+                        <p class="label
+                        text-wrap break-words">
                             Format didukung: JPG, PNG (Maks. 2MB). Anda dapat mengupload lebih dari satu foto kegiatan.
                         </p>
                         

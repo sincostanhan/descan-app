@@ -1,3 +1,5 @@
+{{-- resources\views\components\empty-alert.blade.php --}}
+
 @props(['message'])
 
 <div role="alert" class="alert alert-warning">
