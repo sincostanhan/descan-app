@@ -14,6 +14,7 @@ use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\PublicStatisticController;
 use App\Http\Controllers\StatisticalTableController;
+use App\Http\Controllers\StatisticTableEntryController;
 use App\Http\Controllers\StatisticChartController;
 use Illuminate\Support\Facades\Route;
 
