@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\StatisticalTable;
+use App\Models\StatisticTableEntry;
 use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
 
@@ -39,32 +40,45 @@ class PublicStatisticController extends Controller
         //     $query->where('title', 'like', '%' . $search . '%');
         // }
 
-        $query = StatisticalTable::query()
-            ->when($request->get('search'), function ($query, $search) {
-                $query->where('title', 'like', '%' . $search . '%');
+        // $query = StatisticalTable::query()
+        //     ->when($request->get('search'), function ($query, $search) {
+        //         $query->where('title', 'like', '%' . $search . '%');
+        //     });
+        $query = StatisticTableEntry::query()
+            ->whereHas('template', fn ($q) => $q->where('is_active', true))
+            ->with('template')
+            ->when($request->get('search'), function ($q, $search) {
+                $q->where('title', 'like', "%{$search}%")
+                  ->orWhereHas('template', fn ($t) => $t->where('title', 'like', "%{$search}%"));
             });
 
-        // Terapkan urutan jika ada kolom yang sedang aktif diklik
-        if ($sortBy) {
-            $allowedSorts = ['publication', 'title', 'updated_at'];
-            if (in_array($sortBy, $allowedSorts)) {
-                if ($sortBy === 'publication') {
-                    $query->orderBy('publication', $sortDir)->orderBy('chapter', 'asc');
-                } else {
-                    $query->orderBy($sortBy, $sortDir);
-                }
-            }
+        if ($sortBy && in_array($sortBy, ['title', 'updated_at'])) {
+            $query->orderBy($sortBy, $sortDir);
         } else {
-            // Default sorting saat kondisi awal (semua panah arrow-up-down)
-            $query->orderBy('chapter', 'asc')->orderBy('created_at', 'desc');
+            $query->orderBy('created_at', 'desc');
         }
+
+        // // Terapkan urutan jika ada kolom yang sedang aktif diklik
+        // if ($sortBy) {
+        //     $allowedSorts = ['publication', 'title', 'updated_at'];
+        //     if (in_array($sortBy, $allowedSorts)) {
+        //         if ($sortBy === 'publication') {
+        //             $query->orderBy('publication', $sortDir)->orderBy('chapter', 'asc');
+        //         } else {
+        //             $query->orderBy($sortBy, $sortDir);
+        //         }
+        //     }
+        // } else {
+        //     // Default sorting saat kondisi awal (semua panah arrow-up-down)
+        //     $query->orderBy('chapter', 'asc')->orderBy('created_at', 'desc');
+        // }
 
         $tables = $query->paginate($perPage);
 
         return view('statistic.index', compact('tables', 'perPage'));
     }
 
-    public function show(StatisticalTable $statistic)
+    public function show(StatisticTableEntry $statistic)
     {
         // Muat relasi chart agar bisa ditampilkan
         $statistic->load('chart');

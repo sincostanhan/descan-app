@@ -3,6 +3,7 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SetupController;
+use App\Http\Controllers\AdminBps\StatisticTemplateController;
 use App\Http\Controllers\AdminBps\UserController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GalleryController;
@@ -43,6 +44,9 @@ Route::domain(env('APP_URL_BASE', 'descan.scthan.tech'))->group(function () {
             Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
             Route::patch('/users/{user}', [UserController::class, 'update'])->name('users.update');
             Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
+
+            // CRUD Template Tabel Statistik
+            Route::resource('statistic-templates', StatisticTemplateController::class)->except(['show']);
         });
     });
 });
@@ -113,22 +117,22 @@ Route::middleware(['auth'])->group(function () {
             ->parameters(['infografis' => 'infographic'])
             ->except(['show']);
 
-        // 1. custom route (pratinjau)
-        Route::post('/statistik/pratinjau', [StatisticalTableController::class, 'preview'])
-            ->name('statistical-table.preview');
-        // 2. Resource tabel statistik utama
-        Route::resource('statistik', StatisticalTableController::class)
-            ->names('statistical-table')
-            ->parameters(['statistik' => 'statistical_table'])
-            ->except(['show']);
+        // // 1. custom route (pratinjau)
+        // Route::post('/statistik/pratinjau', [StatisticalTableController::class, 'preview'])
+        //     ->name('statistical-table.preview');
+        // // 2. Resource tabel statistik utama
+        // Route::resource('statistik', StatisticalTableController::class)
+        //     ->names('statistical-table')
+        //     ->parameters(['statistik' => 'statistical_table'])
+        //     ->except(['show']);
         // 3. Nested resource untuk grafik (Disesuaikan agar seragam dengan parent-nya)
-        Route::resource('statistik.charts', StatisticChartController::class)
-            ->names('statistic-chart') // Nanti kita bisa panggil route('statistic-chart.create')
-            ->parameters([
-                'statistik' => 'statistical_table', // Mengambil ID dari tabel statistik
-                'charts' => 'statistic_chart'
-            ])
-            ->except(['index', 'show']);
+        // Route::resource('statistik.charts', StatisticChartController::class)
+        //     ->names('statistic-chart') // Nanti kita bisa panggil route('statistic-chart.create')
+        //     ->parameters([
+        //         'statistik' => 'statistical_table', // Mengambil ID dari tabel statistik
+        //         'charts' => 'statistic_chart'
+        //     ])
+        //     ->except(['index', 'show']);
 
         Route::get('/pengaturan', [SettingController::class, 'edit'])->name('setting.edit');
         Route::patch('/pengaturan', [SettingController::class, 'update'])->name('setting.update');

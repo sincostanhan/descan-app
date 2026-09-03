@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
         \App\Models\Organization::observe(\App\Observers\OrganizationObserver::class);
         \App\Models\Publication::observe(\App\Observers\PublicationObserver::class);
         \App\Models\Infographic::observe(\App\Observers\InfographicObserver::class);
-        \App\Models\StatisticalTable::observe(\App\Observers\StatisticalTableObserver::class);
+        // \App\Models\StatisticalTable::observe(\App\Observers\StatisticalTableObserver::class);
         // Gunakan view pagination custom DaisyUI
         Paginator::defaultView('vendor.pagination.daisyui');
 
