@@ -13,7 +13,8 @@ class StatisticChart extends Model
 
     protected $fillable = [
         'village_id',
-        'statistical_table_id',
+        // 'statistical_table_id',
+        'statistic_table_entry_id',
         'title',
         'chart_type',
         'x_axis_column',
@@ -34,8 +35,16 @@ class StatisticChart extends Model
      * Relasi ke model StatisticalTable
      * Satu grafik dimiliki oleh satu tabel statistik
      */
-    public function statisticalTable(): BelongsTo
+    // public function statisticalTable(): BelongsTo
+    // {
+    //     return $this->belongsTo(StatisticalTable::class);
+    // }
+    /**
+     * Relasi ke model StatisticTableEntry (menggantikan StatisticalTable yang sudah dihapus)
+     * Satu grafik dimiliki oleh satu entry tabel statistik.
+     */
+    public function statisticTableEntry(): BelongsTo
     {
-        return $this->belongsTo(StatisticalTable::class);
+        return $this->belongsTo(StatisticTableEntry::class, 'statistic_table_entry_id');
     }
 }

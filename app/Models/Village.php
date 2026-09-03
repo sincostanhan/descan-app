@@ -12,4 +12,14 @@ class Village extends Model
     {
         return $this->hasMany(User::class);
     }
+
+    public function statisticTableEntries()
+    {
+        return $this->hasMany(StatisticTableEntry::class);
+    }
+
+    public function regionGeometries()
+    {
+        return $this->hasMany(RegionGeometry::class);
+    }
 }
