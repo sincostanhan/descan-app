@@ -133,6 +133,24 @@ Route::middleware(['auth'])->group(function () {
         //         'charts' => 'statistic_chart'
         //     ])
         //     ->except(['index', 'show']);
+        // Alur wajib "Pilih Template" sebelum bisa membuat tabel baru
+        Route::get('/statistik/pilih-template', [StatisticTableEntryController::class, 'selectTemplate'])
+            ->name('statistic-table-entries.select-template');
+        Route::get('/statistik/buat/{statistic_template}', [StatisticTableEntryController::class, 'create'])
+            ->name('statistic-table-entries.create');
+        Route::post('/statistik/buat/{statistic_template}', [StatisticTableEntryController::class, 'store'])
+            ->name('statistic-table-entries.store');
+        Route::resource('statistik', StatisticTableEntryController::class)
+            ->names('statistic-table-entries')
+            ->parameters(['statistik' => 'statistic_table_entry'])
+            ->except(['show', 'create', 'store']); // create/store custom di atas (butuh parameter template)
+        Route::resource('statistik.charts', StatisticChartController::class)
+            ->names('statistic-chart')
+            ->parameters([
+                'statistik' => 'statistic_table_entry',
+                'charts' => 'statistic_chart',
+            ])
+            ->except(['index', 'show']);
 
         Route::get('/pengaturan', [SettingController::class, 'edit'])->name('setting.edit');
         Route::patch('/pengaturan', [SettingController::class, 'update'])->name('setting.update');

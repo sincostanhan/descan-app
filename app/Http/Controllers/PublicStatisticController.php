@@ -80,8 +80,9 @@ class PublicStatisticController extends Controller
 
     public function show(StatisticTableEntry $statistic)
     {
-        // Muat relasi chart agar bisa ditampilkan
-        $statistic->load('chart');
+        // // Muat relasi chart agar bisa ditampilkan
+        // $statistic->load('chart');
+        $statistic->load(['chart', 'template.headers', 'values.templateCell.columnHeader']);
 
         return view('statistic.show', compact('statistic'));
     }
