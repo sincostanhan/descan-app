@@ -27,9 +27,13 @@ class StoreStatisticTableEntryRequest extends FormRequest
         ];
 
         // $cells = $template->cells()->with('columnHeader')->get();
+        // $cells = $template->cells()
+        //     ->where(fn ($q) => $q->whereNull('village_id')->orWhere('village_id', $villageId))
+        //     ->with('columnHeader')->get();
         $cells = $template->cells()
-            ->where(fn ($q) => $q->whereNull('village_id')->orWhere('village_id', $villageId))
-            ->with('columnHeader')->get();
+            ->whereHas('columnHeader')
+            ->with('columnHeader')
+            ->get();
 
         foreach ($cells as $cell) {
             $rules["values.{$cell->id}"] = match ($cell->columnHeader->data_type) {
