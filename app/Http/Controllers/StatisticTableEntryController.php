@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Actions\CreateStatisticTableEntry;
+use App\Actions\GenerateRtRowsForVillage;
 use App\Actions\UpdateStatisticTableEntry;
 use App\Http\Requests\StoreStatisticTableEntryRequest;
 use App\Http\Requests\UpdateStatisticTableEntryRequest;
