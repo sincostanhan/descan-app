@@ -2,6 +2,9 @@
     document.addEventListener('DOMContentLoaded', function () {
         renderPreview(); // render awal (penting untuk halaman Edit yang sudah ada data)
 
+        const checkedRowSource = document.querySelector('[name=row_source]:checked');
+        if (checkedRowSource) toggleRowSourceMode(checkedRowSource.value);
+
         document.body.addEventListener('click', function (e) {
             const addChildBtn = e.target.closest('.btn-add-child');
             const addSiblingBtn = e.target.closest('.btn-add-sibling');
@@ -210,9 +213,9 @@
             return;
         }
 
-        if (rowSource === 'rt_rw') {
-            wrapper.insertAdjacentHTML('afterbegin', '');
-        }
+        // if (rowSource === 'rt_rw') {
+        //     wrapper.insertAdjacentHTML('afterbegin', '');
+        // }
 
         computeSpans(rowData);
         computeSpans(columnData);
@@ -259,7 +262,7 @@
 
         wrapper.innerHTML = `<div class="overflow-x-auto"><table class="table table-xs border border-base-300">${thead}${tbody}</table></div>`;
 
-         (rowSource === 'rt_rw') {
+        if (rowSource === 'rt_rw') {
             wrapper.insertAdjacentHTML('beforeend', `
                 <p class="text-xs text-warning mt-2">
                     ⚠️ Baris di atas hanya CONTOH ilustrasi. Jumlah & nomor RT/RW sesungguhnya akan
@@ -276,10 +279,14 @@
 
     function toggleRowSourceMode(mode) {
         const panel = document.getElementById('row-headers-panel');
+        const addRowBtn = document.getElementById('btn-add-row-root');
+
         if (mode === 'rt_rw') {
             panel.classList.add('hidden');
+            if (addRowBtn) addRowBtn.disabled = true;
         } else {
             panel.classList.remove('hidden');
+            if (addRowBtn) addRowBtn.disabled = false;
         }
         renderPreview();
     }

@@ -43,7 +43,14 @@ class StatisticTemplateController extends Controller
 
     public function edit(StatisticTemplate $statistic_template)
     {
-        $statistic_template->load(['headers' => fn ($q) => $q->orderBy('order')]);
+        // $statistic_template->load(['headers' => fn ($q) => $q->orderBy('order')]);
+        // whereNull('village_id'): BPS hanya perlu melihat/mengedit header level TEMPLATE
+        // (shared, mode manual + seluruh kolom). Header milik Kelurahan tertentu (hasil generate
+        // otomatis mode rt_rw) sengaja TIDAK dimuat di sini — BPS tidak berwenang mengeditnya,
+        // dan menampilkannya cuma menambah beban render tanpa guna di halaman ini.
+        $statistic_template->load([
+            'headers' => fn ($q) => $q->whereNull('village_id')->orderBy('order'),
+        ]);
 
         return view('admin-bps.statistic-templates.edit', compact('statistic_template'));
     }

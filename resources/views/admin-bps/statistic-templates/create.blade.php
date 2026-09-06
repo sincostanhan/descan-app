@@ -54,7 +54,8 @@
                 <div class="card-body">
                     <div class="flex justify-between items-center mb-2 border-b pb-2">
                         <h2 class="card-title text-secondary text-xl">Struktur Baris (Sisi Kiri Tabel)</h2>
-                        <button type="button" class="btn btn-sm btn-outline" onclick="addRootNode('row-headers-container', 'row')">
+                        {{-- <button type="button" class="btn btn-sm btn-outline" onclick="addRootNode('row-headers-container', 'row')"> --}}
+                        <button type="button" id="btn-add-row-root" class="btn btn-sm btn-outline" onclick="addRootNode('row-headers-container', 'row')">
                             <x-lucide-plus class="w-4 h-4" /> Tambah Baris Utama
                         </button>
                     </div>

@@ -6,6 +6,7 @@ use App\Models\StatisticTemplate;
 use App\Models\StatisticTemplateHeader;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\ValidationException;
 
 class UpdateStatisticTemplate
 {
