@@ -53,7 +53,10 @@ class StatisticTableEntry extends Model
             $this->load('template.headers');
         }
 
-        $rowLabelKey = optional($this->template->rowHeaders->first())->label ?? 'Uraian';
+        // $rowLabelKey = optional($this->template->rowHeaders->first())->label ?? 'Uraian';
+        $rowLabelKey = $this->template->isRtRwMode()
+            ? 'Wilayah (RT/RW)'
+            : (optional($this->template->rowHeaders->first())->label ?? 'Uraian');
 
         $columnLeaves = $this->template->headers
             ->where('axis', 'column')
@@ -73,6 +76,7 @@ class StatisticTableEntry extends Model
         $rowLeaves = $this->template->headers
             ->where('axis', 'row')
             ->where('is_leaf', true)
+            ->filter(fn ($h) => is_null($h->village_id) || $h->village_id === $this->village_id)
             ->sortBy('order');
 
         if (!$this->relationLoaded('values')) {

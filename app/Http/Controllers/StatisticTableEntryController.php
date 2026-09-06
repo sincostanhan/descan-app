@@ -49,14 +49,25 @@ class StatisticTableEntryController extends Controller
     /**
      * Halaman spreadsheet editor untuk mengisi nilai berdasarkan template terpilih.
      */
-    public function create(StatisticTemplate $statistic_template)
+    // public function create(StatisticTemplate $statistic_template)
+    public function create(StatisticTemplate $statistic_template, GenerateRtRowsForVillage $generateRtRows)
     {
+        if ($statistic_template->isRtRwMode()) {
+            $generateRtRows->handle($statistic_template, auth()->user()->village);
+        }
+
+        // Filter village_id: NULL (shared/manual) ATAU milik kelurahan yang sedang login.
+        // Query yang sama berlaku aman untuk kedua mode (manual & rt_rw) tanpa cabang if/else.
+        $villageId = auth()->user()->village_id;
+
         // Eager-load 3 level ke bawah cukup untuk mayoritas kasus header bertingkat.
         // Kalau nanti ada template dengan hierarki >3 level, load ini perlu direkursi manual.
         $statistic_template->load([
-            'rowHeaders.children.children',
+            // 'rowHeaders.children.children',
+            'rowHeaders' => fn ($q) => $q->whereNull('village_id')->orWhere('village_id', $villageId),
             'columnHeaders.children.children',
-            'cells',
+            // 'cells',
+            'cells' => fn ($q) => $q->whereNull('village_id')->orWhere('village_id', $villageId),
         ]);
 
         return view('admin.statistic-table-entries.create', [

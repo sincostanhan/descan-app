@@ -17,17 +17,27 @@ class UpdateStatisticTemplate
     public function handle(StatisticTemplate $template, array $attributes): StatisticTemplate
     {
         return DB::transaction(function () use ($template, $attributes) {
+            if ($template->row_source !== $attributes['row_source'] && $template->entries()->exists()) {
+                throw ValidationException::withMessages([
+                    'row_source' => 'Mode sumber baris tidak bisa diubah karena template ini sudah dipakai Kelurahan.',
+                ]);
+            }
+
             $template->update([
                 'title' => $attributes['title'],
                 'description' => $attributes['description'] ?? null,
                 'is_active' => $attributes['is_active'] ?? $template->is_active,
+                'row_source' => $attributes['row_source'],
             ]);
 
             $keptHeaderIds = [];
 
-            $rowLeafIds = $this->syncHeaderTree(
-                $template, 'row', json_decode($attributes['row_headers'], true) ?? [], null, $keptHeaderIds
-            );
+            // $rowLeafIds = $this->syncHeaderTree(
+            //     $template, 'row', json_decode($attributes['row_headers'], true) ?? [], null, $keptHeaderIds
+            // );
+            $rowLeafIds = $template->row_source === 'manual'
+                ? $this->syncHeaderTree($template, 'row', json_decode($attributes['row_headers'] ?? '[]', true) ?? [], null, $keptHeaderIds)
+                : [];
             $columnLeafIds = $this->syncHeaderTree(
                 $template, 'column', json_decode($attributes['column_headers'], true) ?? [], null, $keptHeaderIds
             );

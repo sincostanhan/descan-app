@@ -13,6 +13,7 @@ class StatisticTemplateCell extends Model
         'row_header_id',
         'column_header_id',
         'is_locked',
+        'village_id',
     ];
 
     protected function casts(): array

@@ -21,6 +21,7 @@ class StatisticTemplateHeader extends Model
         'is_leaf',
         'rt_value',
         'order',
+        'village_id',
     ];
 
     protected function casts(): array

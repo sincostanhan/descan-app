@@ -18,7 +18,9 @@ class UpdateStatisticTemplateRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
             'is_mapped' => ['nullable', 'boolean'],
-            'row_headers' => ['required', 'json'],
+            'row_source' => ['required', 'in:manual,rt_rw'],
+            // 'row_headers' => ['required', 'json'],
+            'row_headers' => ['required_if:row_source,manual', 'nullable', 'json'],
             'column_headers' => ['required', 'json'],
         ];
     }

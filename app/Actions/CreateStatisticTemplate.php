@@ -19,13 +19,24 @@ class CreateStatisticTemplate
                 // is_mapped sengaja selalu false saat create.
                 // Toggle ini hanya boleh dinyalakan lewat Update, setelah struktur tervalidasi ValidateMappableStructure.
                 'is_mapped' => false,
+                'row_source' => $attributes['row_source'],
                 'created_by' => auth()->id(),
             ]);
 
-            $rowLeafIds = $this->buildHeaderTree($template, 'row', json_decode($attributes['row_headers'], true) ?? [], null);
+            // $rowLeafIds = $this->buildHeaderTree($template, 'row', json_decode($attributes['row_headers'], true) ?? [], null);
+            // Mode rt_rw: baris TIDAK dibuat di sini sama sekali — akan digenerate otomatis
+            // per Kelurahan oleh GenerateRtRowsForVillage saat mereka pertama kali membuka template ini.
+            $rowLeafIds = $template->row_source === 'manual'
+                ? $this->buildHeaderTree($template, 'row', json_decode($attributes['row_headers'], true) ?? [], null)
+                : [];
             $columnLeafIds = $this->buildHeaderTree($template, 'column', json_decode($attributes['column_headers'], true) ?? [], null);
 
-            $this->generateCells($template, $rowLeafIds, $columnLeafIds);
+            // $this->generateCells($template, $rowLeafIds, $columnLeafIds);
+            // Cross-join cell hanya relevan untuk mode manual (shared). Mode rt_rw: cell dibuat
+            // belakangan per Kelurahan (juga oleh GenerateRtRowsForVillage), bukan di sini.
+            if ($template->row_source === 'manual') {
+                $this->generateCells($template, $rowLeafIds, $columnLeafIds);
+            }
 
             return $template;
         });

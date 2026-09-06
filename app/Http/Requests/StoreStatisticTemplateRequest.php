@@ -18,7 +18,9 @@ class StoreStatisticTemplateRequest extends FormRequest
             'description' => ['nullable', 'string'],
             'is_active' => ['nullable', 'boolean'],
             // Dikirim sebagai string JSON hasil serialize tree header dari builder di frontend
-            'row_headers' => ['required', 'json'],
+            'row_source' => ['required', 'in:manual,rt_rw'],
+            // 'row_headers' => ['required', 'json'],
+            'row_headers' => ['required_if:row_source,manual', 'nullable', 'json'],
             'column_headers' => ['required', 'json'],
         ];
     }

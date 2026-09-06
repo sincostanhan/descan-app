@@ -18,7 +18,13 @@ class StatisticTemplate extends Model
         'is_mapped',
         'is_active',
         'created_by',
+        'row_source',
     ];
+
+    public function isRtRwMode(): bool
+    {
+        return $this->row_source === 'rt_rw';
+    }
 
     protected function casts(): array
     {
