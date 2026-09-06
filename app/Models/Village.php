@@ -13,6 +13,11 @@ class Village extends Model
         return $this->hasMany(User::class);
     }
 
+    public function organization()
+    {
+        return $this->hasOne(Organization::class);
+    }
+
     public function statisticTableEntries()
     {
         return $this->hasMany(StatisticTableEntry::class);

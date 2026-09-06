@@ -45,7 +45,16 @@ class UpdateStatisticTemplate
 
             // Soft-delete header lama yang sudah tidak ada lagi di payload (BPS hapus dari form builder).
             // Soft delete (bukan hard delete) memastikan cell & value historis milik Kelurahan tetap utuh.
-            $removedHeaders = $template->headers()->whereNotIn('id', $keptHeaderIds)->get();
+            // $removedHeaders = $template->headers()->whereNotIn('id', $keptHeaderIds)->get();
+            $removedHeadersQuery = $template->headers()->whereNotIn('id', $keptHeaderIds);
+            if ($template->row_source === 'rt_rw') {
+                // Baris rt_rw dikelola GenerateRtRowsForVillage per-Kelurahan, BUKAN lewat form BPS ini
+                // (form BPS mode rt_rw memang tidak pernah mengirim row_headers). Jangan pernah anggap
+                // baris-baris itu "dihapus" hanya karena tidak ada di payload — cukup proses axis 'column' saja.
+                $removedHeadersQuery->where('axis', '!=', 'row');
+            }
+
+            $removedHeaders = $removedHeadersQuery->get();
             foreach ($removedHeaders as $header) {
                 $header->delete();
                 $this->logTemplateChange->handle(
@@ -124,6 +133,17 @@ class UpdateStatisticTemplate
 
     private function generateMissingCells(StatisticTemplate $template, array $rowLeafIds, array $columnLeafIds): void
     {
+        // Mode rt_rw: $rowLeafIds selalu kosong (baris dikelola per Kelurahan, bukan oleh BPS).
+        // Supaya kolom baru langsung "nyambung" ke baris RT yang sudah ada milik SEMUA Kelurahan,
+        // kita ambil manual semua baris rt_rw yang sudah pernah digenerate.
+        if ($template->row_source === 'rt_rw') {
+            $rowLeafIds = $template->headers()
+                ->where('axis', 'row')
+                ->where('is_leaf', true)
+                ->pluck('id')
+                ->all();
+        }
+
         $existingPairs = $template->cells()
             ->whereIn('row_header_id', $rowLeafIds)
             ->whereIn('column_header_id', $columnLeafIds)
@@ -134,9 +154,14 @@ class UpdateStatisticTemplate
         foreach ($rowLeafIds as $rowId) {
             foreach ($columnLeafIds as $columnId) {
                 if (!isset($existingPairs["{$rowId}-{$columnId}"])) {
+                    // PENTING: cell baru untuk baris rt_rw harus ikut ditandai village_id yang SAMA
+                    // dengan baris pemiliknya, supaya tidak "bocor" ke Kelurahan lain.
+                    $rowVillageId = StatisticTemplateHeader::find($rowId)?->village_id;
+
                     $template->cells()->create([
                         'row_header_id' => $rowId,
                         'column_header_id' => $columnId,
+                        'village_id' => $rowVillageId,
                         'is_locked' => false,
                     ]);
                 }

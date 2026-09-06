@@ -89,8 +89,13 @@ class StatisticTableEntryController extends Controller
             ->with('success', 'Tabel statistik berhasil disimpan.');
     }
 
-    public function edit(StatisticTableEntry $statistic_table_entry)
+    // public function edit(StatisticTableEntry $statistic_table_entry)
+    public function edit(StatisticTableEntry $statistic_table_entry, GenerateRtRowsForVillage $generateRtRows)
     {
+        if ($statistic_table_entry->template->isRtRwMode()) {
+            $generateRtRows->handle($statistic_table_entry->template, $statistic_table_entry->village);
+        }
+        
         $villageId = $statistic_table_entry->village_id;
 
         $statistic_table_entry->load([
