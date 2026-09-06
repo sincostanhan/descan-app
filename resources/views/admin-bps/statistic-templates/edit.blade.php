@@ -78,7 +78,8 @@
                 </div>
             </div>
 
-            <div class="card bg-base-100 card-border shadow-lg mb-6">
+            {{-- <div class="card bg-base-100 card-border shadow-lg mb-6"> --}}
+            <div class="card bg-base-100 card-border shadow-lg mb-6" id="row-headers-panel">
                 <div class="card-body">
                     <div class="flex justify-between items-center mb-2 border-b pb-2">
                         <h2 class="card-title text-secondary text-xl">Struktur Baris (Sisi Kiri Tabel)</h2>
