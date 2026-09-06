@@ -14,6 +14,7 @@ class UpdateStatisticTableEntryRequest extends FormRequest
     public function rules(): array
     {
         $template = $this->route('statistic_table_entry')->template;
+        $villageId = $this->user()->village_id;
 
         $rules = [
             'source' => ['nullable', 'string', 'max:255'],
@@ -21,7 +22,10 @@ class UpdateStatisticTableEntryRequest extends FormRequest
             'values' => ['nullable', 'array'],
         ];
 
-        $cells = $template->cells()->with('columnHeader')->get();
+        // $cells = $template->cells()->with('columnHeader')->get();
+        $cells = $template->cells()
+            ->where(fn ($q) => $q->whereNull('village_id')->orWhere('village_id', $villageId))
+            ->with('columnHeader')->get();
 
         foreach ($cells as $cell) {
             $rules["values.{$cell->id}"] = match ($cell->columnHeader->data_type) {

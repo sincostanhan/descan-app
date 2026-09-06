@@ -25,7 +25,8 @@ sticky top-0 z-50">
             <li>
                 <a>Data</a>
                 <ul class="p-2">
-                    <li><a href="{{ route('admin.statistical-table.index') }}">Tabel dan Grafik</a></li>
+                    {{-- <li><a href="{{ route('admin.statistical-table.index') }}">Tabel dan Grafik</a></li> --}}
+                    <li><a href="{{ route('admin.statistic-table-entries.index') }}">Tabel dan Grafik</a></li>
                     <li><a href="{{ route('admin.publication.index') }}">Publikasi</a></li>
                     <li><a href="{{ route('admin.infographic.index') }}">Infografis</a></li>
                     <li><a href="#">Metadata</a></li>
@@ -67,7 +68,8 @@ sticky top-0 z-50">
             <details>
             <summary>Data</summary>
             <ul class="p-2 bg-base-100 w-40 z-1">
-                <li><a href="{{ route('admin.statistical-table.index') }}">Tabel dan Grafik</a></li>
+                {{-- <li><a href="{{ route('admin.statistical-table.index') }}">Tabel dan Grafik</a></li> --}}
+                <li><a href="{{ route('admin.statistic-table-entries.index') }}">Tabel dan Grafik</a></li>
                 <li><a href="{{ route('admin.publication.index') }}">Publikasi</a></li>
                 <li><a href="{{ route('admin.infographic.index') }}">Infografis</a></li>
                 <li><a href="#">Metadata</a></li>

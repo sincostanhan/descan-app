@@ -24,6 +24,7 @@ class StatisticTableEntryController extends Controller
         $perPage = $this->getPaginationLimit($request);
 
         $entries = StatisticTableEntry::with('template')
+            ->with('chart')
             ->when($request->get('search'), fn ($q, $s) => $q->whereHas('template', fn ($t) => $t->where('title', 'like', "%{$s}%")))
             ->latest()
             ->paginate($perPage);
@@ -65,10 +66,14 @@ class StatisticTableEntryController extends Controller
         // Kalau nanti ada template dengan hierarki >3 level, load ini perlu direkursi manual.
         $statistic_template->load([
             // 'rowHeaders.children.children',
-            'rowHeaders' => fn ($q) => $q->whereNull('village_id')->orWhere('village_id', $villageId),
+            // 'rowHeaders' => fn ($q) => $q->whereNull('village_id')->orWhere('village_id', $villageId),
+            'rowHeaders' => fn ($q) => $q->where(fn ($qq) => $qq->whereNull('village_id')->orWhere('village_id', $villageId)),
+            'rowHeaders.children',
+            'rowHeaders.children.children',
             'columnHeaders.children.children',
             // 'cells',
-            'cells' => fn ($q) => $q->whereNull('village_id')->orWhere('village_id', $villageId),
+            // 'cells' => fn ($q) => $q->whereNull('village_id')->orWhere('village_id', $villageId),
+            'cells' => fn ($q) => $q->where(fn ($qq) => $qq->whereNull('village_id')->orWhere('village_id', $villageId)),
         ]);
 
         return view('admin.statistic-table-entries.create', [
@@ -86,10 +91,16 @@ class StatisticTableEntryController extends Controller
 
     public function edit(StatisticTableEntry $statistic_table_entry)
     {
+        $villageId = $statistic_table_entry->village_id;
+
         $statistic_table_entry->load([
+            // 'template.rowHeaders.children.children',
+            'template.rowHeaders' => fn ($q) => $q->where(fn ($qq) => $qq->whereNull('village_id')->orWhere('village_id', $villageId)),
+            'template.rowHeaders.children',
             'template.rowHeaders.children.children',
             'template.columnHeaders.children.children',
-            'template.cells',
+            // 'template.cells',
+            'template.cells' => fn ($q) => $q->where(fn ($qq) => $qq->whereNull('village_id')->orWhere('village_id', $villageId)),
             'values',
         ]);
 
