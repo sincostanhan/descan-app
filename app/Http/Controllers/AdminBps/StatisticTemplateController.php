@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\AdminBps;
 
 use App\Actions\CreateStatisticTemplate;
+use App\Actions\LogTemplateChange;
 use App\Actions\RestoreTemplateHeader;
 use App\Actions\UpdateStatisticTemplate;
 use App\Http\Controllers\Controller;
@@ -83,12 +84,21 @@ class StatisticTemplateController extends Controller
             ->with('success', 'Template tabel berhasil dihapus.');
     }
 
-    public function restoreLog(StatisticTemplate $statistic_template, StatisticTemplateLog $log, RestoreTemplateHeader $action)
+    // public function restoreLog(StatisticTemplate $statistic_template, StatisticTemplateLog $log, RestoreTemplateHeader $action)
+    public function restoreLog(StatisticTemplate $statistic_template, StatisticTemplateLog $log, RestoreTemplateHeader $action, LogTemplateChange $logChange)
     {
         abort_unless($log->statistic_template_id === $statistic_template->id, 404);
         abort_unless($log->canBeRestored(), 422, 'Log ini tidak bisa dipulihkan.');
 
-        $action->handle($log->affected_header_id);
+        // $action->handle($log->affected_header_id);
+        $header = $action->handle($log->affected_header_id);
+    
+        $logChange->handle(
+            $statistic_template,
+            $header->axis === 'row' ? 'row_restored' : 'column_restored',
+            "Memulihkan header {$header->axis} \"{$header->label}\" yang sebelumnya dihapus.",
+            $header->id
+        );
 
         return back()->with('success', 'Kolom/baris berhasil dipulihkan.');
     }

@@ -96,7 +96,9 @@
                                             <button type="button"
                                                 data-history-trigger="{{ $entry->template->id }}"
                                                 onclick="document.getElementById('modal_history_{{ $entry->template->id }}').showModal()"
-                                                class="btn btn-soft btn-info btn-sm gap-1">
+                                                {{-- class="btn btn-soft btn-info btn-sm gap-1"> --}}
+                                                {{-- class="btn btn-soft btn-info btn-sm gap-1 min-w-24 justify-center"> --}}
+                                                class="btn btn-soft btn-info btn-sm gap-1 min-w-28 justify-center">
                                                 Riwayat
                                                 {{-- <x-lucide-bell class="w-4 h-4 {{ ($unreadCounts[$entry->template->id] ?? 0) > 0 ? 'text-error' : '' }}" /> --}}
                                                 <x-lucide-bell class="w-4 h-4 bell-icon {{ ($unreadCounts[$entry->template->id] ?? 0) > 0 ? 'text-error' : '' }}" />
