@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Actions\CreateStatisticTableEntry;
 use App\Actions\GenerateRtRowsForVillage;
+use App\Actions\MarkTemplateLogsAsRead;
 use App\Actions\UpdateStatisticTableEntry;
 use App\Http\Requests\StoreStatisticTableEntryRequest;
 use App\Http\Requests\UpdateStatisticTableEntryRequest;
@@ -19,20 +20,36 @@ class StatisticTableEntryController extends Controller
     /**
      * Daftar tabel statistik yang SUDAH diisi Kelurahan ini.
      */
-    public function index(Request $request)
+    // public function index(Request $request)
+    public function index(Request $request, MarkTemplateLogsAsRead $markLogsAsRead)
     {
         $perPage = $this->getPaginationLimit($request);
+        $villageId = auth()->user()->village_id;
 
         $entries = StatisticTableEntry::with('template')
             ->with('chart')
-            ->with(['template.logs' => fn ($q) => $q->latest()->with('changer')])
+            // ->with(['template.logs' => fn ($q) => $q->latest()->with('changer')])        
+            ->with(['template.logs' => fn ($q) => $q->latest()->with(['changer', 'reads'])])
             ->when($request->get('search'), fn ($q, $s) => $q->whereHas('template', fn ($t) => $t->where('title', 'like', "%{$s}%")))
             ->latest()
             ->paginate($perPage);
 
+        // Hitung unread DULU (untuk badge & highlight di kunjungan ini), baru tandai terbaca (untuk kunjungan berikutnya).
+        $unreadCounts = [];
+        foreach ($entries as $entry) {
+            $unreadCounts[$entry->template->id] = $entry->template->logs
+                ->filter(fn ($log) => $log->reads->where('village_id', $villageId)->isEmpty())
+                ->count();
+        }
+
+        foreach ($entries->getCollection()->pluck('template')->unique('id') as $template) {
+            $markLogsAsRead->handle($template, $villageId);
+        }
+
         // return view('admin.statistic-table-entries.index', compact('entries', 'perPage'));
         // return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts'));
         // (villageId juga perlu dikirim, sudah ada sebagai variabel $villageId dari langkah sebelumnya)
+        // return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts', 'villageId'));
         return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts', 'villageId'));
     }
 
