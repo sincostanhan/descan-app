@@ -147,6 +147,8 @@ Route::middleware(['auth'])->group(function () {
             ->names('statistic-table-entries')
             ->parameters(['statistik' => 'statistic_table_entry'])
             ->except(['show', 'create', 'store']); // create/store custom di atas (butuh parameter template)
+        Route::post('/statistik/templates/{statistic_template}/logs/read', [StatisticTableEntryController::class, 'markLogsRead'])
+            ->name('statistic-table-entries.logs.read');
         Route::resource('statistik.charts', StatisticChartController::class)
             ->names('statistic-chart')
             ->parameters([

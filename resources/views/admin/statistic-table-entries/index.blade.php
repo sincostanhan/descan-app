@@ -92,11 +92,17 @@
                                         </td>
                                         <td class="flex justify-center gap-2">
                                             {{-- <button type="button" onclick="document.getElementById('modal_history_{{ $entry->template->id }}').showModal()" class="btn btn-soft btn-info btn-sm"> --}}
-                                            <button type="button" onclick="document.getElementById('modal_history_{{ $entry->template->id }}').showModal()" class="btn btn-soft btn-info btn-sm gap-1">
+                                            {{-- <button type="button" onclick="document.getElementById('modal_history_{{ $entry->template->id }}').showModal()" class="btn btn-soft btn-info btn-sm gap-1"> --}}
+                                            <button type="button"
+                                                data-history-trigger="{{ $entry->template->id }}"
+                                                onclick="document.getElementById('modal_history_{{ $entry->template->id }}').showModal()"
+                                                class="btn btn-soft btn-info btn-sm gap-1">
                                                 Riwayat
-                                                <x-lucide-bell class="w-4 h-4 {{ ($unreadCounts[$entry->template->id] ?? 0) > 0 ? 'text-error' : '' }}" />
+                                                {{-- <x-lucide-bell class="w-4 h-4 {{ ($unreadCounts[$entry->template->id] ?? 0) > 0 ? 'text-error' : '' }}" /> --}}
+                                                <x-lucide-bell class="w-4 h-4 bell-icon {{ ($unreadCounts[$entry->template->id] ?? 0) > 0 ? 'text-error' : '' }}" />
                                                 @if(($unreadCounts[$entry->template->id] ?? 0) > 0)
-                                                    <span class="text-error font-bold text-xs">{{ $unreadCounts[$entry->template->id] }}</span>
+                                                    {{-- <span class="text-error font-bold text-xs">{{ $unreadCounts[$entry->template->id] }}</span> --}}
+                                                    <span class="text-error font-bold text-xs unread-count">{{ $unreadCounts[$entry->template->id] }}</span>
                                                 @endif
                                             </button>
                                             <a href="{{ route('admin.statistic-table-entries.edit', $entry) }}" class="btn btn-soft btn-warning btn-sm">
@@ -128,3 +134,33 @@
         </div>
     </div>
 </x-layout-admin>
+
+@push('scripts')
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('dialog[id^="modal_history_"]').forEach(function (dialog) {
+            // Event 'close' otomatis terpicu native <dialog> baik ditutup lewat tombol ✕,
+            // klik backdrop, maupun tombol Escape — tidak perlu pasang listener manual per tombol.
+            dialog.addEventListener('close', function () {
+                const templateId = dialog.id.replace('modal_history_', '');
+                const trigger = document.querySelector(`[data-history-trigger="${templateId}"]`);
+                if (!trigger) return;
+
+                const countBadge = trigger.querySelector('.unread-count');
+                if (!countBadge) return; // sudah tidak ada notif baru, tidak perlu request apa pun
+
+                fetch(`{{ url('/admin/statistik/templates') }}/${templateId}/logs/read`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    },
+                }).catch(() => {});
+
+                countBadge.remove();
+                trigger.querySelector('.bell-icon')?.classList.remove('text-error');
+            });
+        });
+    });
+</script>
+@endpush

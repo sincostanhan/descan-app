@@ -10,6 +10,12 @@ class StatisticTemplateLogRead extends Model
 {
     use BelongsToVillage;
 
+    /**
+     * Tabel ini sengaja tidak punya created_at/updated_at — 'read_at' sudah cukup
+     * merepresentasikan kapan log ditandai terbaca, jadi timestamp bawaan Eloquent dimatikan.
+     */
+    public $timestamps = false;
+
     protected $fillable = [
         'statistic_template_log_id',
         'village_id',

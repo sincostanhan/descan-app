@@ -21,7 +21,8 @@ class StatisticTableEntryController extends Controller
      * Daftar tabel statistik yang SUDAH diisi Kelurahan ini.
      */
     // public function index(Request $request)
-    public function index(Request $request, MarkTemplateLogsAsRead $markLogsAsRead)
+    // public function index(Request $request, MarkTemplateLogsAsRead $markLogsAsRead)
+    public function index(Request $request)
     {
         $perPage = $this->getPaginationLimit($request);
         $villageId = auth()->user()->village_id;
@@ -34,7 +35,6 @@ class StatisticTableEntryController extends Controller
             ->latest()
             ->paginate($perPage);
 
-        // Hitung unread DULU (untuk badge & highlight di kunjungan ini), baru tandai terbaca (untuk kunjungan berikutnya).
         $unreadCounts = [];
         foreach ($entries as $entry) {
             $unreadCounts[$entry->template->id] = $entry->template->logs
@@ -42,15 +42,26 @@ class StatisticTableEntryController extends Controller
                 ->count();
         }
 
-        foreach ($entries->getCollection()->pluck('template')->unique('id') as $template) {
-            $markLogsAsRead->handle($template, $villageId);
-        }
+        // foreach ($entries->getCollection()->pluck('template')->unique('id') as $template) {
+        //     $markLogsAsRead->handle($template, $villageId);
+        // }
 
         // return view('admin.statistic-table-entries.index', compact('entries', 'perPage'));
         // return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts'));
         // (villageId juga perlu dikirim, sudah ada sebagai variabel $villageId dari langkah sebelumnya)
         // return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts', 'villageId'));
         return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts', 'villageId'));
+    }
+
+
+    /**
+     * Dipanggil via AJAX saat modal riwayat DITUTUP (bukan saat halaman dibuka).
+     */
+    public function markLogsRead(StatisticTemplate $statistic_template, MarkTemplateLogsAsRead $action)
+    {
+        $action->handle($statistic_template, auth()->user()->village_id);
+    
+        return response()->json(['success' => true]);
     }
 
     /**
