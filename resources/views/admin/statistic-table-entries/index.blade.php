@@ -107,6 +107,13 @@
                                                     <span class="text-error font-bold text-xs unread-count">{{ $unreadCounts[$entry->template->id] }}</span>
                                                 @endif
                                             </button>
+
+                                            @if(!$entry->chart)
+                                                <a href="{{ route('admin.statistic-chart.create', $entry) }}" class="btn btn-soft btn-primary btn-sm">
+                                                    Tambah Grafik
+                                                </a>
+                                            @endif
+
                                             <a href="{{ route('admin.statistic-table-entries.edit', $entry) }}" class="btn btn-soft btn-warning btn-sm">
                                                 Edit
                                             </a>
