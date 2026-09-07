@@ -25,11 +25,15 @@ class StatisticTableEntryController extends Controller
 
         $entries = StatisticTableEntry::with('template')
             ->with('chart')
+            ->with(['template.logs' => fn ($q) => $q->latest()->with('changer')])
             ->when($request->get('search'), fn ($q, $s) => $q->whereHas('template', fn ($t) => $t->where('title', 'like', "%{$s}%")))
             ->latest()
             ->paginate($perPage);
 
-        return view('admin.statistic-table-entries.index', compact('entries', 'perPage'));
+        // return view('admin.statistic-table-entries.index', compact('entries', 'perPage'));
+        // return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts'));
+        // (villageId juga perlu dikirim, sudah ada sebagai variabel $villageId dari langkah sebelumnya)
+        return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts', 'villageId'));
     }
 
     /**

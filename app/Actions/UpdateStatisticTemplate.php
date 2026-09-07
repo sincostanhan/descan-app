@@ -60,7 +60,9 @@ class UpdateStatisticTemplate
                 $this->logTemplateChange->handle(
                     $template,
                     $header->axis === 'row' ? 'row_removed' : 'column_removed',
-                    "Menghapus header {$header->axis} \"{$header->label}\" dari template."
+                    // "Menghapus header {$header->axis} \"{$header->label}\" dari template."
+                    "Menghapus header {$header->axis} \"{$header->label}\" dari template.",
+                    $header->id
                 );
             }
 
@@ -104,8 +106,19 @@ class UpdateStatisticTemplate
             $isNewHeader = !$existing;
 
             if ($existing) {
+                $labelChanged = $existing->label !== $payload['label'];
+                $oldLabel = $existing->label;
                 $existing->update($payload);
                 $header = $existing;
+
+                if ($labelChanged) {
+                    $this->logTemplateChange->handle(
+                        $template,
+                        $axis === 'row' ? 'row_renamed' : 'column_renamed',
+                        "Mengganti nama header {$axis} dari \"{$oldLabel}\" menjadi \"{$header->label}\".",
+                        $header->id
+                    );
+                }
             } else {
                 $payload['key'] = $isLeaf ? Str::slug($node['label']) . '-' . Str::random(6) : null;
                 $header = $template->headers()->create($payload);
@@ -117,7 +130,9 @@ class UpdateStatisticTemplate
                 $this->logTemplateChange->handle(
                     $template,
                     $axis === 'row' ? 'row_added' : 'column_added',
-                    "Menambahkan header {$axis} baru \"{$header->label}\" pada template."
+                    // "Menambahkan header {$axis} baru \"{$header->label}\" pada template."
+                    "Menambahkan header {$axis} baru \"{$header->label}\" pada template.",
+                    $header->id
                 );
             }
 

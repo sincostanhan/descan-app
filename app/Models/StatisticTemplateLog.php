@@ -10,10 +10,33 @@ class StatisticTemplateLog extends Model
 {
     protected $fillable = [
         'statistic_template_id',
+        'affected_header_id',
         'changed_by',
         'change_type',
         'description',
     ];
+
+    /**
+     * withTrashed(): header yang dicatat log ini bisa saja sudah soft-deleted (kasus 'removed'),
+     * tetap perlu bisa diakses untuk ditampilkan/dicek statusnya di modal riwayat.
+     */
+    public function affectedHeader(): BelongsTo
+    {
+        return $this->belongsTo(StatisticTemplateHeader::class, 'affected_header_id')->withTrashed();
+    }
+
+    /**
+     * Tombol "Pulihkan" HANYA relevan untuk log jenis removed, DAN header-nya
+     * masih benar-benar berstatus soft-deleted saat ini (belum pernah dipulihkan sebelumnya).
+     */
+    public function canBeRestored(): bool
+    {
+        if (!in_array($this->change_type, ['row_removed', 'column_removed'])) {
+            return false;
+        }
+
+        return $this->affectedHeader?->trashed() ?? false;
+    }
 
     public function template(): BelongsTo
     {

@@ -103,6 +103,9 @@
                                             </div>
                                         </td>
                                         <td class="flex justify-center gap-2">
+                                            <button type="button" onclick="document.getElementById('modal_history_{{ $template->id }}').showModal()" class="btn btn-soft btn-info btn-sm">
+                                                Riwayat
+                                            </button>
                                             <a href="{{ route('admin-bps.statistic-templates.edit', $template) }}" class="btn btn-soft btn-warning btn-sm">
                                                 Edit
                                             </a>
@@ -114,6 +117,7 @@
                                                 <button type="submit" class="btn btn-soft btn-error btn-sm">Hapus</button>
                                             </form>
                                         </td>
+                                        <x-template-history-modal :template="$template" :can-restore="true" />
                                     </tr>
                                 @endforeach
                             </tbody>

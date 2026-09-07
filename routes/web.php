@@ -48,6 +48,8 @@ Route::domain(env('APP_URL_BASE', 'descan.scthan.tech'))->group(function () {
 
             // CRUD Template Tabel Statistik
             Route::resource('statistic-templates', StatisticTemplateController::class)->except(['show']);
+            Route::post('statistic-templates/{statistic_template}/logs/{log}/restore', [StatisticTemplateController::class, 'restoreLog'])
+            ->name('statistic-templates.logs.restore');
         });
     });
 });

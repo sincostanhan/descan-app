@@ -91,6 +91,14 @@
                                             {{ $entry->updated_at->translatedFormat('d M Y') }}
                                         </td>
                                         <td class="flex justify-center gap-2">
+                                            {{-- <button type="button" onclick="document.getElementById('modal_history_{{ $entry->template->id }}').showModal()" class="btn btn-soft btn-info btn-sm"> --}}
+                                            <button type="button" onclick="document.getElementById('modal_history_{{ $entry->template->id }}').showModal()" class="btn btn-soft btn-info btn-sm gap-1">
+                                                Riwayat
+                                                <x-lucide-bell class="w-4 h-4 {{ ($unreadCounts[$entry->template->id] ?? 0) > 0 ? 'text-error' : '' }}" />
+                                                @if(($unreadCounts[$entry->template->id] ?? 0) > 0)
+                                                    <span class="text-error font-bold text-xs">{{ $unreadCounts[$entry->template->id] }}</span>
+                                                @endif
+                                            </button>
                                             <a href="{{ route('admin.statistic-table-entries.edit', $entry) }}" class="btn btn-soft btn-warning btn-sm">
                                                 Edit
                                             </a>
@@ -102,6 +110,8 @@
                                                 <button type="submit" class="btn btn-soft btn-error btn-sm">Hapus</button>
                                             </form>
                                         </td>
+                                        {{-- <x-template-history-modal :template="$entry->template" :can-restore="false" /> --}}
+                                        <x-template-history-modal :template="$entry->template" :can-restore="false" :village-id="$villageId" />
                                     </tr>
                                 @endforeach
                             </tbody>

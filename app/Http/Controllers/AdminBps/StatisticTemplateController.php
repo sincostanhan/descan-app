@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\AdminBps;
 
 use App\Actions\CreateStatisticTemplate;
+use App\Actions\RestoreTemplateHeader;
 use App\Actions\UpdateStatisticTemplate;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreStatisticTemplateRequest;
 use App\Http\Requests\UpdateStatisticTemplateRequest;
 use App\Models\StatisticTemplate;
+use App\Models\StatisticTemplateLog;
 use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
 
@@ -22,6 +24,7 @@ class StatisticTemplateController extends Controller
         $templates = StatisticTemplate::query()
             ->when($request->get('search'), fn ($q, $search) => $q->where('title', 'like', "%{$search}%"))
             ->withCount('entries')
+            ->with(['logs' => fn ($q) => $q->latest()->with('changer')])
             ->latest()
             ->paginate($perPage);
 
@@ -78,5 +81,15 @@ class StatisticTemplateController extends Controller
 
         return redirect()->route('admin-bps.statistic-templates.index')
             ->with('success', 'Template tabel berhasil dihapus.');
+    }
+
+    public function restoreLog(StatisticTemplate $statistic_template, StatisticTemplateLog $log, RestoreTemplateHeader $action)
+    {
+        abort_unless($log->statistic_template_id === $statistic_template->id, 404);
+        abort_unless($log->canBeRestored(), 422, 'Log ini tidak bisa dipulihkan.');
+
+        $action->handle($log->affected_header_id);
+
+        return back()->with('success', 'Kolom/baris berhasil dipulihkan.');
     }
 }
