@@ -31,7 +31,9 @@ class StoreStatisticChartRequest extends FormRequest
             'y_axis_columns.*' => ['string'],
             'y_axis_colors' => ['nullable', 'array'],
             'y_axis_colors.*' => ['nullable', 'string'],
-            'has_total_row' => ['nullable'],
+            // 'has_total_row' => ['nullable'],
+            'included_rows' => ['nullable', 'array'],
+            'included_rows.*' => ['integer'],
             'is_active' => ['nullable'], // Checkbox dari form
         ];
     }
@@ -40,7 +42,7 @@ class StoreStatisticChartRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
-            'has_total_row' => $this->has('has_total_row'),
+            // 'has_total_row' => $this->has('has_total_row'),
             'is_active' => $this->has('is_active'),
         ]);
     }

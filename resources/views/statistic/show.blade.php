@@ -99,10 +99,15 @@
                 const chartsGrid = document.getElementById('publicChartsGrid');
 
                 // Potong data baris terakhir jika fitur "has_total_row" diaktifkan admin
-                let dataToRender = rawTableData;
-                if (chartConfig.has_total_row) {
-                    dataToRender = rawTableData.slice(0, -1);
-                }
+                // let dataToRender = rawTableData;
+                // if (chartConfig.has_total_row) {
+                //     dataToRender = rawTableData.slice(0, -1);
+                // }
+                // Fallback ke "semua baris" untuk grafik lama yang dibuat sebelum fitur ini ada (included_rows masih null).
+                const includedRows = (chartConfig.included_rows && chartConfig.included_rows.length)
+                    ? chartConfig.included_rows
+                    : rawTableData.map((_, i) => i);
+                const dataToRender = rawTableData.filter((_, i) => includedRows.includes(i));
 
                 const xAxis = chartConfig.x_axis_column;
                 const labels = dataToRender.map(row => row[xAxis] || '-');
@@ -184,28 +189,56 @@
                     chartsGrid.className = 'grid grid-cols-1 w-full';
                     const ctx = createCanvasContainer();
                     
-                    const datasets = checkedYAxes.map((yCol) => {
-                        const hexColor = chartConfig.y_axis_colors[yCol] || '#3b82f6';
-                        return {
-                            label: yCol,
-                            data: dataToRender.map(row => parseFloat(row[yCol]) || 0),
-                            backgroundColor: hexColor, 
-                            borderColor: hexColor,
-                            borderWidth: 1
-                        };
-                    });
+                    // const datasets = checkedYAxes.map((yCol) => {
+                    //     const hexColor = chartConfig.y_axis_colors[yCol] || '#3b82f6';
+                    //     return {
+                    //         label: yCol,
+                    //         data: dataToRender.map(row => parseFloat(row[yCol]) || 0),
+                    //         backgroundColor: hexColor, 
+                    //         borderColor: hexColor,
+                    //         borderWidth: 1
+                    //     };
+                    // });
 
                     let actualType = 'bar';
                     let indexAxis = 'x';
                     let isStacked = false;
+                    let isPercent = false;
+                    let isFilled = false;
 
                     switch(type) {
                         case 'bar_clustered': actualType = 'bar'; indexAxis = 'y'; break;
                         case 'bar_stacked': actualType = 'bar'; indexAxis = 'y'; isStacked = true; break;
+                        case 'bar_stacked_100': actualType = 'bar'; indexAxis = 'y'; isStacked = true; isPercent = true; break;
                         case 'column_clustered': actualType = 'bar'; indexAxis = 'x'; break;
                         case 'column_stacked': actualType = 'bar'; indexAxis = 'x'; isStacked = true; break;
+                        case 'column_stacked_100': actualType = 'bar'; indexAxis = 'x'; isStacked = true; isPercent = true; break;
                         case 'line_markers': actualType = 'line'; break;
+                        case 'line_stacked': actualType = 'line'; isStacked = true; isFilled = true; break;
+                        case 'line_stacked_100': actualType = 'line'; isStacked = true; isFilled = true; isPercent = true; break;
                     }
+
+                    const rowTotals = isPercent
+                        ? dataToRender.map(row => checkedYAxes.reduce((sum, col) => sum + (parseFloat(row[col]) || 0), 0))
+                        : null;
+
+                    const datasets = checkedYAxes.map((yCol) => {
+                        const hexColor = chartConfig.y_axis_colors[yCol] || '#3b82f6';
+                        const data = dataToRender.map((row, i) => {
+                            const raw = parseFloat(row[yCol]) || 0;
+                            if (!isPercent) return raw;
+                            const total = rowTotals[i];
+                            return total > 0 ? +(raw / total * 100).toFixed(2) : 0;
+                        });
+                        return {
+                            label: yCol,
+                            data: data,
+                            backgroundColor: hexColor,
+                            borderColor: hexColor,
+                            borderWidth: 1,
+                            fill: isFilled,
+                        };
+                    });
 
                     new Chart(ctx, {
                         type: actualType,
@@ -214,7 +247,15 @@
                             responsive: true,
                             maintainAspectRatio: false,
                             indexAxis: indexAxis,
-                            scales: { x: { stacked: isStacked }, y: { stacked: isStacked } }
+                            // scales: { x: { stacked: isStacked }, y: { stacked: isStacked } }
+                            scales: {
+                                x: { stacked: isStacked },
+                                y: {
+                                    stacked: isStacked,
+                                    max: isPercent ? 100 : undefined,
+                                    ticks: { callback: v => isPercent ? v + '%' : v },
+                                }
+                            }
                         }
                     });
                 }

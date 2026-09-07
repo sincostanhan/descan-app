@@ -71,10 +71,13 @@
             chartPreviewContainer.classList.remove('hidden');
             destroyAllCharts();
 
-            let dataToRender = tableData;
-            if (hasTotalRowToggle && hasTotalRowToggle.checked) {
-                dataToRender = tableData.slice(0, -1);
-            }
+            // let dataToRender = tableData;
+            // if (hasTotalRowToggle && hasTotalRowToggle.checked) {
+            //     dataToRender = tableData.slice(0, -1);
+            // }
+            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+            const checkedRowIndices = Array.from(rowCheckboxes).filter(cb => cb.checked).map(cb => parseInt(cb.value));
+            const dataToRender = tableData.filter((_, i) => checkedRowIndices.includes(i));
 
             const labels = dataToRender.map(row => row[xAxis] || '-');
 
@@ -128,30 +131,64 @@
                 chartsGrid.className = 'grid grid-cols-1 w-full';
                 const ctx = createCanvasContainer();
 
-                const datasets = checkedYAxes.map((yCol) => {
-                    const checkbox = Array.from(yAxisCheckboxes).find(cb => cb.value === yCol);
-                    const colorInput = checkbox.closest('.y-axis-wrapper').querySelector('.color-picker-input');
-                    const hexColor = colorInput.value;
-                    return {
-                        label: yCol,
-                        data: dataToRender.map(row => parseFloat(row[yCol]) || 0),
-                        backgroundColor: hexColor,
-                        borderColor: hexColor,
-                        borderWidth: 1
-                    };
-                });
+                // const datasets = checkedYAxes.map((yCol) => {
+                //     const checkbox = Array.from(yAxisCheckboxes).find(cb => cb.value === yCol);
+                //     const colorInput = checkbox.closest('.y-axis-wrapper').querySelector('.color-picker-input');
+                //     const hexColor = colorInput.value;
+                //     return {
+                //         label: yCol,
+                //         data: dataToRender.map(row => parseFloat(row[yCol]) || 0),
+                //         backgroundColor: hexColor,
+                //         borderColor: hexColor,
+                //         borderWidth: 1
+                //     };
+                // });
 
                 let actualType = 'bar';
                 let indexAxis = 'x';
                 let isStacked = false;
+                let isPercent = false;
+                let isFilled = false;
 
                 switch (type) {
                     case 'bar_clustered': actualType = 'bar'; indexAxis = 'y'; break;
                     case 'bar_stacked': actualType = 'bar'; indexAxis = 'y'; isStacked = true; break;
+                    case 'bar_stacked_100': actualType = 'bar'; indexAxis = 'y'; isStacked = true; isPercent = true; break;
                     case 'column_clustered': actualType = 'bar'; indexAxis = 'x'; break;
                     case 'column_stacked': actualType = 'bar'; indexAxis = 'x'; isStacked = true; break;
+                    case 'column_stacked_100': actualType = 'bar'; indexAxis = 'x'; isStacked = true; isPercent = true; break;
                     case 'line_markers': actualType = 'line'; break;
+                    case 'line_stacked': actualType = 'line'; isStacked = true; isFilled = true; break;
+                    case 'line_stacked_100': actualType = 'line'; isStacked = true; isFilled = true; isPercent = true; break;
                 }
+
+                // Untuk mode 100%: hitung total per baris (lintas semua kolom Y yang dicentang),
+                // lalu ubah tiap nilai jadi persentase dari total itu.
+                const rowTotals = isPercent
+                    ? dataToRender.map(row => checkedYAxes.reduce((sum, col) => sum + (parseFloat(row[col]) || 0), 0))
+                    : null;
+
+                const datasets = checkedYAxes.map((yCol) => {
+                    const checkbox = Array.from(yAxisCheckboxes).find(cb => cb.value === yCol);
+                    const colorInput = checkbox.closest('.y-axis-wrapper').querySelector('.color-picker-input');
+                    const hexColor = colorInput.value;
+
+                    const data = dataToRender.map((row, i) => {
+                        const raw = parseFloat(row[yCol]) || 0;
+                        if (!isPercent) return raw;
+                        const total = rowTotals[i];
+                        return total > 0 ? +(raw / total * 100).toFixed(2) : 0;
+                    });
+
+                    return {
+                        label: yCol,
+                        data: data,
+                        backgroundColor: hexColor,
+                        borderColor: hexColor,
+                        borderWidth: 1,
+                        fill: isFilled,
+                    };
+                });
 
                 const newChart = new Chart(ctx, {
                     type: actualType,
@@ -160,7 +197,15 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         indexAxis: indexAxis,
-                        scales: { x: { stacked: isStacked }, y: { stacked: isStacked } }
+                        // scales: { x: { stacked: isStacked }, y: { stacked: isStacked } }
+                        scales: {
+                            x: { stacked: isStacked },
+                            y: {
+                                stacked: isStacked,
+                                max: isPercent ? 100 : undefined,
+                                ticks: { callback: v => isPercent ? v + '%' : v },
+                            }
+                        }
                     }
                 });
                 chartInstances.push(newChart);
@@ -170,7 +215,8 @@
         chartTypeSelect.addEventListener('change', updatePreview);
         xAxisSelect.addEventListener('change', () => { updateYAxisCheckboxes(); updatePreview(); });
         yAxisCheckboxes.forEach(cb => cb.addEventListener('change', updatePreview));
-        if (hasTotalRowToggle) hasTotalRowToggle.addEventListener('change', updatePreview);
+        // if (hasTotalRowToggle) hasTotalRowToggle.addEventListener('change', updatePreview);
+        rowCheckboxes.forEach(cb => cb.addEventListener('change', updatePreview));
         document.querySelectorAll('.color-picker-input').forEach(picker => picker.addEventListener('input', updatePreview));
 
         updateYAxisCheckboxes();

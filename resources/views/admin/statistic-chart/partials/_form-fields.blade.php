@@ -43,9 +43,16 @@
 
             @foreach($headers as $index => $header)
                 <div class="flex items-center gap-2 p-1 y-axis-wrapper">
-                    <label class="cursor-pointer label justify-start gap-2 flex-grow">
+                    {{-- <label class="cursor-pointer label justify-start gap-2 flex-grow">
                         <input type="checkbox" name="y_axis_columns[]" value="{{ $header }}" class="checkbox checkbox-primary checkbox-sm y-axis-checkbox"
                             {{ in_array($header, old('y_axis_columns', $savedYColumns)) ? 'checked' : '' }} />
+                        <span class="label-text truncate">{{ $header }}</span>
+                    </label> --}}
+                    <label class="cursor-pointer label justify-start gap-2 flex-grow">
+                        <input type="checkbox" name="y_axis_columns[]" value="{{ $header }}" class="peer sr-only y-axis-checkbox"
+                            {{ in_array($header, old('y_axis_columns', $savedYColumns)) ? 'checked' : '' }} />
+                        <x-lucide-square class="w-5 h-5 text-base-content/40 peer-checked:hidden" />
+                        <x-lucide-square-check class="w-5 h-5 text-primary hidden peer-checked:block" />
                         <span class="label-text truncate">{{ $header }}</span>
                     </label>
                     <input type="color" name="y_axis_colors[{{ $header }}]"
@@ -58,12 +65,31 @@
         <x-forms.error name="y_axis_columns" />
     </fieldset>
 
-    <fieldset class="fieldset w-full mt-2">
+    {{-- <fieldset class="fieldset w-full mt-2">
         <label class="cursor-pointer label justify-start gap-3">
             <input type="checkbox" name="has_total_row" id="hasTotalRowToggle" value="1" class="toggle toggle-warning"
                 {{ old('has_total_row', $chart?->has_total_row) ? 'checked' : '' }} />
             <span class="label-text font-semibold">Kecualikan Baris Terakhir (Baris Total) dari Grafik</span>
         </label>
+    </fieldset> --}}
+    <fieldset class="fieldset w-full mt-4">
+        <legend class="fieldset-legend text-base">Pilih Baris yang Ditampilkan</legend>
+        @php
+            $rowLabelKey = $headers[0] ?? null;
+            $savedIncludedRows = old('included_rows', $chart?->included_rows ?? range(0, count($statisticalTableEntry->content) - 1));
+        @endphp
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-2 border p-4 rounded-lg bg-base-200/30 max-h-64 overflow-y-auto">
+            @foreach($statisticalTableEntry->content as $index => $row)
+                <label class="cursor-pointer label justify-start gap-2">
+                    <input type="checkbox" name="included_rows[]" value="{{ $index }}" class="peer sr-only row-checkbox"
+                        {{ in_array($index, $savedIncludedRows) ? 'checked' : '' }} />
+                    <x-lucide-square class="w-5 h-5 text-base-content/40 peer-checked:hidden shrink-0" />
+                    <x-lucide-square-check class="w-5 h-5 text-primary hidden peer-checked:block shrink-0" />
+                    <span class="label-text truncate">{{ $row[$rowLabelKey] ?? "Baris {$index}" }}</span>
+                </label>
+            @endforeach
+        </div>
+        <x-forms.error name="included_rows" />
     </fieldset>
 
     <fieldset class="fieldset w-full mt-2">

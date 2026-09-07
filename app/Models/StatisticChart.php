@@ -20,14 +20,16 @@ class StatisticChart extends Model
         'x_axis_column',
         'y_axis_columns',
         'y_axis_colors',
-        'has_total_row',
+        // 'has_total_row',
+        'included_rows',
         'is_active',
     ];
 
     protected $casts = [
         'y_axis_columns' => 'array',
         'y_axis_colors' => 'array',
-        'has_total_row' => 'boolean',
+        // 'has_total_row' => 'boolean',
+        'included_rows' => 'array',
         'is_active' => 'boolean',
     ];
 
