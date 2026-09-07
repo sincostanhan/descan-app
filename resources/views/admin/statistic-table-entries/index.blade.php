@@ -133,34 +133,73 @@
             </div>
         </div>
     </div>
-</x-layout-admin>
 
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
-        document.querySelectorAll('dialog[id^="modal_history_"]').forEach(function (dialog) {
-            // Event 'close' otomatis terpicu native <dialog> baik ditutup lewat tombol ✕,
-            // klik backdrop, maupun tombol Escape — tidak perlu pasang listener manual per tombol.
-            dialog.addEventListener('close', function () {
-                const templateId = dialog.id.replace('modal_history_', '');
-                const trigger = document.querySelector(`[data-history-trigger="${templateId}"]`);
-                if (!trigger) return;
+    {{-- @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // document.querySelectorAll('dialog[id^="modal_history_"]').forEach(function (dialog) {
+            const dialogs = document.querySelectorAll('dialog[id^="modal_history_"]');
+            console.log('[debug] jumlah dialog ditemukan:', dialogs.length);
 
-                const countBadge = trigger.querySelector('.unread-count');
-                if (!countBadge) return; // sudah tidak ada notif baru, tidak perlu request apa pun
+            dialogs.forEach(function (dialog) {
+                // Event 'close' otomatis terpicu native <dialog> baik ditutup lewat tombol ✕,
+                // klik backdrop, maupun tombol Escape — tidak perlu pasang listener manual per tombol.
+                dialog.addEventListener('close', function () {
+                    console.log('[debug] event close terpicu untuk:', dialog.id);
+        
+                    const templateId = dialog.id.replace('modal_history_', '');
+                    const trigger = document.querySelector(`[data-history-trigger="${templateId}"]`);
+                    console.log('[debug] trigger ditemukan:', trigger);
+                    if (!trigger) return;
 
-                fetch(`{{ url('/admin/statistik/templates') }}/${templateId}/logs/read`, {
-                    method: 'POST',
-                    headers: {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                        'Accept': 'application/json',
-                    },
-                }).catch(() => {});
+                    const countBadge = trigger.querySelector('.unread-count');
+                    console.log('[debug] badge ditemukan:', countBadge);
+                    if (!countBadge) return; // sudah tidak ada notif baru, tidak perlu request apa pun
 
-                countBadge.remove();
-                trigger.querySelector('.bell-icon')?.classList.remove('text-error');
+                    fetch(`{{ url('/admin/statistik/templates') }}/${templateId}/logs/read`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                        },
+                    // }).catch(() => {});
+                    }).then(r => console.log('[debug] fetch selesai, status:', r.status))
+                    .catch(err => console.log('[debug] fetch gagal:', err));
+
+                    countBadge.remove();
+                    trigger.querySelector('.bell-icon')?.classList.remove('text-error');
+                });
             });
         });
-    });
-</script>
-@endpush
+    </script>
+    @endpush --}}
+    @push('scripts')
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            document.querySelectorAll('dialog[id^="modal_history_"]').forEach(function (dialog) {
+                // Event 'close' otomatis terpicu native <dialog> baik ditutup lewat tombol ✕,
+                // klik backdrop, maupun tombol Escape — tidak perlu pasang listener manual per tombol.
+                dialog.addEventListener('close', function () {
+                    const templateId = dialog.id.replace('modal_history_', '');
+                    const trigger = document.querySelector(`[data-history-trigger="${templateId}"]`);
+                    if (!trigger) return;
+
+                    const countBadge = trigger.querySelector('.unread-count');
+                    if (!countBadge) return; // sudah tidak ada notif baru, tidak perlu request apa pun
+
+                    fetch(`{{ url('/admin/statistik/templates') }}/${templateId}/logs/read`, {
+                        method: 'POST',
+                        headers: {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                            'Accept': 'application/json',
+                        },
+                    }).catch(() => {});
+
+                    countBadge.remove();
+                    trigger.querySelector('.bell-icon')?.classList.remove('text-error');
+                });
+            });
+        });
+    </script>
+    @endpush
+</x-layout-admin>
