@@ -5,6 +5,7 @@
         const chartTypeSelect = document.getElementById('chartTypeSelect');
         const xAxisSelect = document.getElementById('xAxisSelect');
         const yAxisCheckboxes = document.querySelectorAll('.y-axis-checkbox');
+        const rowCheckboxes = document.querySelectorAll('.row-checkbox');
         const chartPreviewContainer = document.getElementById('chartPreviewContainer');
         const chartsGrid = document.getElementById('chartsGrid');
 
@@ -75,7 +76,7 @@
             // if (hasTotalRowToggle && hasTotalRowToggle.checked) {
             //     dataToRender = tableData.slice(0, -1);
             // }
-            const rowCheckboxes = document.querySelectorAll('.row-checkbox');
+            // const rowCheckboxes = document.querySelectorAll('.row-checkbox');
             const checkedRowIndices = Array.from(rowCheckboxes).filter(cb => cb.checked).map(cb => parseInt(cb.value));
             const dataToRender = tableData.filter((_, i) => checkedRowIndices.includes(i));
 
