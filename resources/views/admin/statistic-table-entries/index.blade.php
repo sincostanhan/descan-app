@@ -108,11 +108,16 @@
                                                 @endif
                                             </button>
 
-                                            @if(!$entry->chart)
+                                            {{-- @if(!$entry->chart)
                                                 <a href="{{ route('admin.statistic-chart.create', $entry) }}" class="btn btn-soft btn-primary btn-sm">
                                                     Tambah Grafik
                                                 </a>
-                                            @endif
+                                            @endif --}}
+                                            <a href="{{ $entry->chart ? route('admin.statistic-chart.edit', [$entry, $entry->chart]) : route('admin.statistic-chart.create', $entry) }}"
+                                                class="btn btn-soft btn-primary btn-sm">
+                                                Grafik
+                                            </a>
+
 
                                             <a href="{{ route('admin.statistic-table-entries.edit', $entry) }}" class="btn btn-soft btn-warning btn-sm">
                                                 Edit

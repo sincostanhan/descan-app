@@ -4,8 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Actions\CreateStatisticChart;
 use App\Actions\ParseExcelToArray;
+use App\Actions\UpdateStatisticChart;
 use App\Http\Requests\StoreStatisticChartRequest;
+use App\Http\Requests\UpdateStatisticChartRequest;
 use App\Models\StatisticalTable;
+use App\Models\StatisticChart;
 use App\Models\StatisticTableEntry;
 use Illuminate\Http\Request;
 
@@ -49,7 +52,31 @@ class StatisticChartController extends Controller
         //                  ->with('success', 'Visualisasi grafik berhasil ditambahkan!');
         // TODO(step Controller Kelurahan): ganti ke route('admin.statistic-table-entries.index')
         // setelah controller pengganti StatisticalTableController dibuat di step berikutnya.
-        return back()->with('success', 'Visualisasi grafik berhasil ditambahkan!');
+        // return back()->with('success', 'Visualisasi grafik berhasil ditambahkan!');
+        redirect()->route('admin.statistic-table-entries.index')
+            ->with('success', 'Visualisasi grafik berhasil ditambahkan!');
+    }
+
+    public function edit(StatisticTableEntry $statistic_table_entry, StatisticChart $statistic_chart)
+    {
+        return view('admin.statistic-chart.edit', [
+            'statisticalTableEntry' => $statistic_table_entry,
+            'chart' => $statistic_chart,
+            'headers' => $statistic_table_entry->columns,
+            'chartTypes' => $this->getChartTypes(),
+        ]);
+    }
+
+    public function update(
+        UpdateStatisticChartRequest $request,
+        StatisticTableEntry $statistic_table_entry,
+        StatisticChart $statistic_chart,
+        UpdateStatisticChart $updateAction
+    ) {
+        $updateAction->handle($statistic_chart, $request->validated());
+
+        return redirect()->route('admin.statistic-table-entries.index')
+            ->with('success', 'Konfigurasi grafik berhasil diperbarui.');
     }
 
     /**

@@ -1,3 +1,5 @@
+resources\views\admin\trash\statistical-table\preview.blade.php
+
 <x-layout-admin title="Pratinjau Tabel Statistik">
     <x-hero
         title="Pratinjau & Simpan Tabel"

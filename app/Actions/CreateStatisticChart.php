@@ -13,6 +13,10 @@ class CreateStatisticChart
         // return $statisticalTable->charts()->create($attributes);
         // Relasi chart() (hasOne) otomatis mengisi statistic_table_entry_id.
         // Trait BelongsToVillage di model StatisticChart otomatis mengisi village_id.
+
+        // Judul grafik opsional — kalau dikosongkan BPS/Kelurahan, ikut judul template (sesuai desain lama).
+        $attributes['title'] = $attributes['title'] ?: $statisticTableEntry->template->title;
+
         return $statisticTableEntry->chart()->create($attributes);
     }
 }

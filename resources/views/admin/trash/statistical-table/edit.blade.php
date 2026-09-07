@@ -1,3 +1,5 @@
+resources\views\admin\trash\statistical-table\edit.blade.php
+
 <x-layout-admin title="Edit Tabel Statistik">
     <x-hero
         title="Edit Tabel Statistik"

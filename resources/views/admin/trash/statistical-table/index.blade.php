@@ -1,3 +1,5 @@
+resources\views\admin\trash\statistical-table\index.blade.php
+
 <x-layout-admin title="Tabel Statistik">
     <x-hero
         title="Tabel Statistik"

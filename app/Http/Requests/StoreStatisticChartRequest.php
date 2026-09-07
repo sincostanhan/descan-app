@@ -23,11 +23,15 @@ class StoreStatisticChartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'title' => ['required', 'string', 'max:255'],
+            // 'title' => ['required', 'string', 'max:255'],
+            'title' => ['nullable', 'string', 'max:255'], // kosong = ikut judul tabel (sesuai desain lama)
             'chart_type' => ['required', 'string'],
             'x_axis_column' => ['required', 'string'],
             'y_axis_columns' => ['required', 'array', 'min:1'],
             'y_axis_columns.*' => ['string'],
+            'y_axis_colors' => ['nullable', 'array'],
+            'y_axis_colors.*' => ['nullable', 'string'],
+            'has_total_row' => ['nullable'],
             'is_active' => ['nullable'], // Checkbox dari form
         ];
     }
@@ -36,6 +40,7 @@ class StoreStatisticChartRequest extends FormRequest
     protected function prepareForValidation()
     {
         $this->merge([
+            'has_total_row' => $this->has('has_total_row'),
             'is_active' => $this->has('is_active'),
         ]);
     }

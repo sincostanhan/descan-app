@@ -1,3 +1,5 @@
+resources\views\admin\trash\statistical-table\create.blade.php
+
 <x-layout-admin title="Tambah Tabel Statistik">
     <x-hero
         title="Tambah Tabel Statistik"
