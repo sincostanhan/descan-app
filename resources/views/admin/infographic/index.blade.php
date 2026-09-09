@@ -180,7 +180,8 @@
                                                         @endphp
                                                         
                                                         @if($coverSrc)
-                                                            <img src="{{ $coverSrc }}" alt="Cover" class="object-cover" />
+                                                            {{-- <img src="{{ $coverSrc }}" alt="Cover" class="object-cover" /> --}}
+                                                            <img src="{{ $coverSrc }}" alt="Cover" class="object-cover" loading="lazy" decoding="async" />
                                                         @else
                                                             <x-lucide-file-text class="w-6 h-6 text-base-content/40" />
                                                         @endif

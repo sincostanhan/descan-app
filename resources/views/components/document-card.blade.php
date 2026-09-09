@@ -21,7 +21,8 @@
                     max-w-36 md:max-w-44 w-full 
                     rounded shadow-md border border-base-300 
                     object-cover
-                " 
+                "  
+                loading="lazy" decoding="async"
             />
         @else
             {{-- Fallback: Jika data bermasalah/tidak ada cover --}}

@@ -175,7 +175,8 @@
                                                     rounded border border-base-300 flex items-center justify-center bg-base-200">
                                                         {{-- Cek Cover Ekstrak --}}
                                                         @if($pub->cover_path)
-                                                            <img src="{{ asset('storage/' . $pub->cover_path) }}" alt="Cover" class="object-cover" />
+                                                            {{-- <img src="{{ asset('storage/' . $pub->cover_path) }}" alt="Cover" class="object-cover" /> --}}
+                                                            <img src="{{ asset('storage/' . $pub->cover_path) }}" alt="Cover" class="object-cover" loading="lazy" decoding="async" />
                                                         @else
                                                             <x-lucide-file-text class="w-6 h-6 text-base-content/40" />
                                                         @endif

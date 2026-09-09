@@ -115,7 +115,9 @@
                                     <img src="{{ asset('storage/' . $photo->foto_path) }}"
                                     {{-- <img src="{{ Storage::url($photo->foto_path) }}"  --}}
                                          alt="Foto {{ $gallery->nama_kegiatan }}"
-                                         class="h-72 md:h-96 object-cover" />
+                                         {{-- class="h-72 md:h-96 object-cover" /> --}}
+                                        class="h-72 md:h-96 object-cover"
+                                         loading="lazy" decoding="async" />
                                     
                                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity 
                                     flex items-center justify-center">

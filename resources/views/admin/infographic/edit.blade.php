@@ -105,6 +105,7 @@
                                     
                                     @if($coverSrc)
                                         <img id="old-cover" src="{{ $coverSrc }}" class="w-48 rounded border shadow-md object-cover">
+                                        <img id="old-cover" src="{{ $coverSrc }}" class="w-48 rounded border shadow-md object-cover" loading="lazy" decoding="async">
                                     @endif
                                 </div>
 
@@ -125,8 +126,11 @@
                                         class="w-full h-125 border border-base-300 rounded shadow-sm bg-white {{ $isImage ? 'hidden' : '' }}" 
                                         src="{{ !$isImage ? asset('storage/' . $infographic->file_path) : '' }}"></iframe>
                                             
+                                    {{-- <img id="image-preview" class="max-w-full rounded border {{ !$isImage ? 'hidden' : '' }}" 
+                                         src="{{ $isImage ? asset('storage/' . $infographic->file_path) : '' }}" /> --}}
                                     <img id="image-preview" class="max-w-full rounded border {{ !$isImage ? 'hidden' : '' }}" 
-                                         src="{{ $isImage ? asset('storage/' . $infographic->file_path) : '' }}" />
+                                        src="{{ $isImage ? asset('storage/' . $infographic->file_path) : '' }}"
+                                        loading="lazy" decoding="async" />
                                 </div>
                             </div>
                         </div>

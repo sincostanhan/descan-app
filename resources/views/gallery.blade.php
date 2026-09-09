@@ -62,7 +62,9 @@
                                          object-cover 
                                          hover:scale-105 transition-transform duration-500 
                                          {{-- cursor-pointer --}}
-                                         " />
+                                         {{-- " />                                         --}}
+                                        "
+                                        loading="lazy" decoding="async" />
                                 </div>
                             @endforeach
                         </div>

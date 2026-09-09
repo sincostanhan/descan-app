@@ -106,7 +106,8 @@
                                     <iframe id="pdf-iframe" class="w-full h-125 border 
                                         border-base-300 shadow-sm
                                         rounded bg-white hidden"></iframe>
-                                    <img id="image-preview" class="max-w-full rounded border hidden" />
+                                    {{-- <img id="image-preview" class="max-w-full rounded border hidden" /> --}}
+                                    <img id="image-preview" class="max-w-full rounded border hidden" loading="lazy" decoding="async" />
                                 </div>
                             </div>
                         </div>

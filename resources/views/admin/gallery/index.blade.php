@@ -158,7 +158,9 @@
                                                                     alt="Foto {{ $gallery->judul }}"
                                                                     {{-- class="rounded-box" /> --}}
                                                                     class="rounded-box 
-                                                                    h-72 md:h-96 object-cover" />
+                                                                    {{-- h-72 md:h-96 object-cover" /> --}}
+                                                                    h-72 md:h-96 object-cover"
+                                                                    loading="lazy" decoding="async" />
                                                             </div>
                                                         @endforeach
                                                     </div>

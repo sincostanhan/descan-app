@@ -92,7 +92,8 @@
                                     
                                     {{-- Gambar cover lama (ditampilkan jika ada) --}}
                                     @if($publication->cover_path)
-                                        <img id="old-cover" src="{{ asset('storage/' . $publication->cover_path) }}" class="w-48 rounded border shadow-md">
+                                        {{-- <img id="old-cover" src="{{ asset('storage/' . $publication->cover_path) }}" class="w-48 rounded border shadow-md"> --}}
+                                        <img id="old-cover" src="{{ asset('storage/' . $publication->cover_path) }}" class="w-48 rounded border shadow-md" loading="lazy" decoding="async">
                                     @endif
                                 </div>
 
