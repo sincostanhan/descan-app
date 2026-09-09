@@ -15,7 +15,7 @@
     >
         @if($coverUrl)
             {{-- Tampilkan gambar (hasil ekstrak PDF atau file gambar asli) --}}
-            <img src="{{ $coverUrl }}" 
+            {{-- <img src="{{ $coverUrl }}" 
                 alt="Cover {{ $title }}" 
                 class="
                     max-w-36 md:max-w-44 w-full 
@@ -23,7 +23,22 @@
                     object-cover
                 "  
                 loading="lazy" decoding="async"
-            />
+            /> --}}
+            <div class="relative w-full max-w-36 md:max-w-44">
+                <div class="skeleton absolute inset-0 rounded"></div>
+                <img src="{{ $coverUrl }}" 
+                    alt="Cover {{ $title }}" 
+                    class="
+                        max-w-36 md:max-w-44 w-full 
+                        rounded shadow-md border border-base-300 
+                        object-cover relative opacity-0 transition-opacity duration-300
+                        {{-- object-cover relative opacity-0 transition-opacity duration-3000 --}}
+                    "
+                    loading="lazy" decoding="async"
+                    onload="this.classList.remove('opacity-0'); this.previousElementSibling.remove();"
+                    onerror="this.previousElementSibling.remove();"
+                />
+            </div>
         @else
             {{-- Fallback: Jika data bermasalah/tidak ada cover --}}
             <div class="

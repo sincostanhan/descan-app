@@ -52,19 +52,26 @@
                         shadow-xl">
                             @foreach($gallery->photos as $photo)
                                 {{-- <div class="carousel-item"> --}}
-                                <div class="carousel-item rounded-box overflow-hidden">
+                                {{-- <div class="carousel-item rounded-box overflow-hidden"> --}}
+                                <div class="carousel-item rounded-box overflow-hidden relative">
+                                    <div class="skeleton absolute inset-0 rounded-box"></div>
                                     <img src="{{ asset('storage/' . $photo->foto_path) }}"
                                     {{-- <img src="{{ Storage::url($photo->foto_path) }}"  --}}
                                          {{-- alt="Foto {{ $gallery->nama_kegiatan }}" --}}
                                          alt="Foto {{ $gallery->judul }}"
                                          {{-- class="h-72 md:h-96 object-cover hover:scale-105 transition-transform duration-500 cursor-pointer" /> --}}
                                          class="h-40 md:h-96 
-                                         object-cover 
+                                         {{-- object-cover  --}}
+                                         object-cover relative opacity-0 transition-opacity duration-300
+                                         {{-- object-cover relative opacity-0 transition-opacity duration-3000 --}}
                                          {{-- hover:scale-105 transition-transform duration-500  --}}
                                          {{-- cursor-pointer --}}
                                          {{-- " />                                         --}}
                                         "
-                                        loading="lazy" decoding="async" />
+                                        {{-- loading="lazy" decoding="async" /> --}}
+                                        loading="lazy" decoding="async"
+                                        onload="this.classList.remove('opacity-0'); this.previousElementSibling.remove();"
+                                        onerror="this.previousElementSibling.remove();" />
                                 </div>
                             @endforeach
                         </div>
