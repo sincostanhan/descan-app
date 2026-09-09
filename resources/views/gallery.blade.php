@@ -60,7 +60,7 @@
                                          {{-- class="h-72 md:h-96 object-cover hover:scale-105 transition-transform duration-500 cursor-pointer" /> --}}
                                          class="h-40 md:h-96 
                                          object-cover 
-                                         hover:scale-105 transition-transform duration-500 
+                                         {{-- hover:scale-105 transition-transform duration-500  --}}
                                          {{-- cursor-pointer --}}
                                          {{-- " />                                         --}}
                                         "
