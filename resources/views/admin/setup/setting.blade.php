@@ -23,13 +23,14 @@
         <form action="{{ route('admin.setup.storeSetting') }}" method="POST" enctype="multipart/form-data">
             @csrf
             
-            <div class="card bg-base-100 
+            {{-- <div class="card bg-base-100 
             card-border 
             shadow-lg">
                 <div class="card-body">
                     <h2 class="card-title text-secondary 
-                    text-xl mb-4 border-b pb-2">Identitas Kelurahan</h2>
-                    
+                    text-xl mb-4 border-b pb-2">Identitas Kelurahan</h2> --}}
+            <x-section-card title="Identitas Kelurahan" title-size="text-xl">
+
                     <fieldset class="fieldset 
                     w-full mb-6">
                         <legend class="fieldset-legend">Nama Kelurahan</legend>
@@ -57,8 +58,9 @@
                     <div class="card-actions justify-end mt-8 border-t pt-4">
                         <button type="submit" class="btn btn-secondary">Organisasi <x-lucide-move-right class="w-5 h-5 ml-1" /></button>
                     </div>
-                </div>
-            </div>
+                {{-- </div> --}}
+            {{-- </div> --}}            
+            </x-section-card>
         </form>
     </div>
 </x-layout-admin>
