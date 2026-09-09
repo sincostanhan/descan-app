@@ -74,5 +74,12 @@
                 background-position: 300%
             }
         }
+         
+        @media (prefers-reduced-motion: reduce) {
+            .gradient {
+                animation: none;
+                background-position: 0%;
+            }
+        }
     </style>
 </x-layout-auth>
