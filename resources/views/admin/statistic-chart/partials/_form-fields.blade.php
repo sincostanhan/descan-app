@@ -101,7 +101,9 @@
     </fieldset>
 </div>
 
-<div id="chartPreviewContainer" class="hidden mt-8 mb-4 border rounded-xl p-4 bg-white shadow-sm w-full">
-    <h3 class="text-center font-bold text-gray-700 mb-4">Live Preview Grafik</h3>
+{{-- <div id="chartPreviewContainer" class="hidden mt-8 mb-4 border rounded-xl p-4 bg-white shadow-sm w-full">
+    <h3 class="text-center font-bold text-gray-700 mb-4">Live Preview Grafik</h3> --}}
+<div id="chartPreviewContainer" class="hidden mt-8 mb-4 border rounded-xl p-4 bg-base-100 shadow-sm w-full">
+    <h3 class="text-center font-bold text-base-content/80 mb-4">Live Preview Grafik</h3>
     <div id="chartsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full"></div>
 </div>

@@ -15,7 +15,7 @@
                         <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                     @endforeach
 
-                    <input
+                    <inputmit="return confirm('Apakah Anda yakin ingin menghapus tabel ini beserta grafiknya (jika ada)? Aksi ini tidak bisa dibatalkan
                         type="text"
                         name="search"
                         value="{{ request('search') }}"
@@ -122,13 +122,41 @@
                                             <a href="{{ route('admin.statistic-table-entries.edit', $entry) }}" class="btn btn-soft btn-warning btn-sm">
                                                 Edit
                                             </a>
-                                            <form action="{{ route('admin.statistic-table-entries.destroy', $entry) }}" method="POST"
+                                            {{-- <form action="{{ route('admin.statistic-table-entries.destroy', $entry) }}" method="POST"
                                             onsubmit="return confirm('Apakah Anda yakin ingin menghapus tabel ini beserta grafiknya (jika ada)? Aksi ini tidak bisa dibatalkan.')"
                                             class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-soft btn-error btn-sm">Hapus</button>
+                                            </form> --}}
+                                            <form id="form-delete-entry-{{ $entry->id }}" action="{{ route('admin.statistic-table-entries.destroy', $entry) }}" method="POST" class="inline-block">
+                                                @csrf
+                                                @method('DELETE')
                                             </form>
+                                            <button type="button" onclick="document.getElementById('modal_confirm_delete_entry_{{ $entry->id }}').showModal()" class="btn btn-soft btn-error btn-sm">
+                                                Hapus
+                                            </button>
+
+                                            <dialog id="modal_confirm_delete_entry_{{ $entry->id }}" class="modal">
+                                                <div class="modal-box">
+                                                    <div class="flex flex-col items-center text-center">
+                                                        <x-lucide-triangle-alert class="w-14 h-14 text-error mb-4" />
+                                                        <h3 class="font-bold text-xl text-base-content">Konfirmasi Hapus</h3>
+                                                        <p class="py-4 text-base-content/80">Apakah Anda yakin ingin menghapus tabel ini beserta grafiknya (jika ada)? Aksi ini tidak bisa dibatalkan.</p>
+                                                    </div>
+                                                    <div class="modal-action justify-center">
+                                                        <form method="dialog">
+                                                            <button class="btn btn-ghost">Batal</button>
+                                                        </form>
+                                                        <button type="submit" form="form-delete-entry-{{ $entry->id }}" class="btn btn-error">
+                                                            Ya, Hapus
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <form method="dialog" class="modal-backdrop">
+                                                    <button>close</button>
+                                                </form>
+                                            </dialog>
                                         </td>
                                         {{-- <x-template-history-modal :template="$entry->template" :can-restore="false" /> --}}
                                         <x-template-history-modal :template="$entry->template" :can-restore="false" :village-id="$villageId" />

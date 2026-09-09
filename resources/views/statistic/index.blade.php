@@ -87,12 +87,12 @@
                                     $updatedProps = $getSortProps('updated_at');
                                 @endphp
 
-                                <tr>
-                                    <th class="w-16 text-center">No</th>
+                                {{-- <tr>
+                                    <th class="w-16 text-center">No</th> --}}
                                     
                                     {{-- Kolom Publikasi & Bab --}}
                                     {{-- Hapus opacity-40 di sini --}}
-                                    <th class="{{ $pubProps->isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-base-300' }} transition-colors"
+                                    {{-- <th class="{{ $pubProps->isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-base-300' }} transition-colors"
                                         @if(!$pubProps->isDisabled) onclick="window.location='{{ $pubProps->url }}'" @endif>
                                         <div class="flex items-center gap-1">
                                             Publikasi & Bab
@@ -100,11 +100,11 @@
                                             @elseif($pubProps->icon === 'arrow-up') <x-lucide-arrow-up class="w-4 h-4" />
                                             @else <x-lucide-arrow-down class="w-4 h-4" /> @endif
                                         </div>
-                                    </th>
+                                    </th> --}}
 
                                     {{-- Kolom Judul Tabel --}}
                                     {{-- Hapus opacity-40 di sini --}}
-                                    <th class="{{ $titleProps->isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-base-300' }} transition-colors"
+                                    {{-- <th class="{{ $titleProps->isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-base-300' }} transition-colors"
                                         @if(!$titleProps->isDisabled) onclick="window.location='{{ $titleProps->url }}'" @endif>
                                         <div class="flex items-center gap-1">
                                             Judul Tabel
@@ -112,11 +112,11 @@
                                             @elseif($titleProps->icon === 'arrow-up') <x-lucide-arrow-up class="w-4 h-4" />
                                             @else <x-lucide-arrow-down class="w-4 h-4" /> @endif
                                         </div>
-                                    </th>
+                                    </th> --}}
 
                                     {{-- Kolom Terakhir Diperbarui --}}
                                     {{-- Hapus opacity-40 di sini --}}
-                                    <th class="text-center w-48 {{ $updatedProps->isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-base-300' }} transition-colors"
+                                    {{-- <th class="text-center w-48 {{ $updatedProps->isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-base-300' }} transition-colors"
                                         @if(!$updatedProps->isDisabled) onclick="window.location='{{ $updatedProps->url }}'" @endif>
                                         <div class="flex items-center justify-center gap-1">
                                             Terakhir Diperbarui
@@ -124,6 +124,48 @@
                                             @elseif($updatedProps->icon === 'arrow-up') <x-lucide-arrow-up class="w-4 h-4" />
                                             @else <x-lucide-arrow-down class="w-4 h-4" /> @endif
                                         </div>
+                                    </th>
+                                </tr> --}}
+                                <tr>
+                                    <th class="w-16 text-center">No</th>
+
+                                    {{-- Kolom Publikasi & Bab --}}
+                                    <th class="transition-colors">
+                                        <button type="button"
+                                            class="w-full flex items-center gap-1 text-left {{ $pubProps->isDisabled ? 'cursor-not-allowed text-base-content/50' : 'cursor-pointer hover:bg-base-300' }}"
+                                            @if($pubProps->isDisabled) disabled @endif
+                                            @if(!$pubProps->isDisabled) onclick="window.location='{{ $pubProps->url }}'" @endif>
+                                            Publikasi & Bab
+                                            @if($pubProps->icon === 'arrow-up-down') <x-lucide-arrow-up-down class="w-4 h-4 text-base-content/40" />
+                                            @elseif($pubProps->icon === 'arrow-up') <x-lucide-arrow-up class="w-4 h-4" />
+                                            @else <x-lucide-arrow-down class="w-4 h-4" /> @endif
+                                        </button>
+                                    </th>
+
+                                    {{-- Kolom Judul Tabel --}}
+                                    <th class="transition-colors">
+                                        <button type="button"
+                                            class="w-full flex items-center gap-1 text-left {{ $titleProps->isDisabled ? 'cursor-not-allowed text-base-content/50' : 'cursor-pointer hover:bg-base-300' }}"
+                                            @if($titleProps->isDisabled) disabled @endif
+                                            @if(!$titleProps->isDisabled) onclick="window.location='{{ $titleProps->url }}'" @endif>
+                                            Judul Tabel
+                                            @if($titleProps->icon === 'arrow-up-down') <x-lucide-arrow-up-down class="w-4 h-4 text-base-content/40" />
+                                            @elseif($titleProps->icon === 'arrow-up') <x-lucide-arrow-up class="w-4 h-4" />
+                                            @else <x-lucide-arrow-down class="w-4 h-4" /> @endif
+                                        </button>
+                                    </th>
+
+                                    {{-- Kolom Terakhir Diperbarui --}}
+                                    <th class="text-center w-48 transition-colors">
+                                        <button type="button"
+                                            class="w-full flex items-center justify-center gap-1 {{ $updatedProps->isDisabled ? 'cursor-not-allowed text-base-content/50' : 'cursor-pointer hover:bg-base-300' }}"
+                                            @if($updatedProps->isDisabled) disabled @endif
+                                            @if(!$updatedProps->isDisabled) onclick="window.location='{{ $updatedProps->url }}'" @endif>
+                                            Terakhir Diperbarui
+                                            @if($updatedProps->icon === 'arrow-up-down') <x-lucide-arrow-up-down class="w-4 h-4 text-base-content/40" />
+                                            @elseif($updatedProps->icon === 'arrow-up') <x-lucide-arrow-up class="w-4 h-4" />
+                                            @else <x-lucide-arrow-down class="w-4 h-4" /> @endif
+                                        </button>
                                     </th>
                                 </tr>
                             </thead>

@@ -282,7 +282,26 @@
         </form>
     </div>
 
-    @push('scripts')
+    <dialog id="modal_confirm_reset" class="modal">
+        <div class="modal-box">
+            <div class="flex flex-col items-center text-center">
+                <x-lucide-triangle-alert class="w-14 h-14 text-warning mb-4" />
+                <h3 class="font-bold text-xl text-base-content">Konfirmasi Reset</h3>
+                <p id="modal_confirm_reset_message" class="py-4 text-base-content/80"></p>
+            </div>
+            <div class="modal-action justify-center">
+                <form method="dialog">
+                    <button class="btn btn-ghost">Batal</button>
+                </form>
+                <button type="button" id="btn_confirm_reset" class="btn btn-warning">Ya, Lanjutkan</button>
+            </div>
+        </div>
+        <form method="dialog" class="modal-backdrop">
+            <button>close</button>
+        </form>
+    </dialog>
+
+    {{-- @push('scripts')
     <script>
         function generateRW() {
             const count = document.getElementById('input_jumlah_rw').value;
@@ -319,12 +338,20 @@
             }
         }
 
+        function showWarningToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-top toast-center z-50';
+            toast.innerHTML = `<div class="alert alert-warning"><span>${message}</span></div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
         function generateRT() {
             const rwRows = document.querySelectorAll('.rw-row');
             const rtContainer = document.getElementById('rt-container');
             
             if (rwRows.length === 0) {
-                alert('Silakan generate baris RW terlebih dahulu!');
+                // alert('Silakan generate baris RW terlebih dahulu!');
+                showWarningToast('Silakan generate baris RW terlebih dahulu!');
                 return;
             }
 
@@ -369,6 +396,129 @@
 
             if(globalRtIndex === 0) {
                 rtContainer.innerHTML = '<div class="text-center p-4 border-2 border-dashed rounded-box opacity-60 text-error">Anda belum mengisi Jumlah RT di tabel RW.</div>';
+            }
+        }
+    </script>
+    @endpush --}}
+    @push('scripts')
+    <script>
+        let pendingResetAction = null;
+
+        function confirmReset(message, onConfirm) {
+            document.getElementById('modal_confirm_reset_message').textContent = message;
+            pendingResetAction = onConfirm;
+            document.getElementById('modal_confirm_reset').showModal();
+        }
+
+        document.getElementById('btn_confirm_reset').addEventListener('click', function () {
+            if (pendingResetAction) {
+                pendingResetAction();
+                pendingResetAction = null;
+            }
+            document.getElementById('modal_confirm_reset').close();
+        });
+
+        function generateRW() {
+            const count = document.getElementById('input_jumlah_rw').value;
+            const container = document.getElementById('rw-container');
+
+            if (!count || count <= 0) return;
+
+            function doGenerate() {
+                container.innerHTML = '';
+
+                for(let i = 0; i < count; i++) {
+                    const rwNum = String(i + 1).padStart(2, '0');
+                    container.innerHTML += `
+                    <div class="bg-base-200/60 rounded-box flex flex-col md:flex-row gap-4 p-4 items-start rw-row">
+                        <fieldset class="fieldset w-full md:w-1/4">
+                            <legend class="fieldset-legend">Nomor RW</legend>
+                            <input type="text" name="daftar_rw[${i}][rw]" value="${rwNum}" class="input w-full rw-number" readonly>
+                        </fieldset>
+
+                        <fieldset class="fieldset w-full md:w-2/4">
+                            <legend class="fieldset-legend">Nama Ketua RW</legend>
+                            <input type="text" name="daftar_rw[${i}][nama]" placeholder="Masukkan nama ..." class="input w-full">
+                        </fieldset>
+
+                        <fieldset class="fieldset w-full md:w-1/4">
+                            <legend class="fieldset-legend">Jumlah RT</legend>
+                            <input type="number" min="0" class="input w-full input-rt-count" placeholder="Misal: 4">
+                        </fieldset>
+                    </div>`;
+                }
+            }
+
+            // Konfirmasi jika sudah ada isinya agar data lama tidak terhapus tak sengaja
+            if (container.innerHTML.includes('rw-row')) {
+                confirmReset('PERINGATAN: Ini akan mereset dan menghapus nama ketua RW yang sudah ada di bawah. Lanjut?', doGenerate);
+            } else {
+                doGenerate();
+            }
+        }
+
+        function showWarningToast(message) {
+            const toast = document.createElement('div');
+            toast.className = 'toast toast-top toast-center z-50';
+            toast.innerHTML = `<div class="alert alert-warning"><span>${message}</span></div>`;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
+        }
+
+        function generateRT() {
+            const rwRows = document.querySelectorAll('.rw-row');
+            const rtContainer = document.getElementById('rt-container');
+
+            if (rwRows.length === 0) {
+                showWarningToast('Silakan generate baris RW terlebih dahulu!');
+                return;
+            }
+
+            function doGenerate() {
+                rtContainer.innerHTML = '';
+                let globalRtIndex = 0;
+
+                rwRows.forEach((row) => {
+                    const rwInput = row.querySelector('.rw-number');
+                    const rtCountInput = row.querySelector('.input-rt-count');
+
+                    const rwNum = rwInput ? rwInput.value : '';
+                    const rtCount = parseInt(rtCountInput.value) || 0;
+
+                    for(let i = 0; i < rtCount; i++) {
+                        const rtNum = String(i + 1).padStart(3, '0');
+
+                        rtContainer.innerHTML += `
+                        <div class="bg-base-200/40 rounded-box flex flex-col md:flex-row gap-4 p-4 items-start">
+                            <fieldset class="fieldset w-full md:w-1/4">
+                                <legend class="fieldset-legend">Nomor RT</legend>
+                                <input type="text" name="daftar_rt[${globalRtIndex}][rt]" value="${rtNum}" class="input w-full">
+                            </fieldset>
+
+                            <fieldset class="fieldset w-full md:w-1/4">
+                                <legend class="fieldset-legend">Nomor RW</legend>
+                                <input type="text" name="daftar_rt[${globalRtIndex}][rw]" value="${rwNum}" class="input w-full" readonly>
+                            </fieldset>
+
+                            <fieldset class="fieldset w-full md:w-2/4">
+                                <legend class="fieldset-legend">Nama Ketua RT</legend>
+                                <input type="text" name="daftar_rt[${globalRtIndex}][nama]" placeholder="Masukkan nama ..." class="input w-full">
+                            </fieldset>
+                        </div>`;
+
+                        globalRtIndex++;
+                    }
+                });
+
+                if(globalRtIndex === 0) {
+                    rtContainer.innerHTML = '<div class="text-center p-4 border-2 border-dashed rounded-box opacity-60 text-error">Anda belum mengisi Jumlah RT di tabel RW.</div>';
+                }
+            }
+
+            if (rtContainer.innerHTML.includes('name="daftar_rt')) {
+                confirmReset('PERINGATAN: Ini akan mereset dan menghapus nama ketua RT yang sudah ada di bawah. Lanjut?', doGenerate);
+            } else {
+                doGenerate();
             }
         }
     </script>

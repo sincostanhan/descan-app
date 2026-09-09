@@ -96,11 +96,11 @@
                                     $updatedProps = $getSortProps('updated_at');
                                 @endphp
 
-                                <tr>
-                                    {{-- <th class="w-16 text-center">No</th> --}}
+                                {{-- <tr>
+                                    {{-- <th class="w-16 text-center">No</th> --}
                                     <th class="w-16">No</th>
                                     
-                                    {{-- Kolom Judul / Deskripsi Metadata --}}
+                                    {{-- Kolom Judul / Deskripsi Metadata --}
                                     <th class="{{ $titleProps->isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-base-300' }} transition-colors"
                                         @if(!$titleProps->isDisabled) onclick="window.location='{{ $titleProps->url }}'" @endif>
                                         <div class="flex items-center gap-1">
@@ -113,7 +113,7 @@
 
                                     <th class="text-center">File</th>
 
-                                    {{-- Kolom Terakhir Diperbarui --}}
+                                    {{-- Kolom Terakhir Diperbarui --}
                                     <th class="{{ $updatedProps->isDisabled ? 'cursor-not-allowed' : 'cursor-pointer hover:bg-base-300' }} transition-colors"
                                         @if(!$updatedProps->isDisabled) onclick="window.location='{{ $updatedProps->url }}'" @endif>
                                         <div class="flex items-center gap-1">
@@ -124,6 +124,39 @@
                                         </div>
                                     </th>
                                     
+                                    <th class="w-32 text-center">Aksi</th>
+                                </tr> --}}
+                                <tr>
+                                    <th class="w-16">No</th>
+
+                                    {{-- Kolom Judul / Deskripsi Metadata --}}
+                                    <th class="transition-colors">
+                                        <button type="button"
+                                            class="w-full flex items-center gap-1 text-left {{ $titleProps->isDisabled ? 'cursor-not-allowed text-base-content/50' : 'cursor-pointer hover:bg-base-300' }}"
+                                            @if($titleProps->isDisabled) disabled @endif
+                                            @if(!$titleProps->isDisabled) onclick="window.location='{{ $titleProps->url }}'" @endif>
+                                            Infografis
+                                            @if($titleProps->icon === 'arrow-up-down') <x-lucide-arrow-up-down class="w-4 h-4 text-base-content/40" />
+                                            @elseif($titleProps->icon === 'arrow-up') <x-lucide-arrow-up class="w-4 h-4" />
+                                            @else <x-lucide-arrow-down class="w-4 h-4" /> @endif
+                                        </button>
+                                    </th>
+
+                                    <th class="text-center">File</th>
+
+                                    {{-- Kolom Terakhir Diperbarui --}}
+                                    <th class="transition-colors">
+                                        <button type="button"
+                                            class="w-full flex items-center gap-1 text-left {{ $updatedProps->isDisabled ? 'cursor-not-allowed text-base-content/50' : 'cursor-pointer hover:bg-base-300' }}"
+                                            @if($updatedProps->isDisabled) disabled @endif
+                                            @if(!$updatedProps->isDisabled) onclick="window.location='{{ $updatedProps->url }}'" @endif>
+                                            Terakhir Diperbarui
+                                            @if($updatedProps->icon === 'arrow-up-down') <x-lucide-arrow-up-down class="w-4 h-4 text-base-content/40" />
+                                            @elseif($updatedProps->icon === 'arrow-up') <x-lucide-arrow-up class="w-4 h-4" />
+                                            @else <x-lucide-arrow-down class="w-4 h-4" /> @endif
+                                        </button>
+                                    </th>
+
                                     <th class="w-32 text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -170,7 +203,8 @@
                                                 href="{{ asset('storage/' . $info->file_path) }}" 
                                                 target="_blank" 
                                                 {{-- class="link link-primary" --}}
-                                                class="btn btn-info btn-sm text-white"
+                                                {{-- class="btn btn-info btn-sm text-white" --}}
+                                                class="btn btn-info btn-sm"
                                             >
                                                 <x-lucide-external-link class="w-4 h-4 mr-1"/> Lihat File
                                             </a>
@@ -180,12 +214,40 @@
                                         whitespace-nowrap">
                                             <a href="{{ route('admin.infographic.edit', $info->id) }}" class="btn btn-warning btn-sm 
                                                 text-white">Edit</a>
-                                            <form action="{{ route('admin.infographic.destroy', $info->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus infografis ini?');" class="inline-block">
+                                            {{-- <form action="{{ route('admin.infographic.destroy', $info->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus infografis ini?');" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-error btn-sm 
                                                 text-white">Hapus</button>
+                                            </form> --}}
+                                            <form id="form-delete-infographic-{{ $info->id }}" action="{{ route('admin.infographic.destroy', $info->id) }}" method="POST" class="inline-block">
+                                                @csrf
+                                                @method('DELETE')
                                             </form>
+                                            <button type="button" onclick="document.getElementById('modal_confirm_delete_infographic_{{ $info->id }}').showModal()" class="btn btn-error btn-sm">
+                                                Hapus
+                                            </button>
+
+                                            <dialog id="modal_confirm_delete_infographic_{{ $info->id }}" class="modal">
+                                                <div class="modal-box">
+                                                    <div class="flex flex-col items-center text-center">
+                                                        <x-lucide-triangle-alert class="w-14 h-14 text-error mb-4" />
+                                                        <h3 class="font-bold text-xl text-base-content">Konfirmasi Hapus</h3>
+                                                        <p class="py-4 text-base-content/80">Yakin ingin menghapus infografis ini?</p>
+                                                    </div>
+                                                    <div class="modal-action justify-center">
+                                                        <form method="dialog">
+                                                            <button class="btn btn-ghost">Batal</button>
+                                                        </form>
+                                                        <button type="submit" form="form-delete-infographic-{{ $info->id }}" class="btn btn-error">
+                                                            Ya, Hapus
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <form method="dialog" class="modal-backdrop">
+                                                    <button>close</button>
+                                                </form>
+                                            </dialog>
                                         </td>
                                     </tr>
                                 @endforeach

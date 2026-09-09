@@ -27,7 +27,8 @@
 
             <div class="modal-action justify-center">
                 <form method="dialog">
-                    <button class="btn {{ session('success') ? 'btn-success text-white' : 'btn-error text-white' }} px-8">
+                    {{-- <button class="btn {{ session('success') ? 'btn-success text-white' : 'btn-error text-white' }} px-8"> --}}
+                    <button class="btn {{ session('success') ? 'btn-success' : 'btn-error' }} px-8">
                         Tutup
                     </button>
                 </form>

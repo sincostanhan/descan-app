@@ -4,7 +4,10 @@
 <dialog id="modal_history_{{ $template->id }}" class="modal modal-middle">
     <div class="modal-box w-11/12 max-w-2xl">
         <form method="dialog">
-            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+            {{-- <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button> --}}
+            <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                <x-lucide-x class="w-4 h-4" />
+            </button>
         </form>
 
         <h3 class="text-xl font-bold mb-1">Riwayat Perubahan</h3>
@@ -39,7 +42,7 @@
                             </p>
                         </div>
 
-                        @if($canRestore && $log->canBeRestored())
+                        {{-- @if($canRestore && $log->canBeRestored())
                             <form action="{{ route('admin-bps.statistic-templates.logs.restore', [$template, $log]) }}" method="POST"
                                 onsubmit="return confirm('Pulihkan kolom/baris ini? Data yang sudah pernah diisi Kelurahan akan langsung muncul kembali.')"
                                 class="shrink-0">
@@ -48,6 +51,35 @@
                                     Pulihkan
                                 </button>
                             </form>
+                        @endif --}}
+                        @if($canRestore && $log->canBeRestored())
+                            <form id="form-restore-log-{{ $log->id }}" action="{{ route('admin-bps.statistic-templates.logs.restore', [$template, $log]) }}" method="POST" class="shrink-0">
+                                @csrf
+                            </form>
+                            <button type="button" onclick="document.getElementById('modal_confirm_restore_{{ $log->id }}').showModal()" class="btn btn-xs btn-soft btn-success whitespace-nowrap">
+                                Pulihkan
+                            </button>
+
+                            <dialog id="modal_confirm_restore_{{ $log->id }}" class="modal">
+                                <div class="modal-box">
+                                    <div class="flex flex-col items-center text-center">
+                                        <x-lucide-triangle-alert class="w-14 h-14 text-warning mb-4" />
+                                        <h3 class="font-bold text-xl text-base-content">Konfirmasi Pulihkan</h3>
+                                        <p class="py-4 text-base-content/80">Pulihkan kolom/baris ini? Data yang sudah pernah diisi Kelurahan akan langsung muncul kembali.</p>
+                                    </div>
+                                    <div class="modal-action justify-center">
+                                        <form method="dialog">
+                                            <button class="btn btn-ghost">Batal</button>
+                                        </form>
+                                        <button type="submit" form="form-restore-log-{{ $log->id }}" class="btn btn-success">
+                                            Ya, Pulihkan
+                                        </button>
+                                    </div>
+                                </div>
+                                <form method="dialog" class="modal-backdrop">
+                                    <button>close</button>
+                                </form>
+                            </dialog>
                         @endif
                     </li>
                 @endforeach

@@ -1,5 +1,26 @@
+<dialog id="modal_confirm_remove_node" class="modal">
+    <div class="modal-box">
+        <div class="flex flex-col items-center text-center">
+            <x-lucide-triangle-alert class="w-14 h-14 text-error mb-4" />
+            <h3 class="font-bold text-xl text-base-content">Konfirmasi Hapus</h3>
+            <p class="py-4 text-base-content/80">Hapus baris/kolom ini beserta seluruh sub-levelnya? (Data Kelurahan yang sudah pernah mengisi sel ini tetap aman tersimpan, hanya tidak tampil lagi di form.)</p>
+        </div>
+        <div class="modal-action justify-center">
+            <form method="dialog">
+                <button class="btn btn-ghost">Batal</button>
+            </form>
+            <button type="button" id="btn_confirm_remove_node" class="btn btn-error">Ya, Hapus</button>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        let nodeToRemove = null;
+
         renderPreview(); // render awal (penting untuk halaman Edit yang sudah ada data)
 
         const checkedRowSource = document.querySelector('[name=row_source]:checked');
@@ -22,13 +43,27 @@
                 renderPreview();
             }
 
+            // if (removeBtn) {
+            //     const node = removeBtn.closest('.header-node');
+            //     if (confirm('Hapus baris/kolom ini beserta seluruh sub-levelnya? (Data Kelurahan yang sudah pernah mengisi sel ini tetap aman tersimpan, hanya tidak tampil lagi di form.)')) {
+            //         node.remove();
+            //         renderPreview();
+            //     }
+            // }
+        // });
             if (removeBtn) {
-                const node = removeBtn.closest('.header-node');
-                if (confirm('Hapus baris/kolom ini beserta seluruh sub-levelnya? (Data Kelurahan yang sudah pernah mengisi sel ini tetap aman tersimpan, hanya tidak tampil lagi di form.)')) {
-                    node.remove();
-                    renderPreview();
-                }
+                nodeToRemove = removeBtn.closest('.header-node');
+                document.getElementById('modal_confirm_remove_node').showModal();
             }
+        });
+
+        document.getElementById('btn_confirm_remove_node').addEventListener('click', function () {
+            if (nodeToRemove) {
+                nodeToRemove.remove();
+                renderPreview();
+                nodeToRemove = null;
+            }
+            document.getElementById('modal_confirm_remove_node').close();
         });
 
         // Preview ikut update saat label/rt_value/data_type diketik/diganti
@@ -60,7 +95,9 @@
                 <div class="flex gap-1 shrink-0">
                     <button type="button" class="btn btn-xs btn-outline btn-add-child" title="Tambah sub-level">Sub</button>
                     <button type="button" class="btn btn-xs btn-outline btn-add-sibling" title="Tambah sejajar">+</button>
-                    <button type="button" class="btn btn-xs btn-soft btn-error btn-remove-node" title="Hapus">✕</button>
+                    <button type="button" class="btn btn-xs btn-soft btn-error btn-remove-node" title="Hapus">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-x"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
+                    </button>
                 </div>
             </div>
             <div class="node-children ml-6 mt-2 space-y-2 border-l-2 border-base-300 pl-4"></div>
@@ -108,6 +145,13 @@
         return Array.from(document.getElementById(containerId).children).map(node => serializeNode(node, axis));
     }
 
+    function showWarningToast(message) {
+        const toast = document.createElement('div');
+        toast.className = 'toast toast-top toast-center z-50';
+        toast.innerHTML = `<div class="alert alert-warning"><span>${message}</span></div>`;
+        document.body.appendChild(toast);
+        setTimeout(() => toast.remove(), 3000);
+    }
     function prepareSubmit() {
         // const rowData = serializeAxis('row-headers-container', 'row');
         const rowSource = document.querySelector('[name=row_source]:checked').value;
@@ -117,11 +161,13 @@
         // if (rowData.length === 0 || columnData.length === 0) {
             // alert('Minimal harus ada 1 struktur Baris dan 1 struktur Kolom.');
         if (rowSource === 'manual' && rowData.length === 0) {
-            alert('Minimal harus ada 1 struktur Baris (atau pilih mode "Otomatis dari RT/RW").');
+            // alert('Minimal harus ada 1 struktur Baris (atau pilih mode "Otomatis dari RT/RW").');
+            showWarningToast('Minimal harus ada 1 struktur Baris (atau pilih mode "Otomatis dari RT/RW").');
             return false;
         }
         if (columnData.length === 0) {
-            alert('Minimal harus ada 1 struktur Kolom.');
+            // alert('Minimal harus ada 1 struktur Kolom.');
+            showWarningToast('Minimal harus ada 1 struktur Kolom.');
             return false;
         }
 

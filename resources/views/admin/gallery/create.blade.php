@@ -72,7 +72,8 @@
                         <a href="{{ route('admin.gallery.index') }}" 
                         class="btn btn-ghost">Batal</a>
                         <button type="submit" 
-                        class="btn btn-secondary text-white">
+                        {{-- class="btn btn-secondary text-white"> --}}
+                        class="btn btn-secondary">
                             <x-lucide-file-up class="w-5 h-5 
                             mr-1" />
                             Simpan & Upload

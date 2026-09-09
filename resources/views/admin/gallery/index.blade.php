@@ -79,17 +79,45 @@
                                                 ">
                                                 Edit
                                             </a>
-                                            <form action="{{ route('admin.gallery.destroy', $gallery->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus galeri ini?');" class="inline-block">
+                                            {{-- <form action="{{ route('admin.gallery.destroy', $gallery->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus galeri ini?');" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" 
-                                                {{-- class="btn btn-error btn-sm --}}
+                                                {{-- class="btn btn-error btn-sm --}
                                                 class="btn btn-soft btn-error btn-sm
-                                                {{-- text-white --}}
+                                                {{-- text-white --}
                                                 ">
                                                     Hapus
                                                 </button>
+                                            </form> --}}
+                                            <form id="form-delete-gallery-{{ $gallery->id }}" action="{{ route('admin.gallery.destroy', $gallery->id) }}" method="POST" class="inline-block">
+                                                @csrf
+                                                @method('DELETE')
                                             </form>
+                                            <button type="button" onclick="document.getElementById('modal_confirm_delete_gallery_{{ $gallery->id }}').showModal()" class="btn btn-soft btn-error btn-sm">
+                                                Hapus
+                                            </button>
+
+                                            <dialog id="modal_confirm_delete_gallery_{{ $gallery->id }}" class="modal">
+                                                <div class="modal-box">
+                                                    <div class="flex flex-col items-center text-center">
+                                                        <x-lucide-triangle-alert class="w-14 h-14 text-error mb-4" />
+                                                        <h3 class="font-bold text-xl text-base-content">Konfirmasi Hapus</h3>
+                                                        <p class="py-4 text-base-content/80">Yakin ingin menghapus galeri ini?</p>
+                                                    </div>
+                                                    <div class="modal-action justify-center">
+                                                        <form method="dialog">
+                                                            <button class="btn btn-ghost">Batal</button>
+                                                        </form>
+                                                        <button type="submit" form="form-delete-gallery-{{ $gallery->id }}" class="btn btn-error">
+                                                            Ya, Hapus
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <form method="dialog" class="modal-backdrop">
+                                                    <button>close</button>
+                                                </form>
+                                            </dialog>
                                         </td>
                                     </tr>
 
@@ -97,7 +125,10 @@
                                         modal-middle">
                                         <div class="modal-box w-11/12 max-w-5xl">
                                             <form method="dialog">
-                                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button>
+                                                {{-- <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button> --}}
+                                                <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
+                                                    <x-lucide-x class="w-4 h-4" />
+                                                </button>
                                             </form>
                                             
                                             {{-- <h3 class="text-lg font-bold mb-1">{{ $gallery->nama_kegiatan }}</h3> --}}

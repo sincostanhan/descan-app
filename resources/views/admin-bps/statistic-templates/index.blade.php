@@ -109,13 +109,41 @@
                                             <a href="{{ route('admin-bps.statistic-templates.edit', $template) }}" class="btn btn-soft btn-warning btn-sm">
                                                 Edit
                                             </a>
-                                            <form action="{{ route('admin-bps.statistic-templates.destroy', $template) }}" method="POST"
+                                            {{-- <form action="{{ route('admin-bps.statistic-templates.destroy', $template) }}" method="POST"
                                             onsubmit="return confirm('Apakah Anda yakin ingin menghapus template ini? Aksi ini tidak bisa dibatalkan.')"
                                             class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="btn btn-soft btn-error btn-sm">Hapus</button>
+                                            </form> --}}
+                                            <form id="form-delete-template-{{ $template->id }}" action="{{ route('admin-bps.statistic-templates.destroy', $template) }}" method="POST" class="inline-block">
+                                                @csrf
+                                                @method('DELETE')
                                             </form>
+                                            <button type="button" onclick="document.getElementById('modal_confirm_delete_template_{{ $template->id }}').showModal()" class="btn btn-soft btn-error btn-sm">
+                                                Hapus
+                                            </button>
+
+                                            <dialog id="modal_confirm_delete_template_{{ $template->id }}" class="modal">
+                                                <div class="modal-box">
+                                                    <div class="flex flex-col items-center text-center">
+                                                        <x-lucide-triangle-alert class="w-14 h-14 text-error mb-4" />
+                                                        <h3 class="font-bold text-xl text-base-content">Konfirmasi Hapus</h3>
+                                                        <p class="py-4 text-base-content/80">Apakah Anda yakin ingin menghapus template ini? Aksi ini tidak bisa dibatalkan.</p>
+                                                    </div>
+                                                    <div class="modal-action justify-center">
+                                                        <form method="dialog">
+                                                            <button class="btn btn-ghost">Batal</button>
+                                                        </form>
+                                                        <button type="submit" form="form-delete-template-{{ $template->id }}" class="btn btn-error">
+                                                            Ya, Hapus
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <form method="dialog" class="modal-backdrop">
+                                                    <button>close</button>
+                                                </form>
+                                            </dialog>
                                         </td>
                                         <x-template-history-modal :template="$template" :can-restore="true" />
                                     </tr>

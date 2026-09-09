@@ -77,7 +77,8 @@
                                 </div>
                             
                             @if($statistic->source)
-                                <div class="mt-8 text-center text-sm text-gray-500">
+                                {{-- <div class="mt-8 text-center text-sm text-gray-500"> --}}
+                                <div class="mt-8 text-center text-sm text-base-content/60">
                                     Sumber Data: {{ $statistic->source }}
                                 </div>
                             @endif
@@ -120,7 +121,8 @@
                     wrapper.className = 'w-full flex flex-col items-center';
                     if(titleText) {
                         const title = document.createElement('h4');
-                        title.className = 'text-md font-semibold mb-2 text-center text-gray-600';
+                        // title.className = 'text-md font-semibold mb-2 text-center text-gray-600';
+                        title.className = 'text-md font-semibold mb-2 text-center text-base-content/70';
                         title.innerText = titleText;
                         wrapper.appendChild(title);
                     }

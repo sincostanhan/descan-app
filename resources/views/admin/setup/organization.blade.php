@@ -335,12 +335,20 @@
                 }
             }
 
+            function showWarningToast(message) {
+                const toast = document.createElement('div');
+                toast.className = 'toast toast-top toast-center z-50';
+                toast.innerHTML = `<div class="alert alert-warning"><span>${message}</span></div>`;
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000);
+            }
             function generateRT() {
                 const rwRows = document.querySelectorAll('.rw-row');
                 const rtContainer = document.getElementById('rt-container');
                 
                 if (rwRows.length === 0) {
-                    alert('Silakan generate baris RW terlebih dahulu!');
+                    // alert('Silakan generate baris RW terlebih dahulu!');
+                    showWarningToast('Silakan generate baris RW terlebih dahulu!');
                     return;
                 }
 

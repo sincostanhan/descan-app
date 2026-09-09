@@ -57,16 +57,44 @@
                                         <a href="{{ route('admin-bps.users.edit', $admin) }}" class="btn btn-soft btn-warning btn-sm 
                                             {{-- text-white">Edit</a> --}}
                                             ">Edit</a>
-                                        <form action="{{ route('admin-bps.users.destroy', $admin) }}" method="POST" 
-                                        onsubmit="return confirm('Apakah Anda yakin ingin menghapus admin ini?')"
-                                        class="inline-block">
+                                        {{-- <form action="{{ route('admin-bps.users.destroy', $admin) }}" method="POST"  --}}
+                                        {{-- onsubmit="return confirm('Apakah Anda yakin ingin menghapus admin ini?')" --}}
+                                        {{-- class="inline-block"> --}}
+                                            {{-- @csrf --}}
+                                            {{-- @method('DELETE') --}}
+                                            {{-- <button type="submit" class="btn btn-error btn-sm  --}}
+                                            {{-- <button type="submit" class="btn btn-soft btn-error btn-sm  --}}
+                                            {{-- text-white">Hapus</button> --}}
+                                            {{-- ">Hapus</button> --}}
+                                        {{-- </form> --}}
+                                        <form id="form-delete-admin-{{ $admin->id }}" action="{{ route('admin-bps.users.destroy', $admin) }}" method="POST" class="inline-block">
                                             @csrf
                                             @method('DELETE')
-                                            {{-- <button type="submit" class="btn btn-error btn-sm  --}}
-                                            <button type="submit" class="btn btn-soft btn-error btn-sm 
-                                            {{-- text-white">Hapus</button> --}}
-                                            ">Hapus</button>
                                         </form>
+                                        <button type="button" onclick="document.getElementById('modal_confirm_delete_admin_{{ $admin->id }}').showModal()" class="btn btn-soft btn-error btn-sm">
+                                            Hapus
+                                        </button>
+
+                                        <dialog id="modal_confirm_delete_admin_{{ $admin->id }}" class="modal">
+                                            <div class="modal-box">
+                                                <div class="flex flex-col items-center text-center">
+                                                    <x-lucide-triangle-alert class="w-14 h-14 text-error mb-4" />
+                                                    <h3 class="font-bold text-xl text-base-content">Konfirmasi Hapus</h3>
+                                                    <p class="py-4 text-base-content/80">Apakah Anda yakin ingin menghapus admin ini?</p>
+                                                </div>
+                                                <div class="modal-action justify-center">
+                                                    <form method="dialog">
+                                                        <button class="btn btn-ghost">Batal</button>
+                                                    </form>
+                                                    <button type="submit" form="form-delete-admin-{{ $admin->id }}" class="btn btn-error">
+                                                        Ya, Hapus
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <form method="dialog" class="modal-backdrop">
+                                                <button>close</button>
+                                            </form>
+                                        </dialog>
                                     </td>
                                 </tr>
                             @endforeach

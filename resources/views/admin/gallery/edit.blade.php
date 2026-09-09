@@ -76,7 +76,8 @@
                         <a href="{{ route('admin.gallery.index') }}" 
                         class="btn btn-ghost">Batal</a>
                         <button type="submit" 
-                        class="btn btn-secondary text-white">
+                        {{-- class="btn btn-secondary text-white"> --}}
+                        class="btn btn-secondary">
                             <x-lucide-file-up class="w-5 h-5 
                             mr-1" />
                             Simpan Perubahan
@@ -118,17 +119,47 @@
                                     
                                     <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 transition-opacity 
                                     flex items-center justify-center">
-                                        <form action="{{ route('admin.gallery.photo.destroy', $photo->id) }}" method="POST" 
+                                        {{-- <form action="{{ route('admin.gallery.photo.destroy', $photo->id) }}" method="POST" 
                                             onsubmit="return confirm('Hapus foto ini dari galeri?');">
                                             @csrf
                                             @method('DELETE')
-                                            {{-- <button type="submit" class="btn btn-error btn-sm text-white shadow-lg"> --}}
-                                            <button type="submit" class="btn btn-error btn-sm text-white">
+                                            {{-- <button type="submit" class="btn btn-error btn-sm text-white shadow-lg"> --}
+                                            {{-- <button type="submit" class="btn btn-error btn-sm text-white"> --}
+                                            <button type="submit" class="btn btn-error btn-sm">
                                                 <x-lucide-trash-2 class="w-4 h-4 
                                                 mr-1" />
                                                 Hapus
                                             </button>
+                                        </form> --}}
+                                        <form id="form-delete-photo-{{ $photo->id }}" action="{{ route('admin.gallery.photo.destroy', $photo->id) }}" method="POST">
+                                            @csrf
+                                            @method('DELETE')
                                         </form>
+                                        <button type="button" onclick="document.getElementById('modal_confirm_delete_photo_{{ $photo->id }}').showModal()" class="btn btn-error btn-sm">
+                                            <x-lucide-trash-2 class="w-4 h-4 mr-1" />
+                                            Hapus
+                                        </button>
+
+                                        <dialog id="modal_confirm_delete_photo_{{ $photo->id }}" class="modal">
+                                            <div class="modal-box">
+                                                <div class="flex flex-col items-center text-center">
+                                                    <x-lucide-triangle-alert class="w-14 h-14 text-error mb-4" />
+                                                    <h3 class="font-bold text-xl text-base-content">Konfirmasi Hapus</h3>
+                                                    <p class="py-4 text-base-content/80">Hapus foto ini dari galeri?</p>
+                                                </div>
+                                                <div class="modal-action justify-center">
+                                                    <form method="dialog">
+                                                        <button class="btn btn-ghost">Batal</button>
+                                                    </form>
+                                                    <button type="submit" form="form-delete-photo-{{ $photo->id }}" class="btn btn-error">
+                                                        Ya, Hapus
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <form method="dialog" class="modal-backdrop">
+                                                <button>close</button>
+                                            </form>
+                                        </dialog>
                                     </div>
 
                                 </div>

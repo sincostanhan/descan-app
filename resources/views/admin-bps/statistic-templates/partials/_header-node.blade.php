@@ -31,7 +31,10 @@
         <div class="flex gap-1 shrink-0">
             <button type="button" class="btn btn-xs btn-outline btn-add-child" title="Tambah sub-level di bawah baris/kolom ini">Sub</button>
             <button type="button" class="btn btn-xs btn-outline btn-add-sibling" title="Tambah baris/kolom sejajar">+</button>
-            <button type="button" class="btn btn-xs btn-soft btn-error btn-remove-node" title="Hapus">✕</button>
+            {{-- <button type="button" class="btn btn-xs btn-soft btn-error btn-remove-node" title="Hapus">✕</button> --}}
+            <button type="button" class="btn btn-xs btn-soft btn-error btn-remove-node" title="Hapus">
+                <x-lucide-x class="w-3.5 h-3.5" />
+            </button>
         </div>
     </div>
 
