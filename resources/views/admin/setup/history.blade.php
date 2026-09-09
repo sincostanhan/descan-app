@@ -26,12 +26,13 @@
         <form action="{{ route('admin.setup.storeHistory') }}" method="POST">
             @csrf
 
-            <div class="card bg-base-100 
+            {{-- <div class="card bg-base-100 
             card-border 
             shadow-lg">
                 <div class="card-body">
                     <h2 class="card-title text-secondary 
-                    text-xl mb-4 border-b pb-2">Konten Sejarah</h2>
+                    text-xl mb-4 border-b pb-2">Konten Sejarah</h2> --}}
+            <x-section-card title="Konten Sejarah" title-size="text-xl">
                     
                     <fieldset class="fieldset 
                     w-full mb-6">
@@ -68,8 +69,9 @@
                         </a>
                         <button type="submit" class="btn btn-secondary">Struktur Organisasi <x-lucide-move-right class="w-5 h-5 ml-1" /></button>
                     </div>
-                </div>
-            </div>
+                {{-- </div>
+            </div> --}}
+            </x-section-card>
         </form>
     </div>
 </x-layout-admin>

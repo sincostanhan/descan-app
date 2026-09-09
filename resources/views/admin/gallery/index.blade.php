@@ -21,12 +21,13 @@
             </a>
         </div>
 
-        <div class="card bg-base-100 
+        {{-- <div class="card bg-base-100 
         card-border 
         shadow-lg">
             <div class="card-body">
                 <h2 class="card-title text-secondary 
-                text-xl mb-4 border-b pb-2">Daftar Galeri</h2>
+                text-xl mb-4 border-b pb-2">Daftar Galeri</h2> --}}
+        <x-section-card title="Daftar Galeri" title-size="text-xl">
 
                 @if($galleries->isEmpty())
                     <x-empty-alert message="Belum ada galeri." />
@@ -179,7 +180,8 @@
                         </table>
                     </div>
                 @endif
-            </div>
-        </div>
+            {{-- </div>
+        </div> --}}
+        </x-section-card>
     </div>
 </x-layout-admin>

@@ -24,9 +24,10 @@
             @csrf
             @method('PATCH')
 
-            <div class="card bg-base-100 card-border shadow-lg mb-6">
+            {{-- <div class="card bg-base-100 card-border shadow-lg mb-6">
                 <div class="card-body">
-                    <h2 class="card-title text-secondary text-xl mb-4 border-b pb-2">Informasi Template</h2>
+                    <h2 class="card-title text-secondary text-xl mb-4 border-b pb-2">Informasi Template</h2> --}}
+            <x-section-card title="Informasi Template" title-size="text-xl" class="mb-6">
 
                     <fieldset class="fieldset w-full mb-6">
                         <legend class="fieldset-legend text-base">Judul Template</legend>
@@ -55,12 +56,14 @@
                         </p>
                         <x-forms.error name="is_mapped" />
                     </div>
-                </div>
-            </div>
+                {{-- </div>
+            </div> --}}
+            </x-section-card>
 
-            <div class="card bg-base-100 card-border shadow-lg mb-6">
+            {{-- <div class="card bg-base-100 card-border shadow-lg mb-6">
                 <div class="card-body">
-                    <h2 class="card-title text-secondary text-xl mb-4 border-b pb-2">Sumber Baris</h2>
+                    <h2 class="card-title text-secondary text-xl mb-4 border-b pb-2">Sumber Baris</h2> --}}
+            <x-section-card title="Sumber Baris" title-size="text-xl" class="mb-6">
                     <div class="flex flex-col gap-2">
                         <label class="label cursor-pointer justify-start gap-3">
                             <input type="radio" name="row_source" value="manual" class="radio radio-sm"
@@ -75,8 +78,9 @@
                             <span class="label-text">Otomatis dari RT/RW — baris "RT 00X RW 00X" digenerate otomatis per Kelurahan</span>
                         </label>
                     </div>
-                </div>
-            </div>
+                {{-- </div>
+            </div> --}}
+            </x-section-card>
 
             {{-- <div class="card bg-base-100 card-border shadow-lg mb-6"> --}}
             <div class="card bg-base-100 card-border shadow-lg mb-6" id="row-headers-panel">
@@ -114,14 +118,16 @@
                 </div>
             </div>
 
-            <div class="card bg-base-100 card-border shadow-lg mb-6">
+            {{-- <div class="card bg-base-100 card-border shadow-lg mb-6">
                 <div class="card-body">
-                    <h2 class="card-title text-secondary text-xl mb-4 border-b pb-2">Preview Struktur Tabel</h2>
+                    <h2 class="card-title text-secondary text-xl mb-4 border-b pb-2">Preview Struktur Tabel</h2> --}}
+            <x-section-card title="Preview Struktur Tabel" title-size="text-xl" class="mb-6">
                     <div id="template-preview-wrapper">
                         <p class="text-sm text-base-content/50 italic">Tambahkan minimal 1 struktur Baris dan 1 struktur Kolom untuk melihat preview.</p>
                     </div>
-                </div>
-            </div>
+                {{-- </div>
+            </div> --}}
+            </x-section-card>
 
             <input type="hidden" name="row_headers" id="row_headers_input">
             <input type="hidden" name="column_headers" id="column_headers_input">

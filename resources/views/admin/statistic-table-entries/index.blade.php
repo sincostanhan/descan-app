@@ -42,12 +42,13 @@
             </div>
         </div>
 
-        <div class="card bg-base-100
+        {{-- <div class="card bg-base-100
         card-border
         shadow-lg">
             <div class="card-body">
                 <h2 class="card-title text-secondary
-                text-xl mb-4 border-b pb-2">Daftar Tabel Statistik</h2>
+                text-xl mb-4 border-b pb-2">Daftar Tabel Statistik</h2> --}}
+        <x-section-card title="Daftar Tabel Statistik" title-size="text-xl">
 
                 @if($entries->isEmpty())
                     @if(request('search'))
@@ -172,8 +173,9 @@
                         </div>
                     @endif
                 @endif
-            </div>
-        </div>
+            {{-- </div>
+        </div> --}}
+        </x-section-card>
     </div>
 
     {{-- @push('scripts')

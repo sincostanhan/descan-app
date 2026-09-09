@@ -12,11 +12,12 @@
         @else
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 @foreach($templates as $template)
-                    <div class="card bg-base-100 card-border shadow-lg">
+                    {{-- <div class="card bg-base-100 card-border shadow-lg">
                         <div class="card-body">
                             <h2 class="card-title text-secondary text-lg border-b pb-2 mb-2">
                                 {{ $template->title }}
-                            </h2>
+                            </h2> --}}
+                    <x-section-card :title="$template->title" title-size="text-lg">
 
                             @if($template->description)
                                 <p class="text-sm text-base-content/70 leading-relaxed line-clamp-3">
@@ -39,8 +40,9 @@
                                     Isi Data <x-lucide-arrow-right class="w-4 h-4 ml-1" />
                                 </a>
                             </div>
-                        </div>
-                    </div>
+                        {{-- </div>
+                    </div> --}}
+                    </x-section-card>
                 @endforeach
             </div>
         @endif

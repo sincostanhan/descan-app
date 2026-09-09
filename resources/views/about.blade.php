@@ -7,11 +7,12 @@
 
     {{-- <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-8"> --}}
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <div class="card bg-base-100 text-primary-content card-border 
+        {{-- <div class="card bg-base-100 text-primary-content card-border 
         shadow-lg">
             <div class="card-body">
                 <h2 class="card-title 
-                text-2xl mb-4 border-b pb-2">Batas Wilayah</h2>
+                text-2xl mb-4 border-b pb-2">Batas Wilayah</h2> --}}
+        <x-section-card title="Batas Wilayah" title-color="" class="text-primary-content">
                 
                 <div class="mb-4">
                     <h3 class="text-secondary
@@ -57,21 +58,23 @@
                         </table>
                     </div>
                 </div>
-            </div>
-        </div>
-        
+            {{-- </div> --}}
+        {{-- </div> --}}
+        </x-section-card>
+
         {{--o Card with custom color --}}
         {{--o Card with a card-border --}}
         {{-- <div class="card bg-primary text-primary-content w-96"> --}}
         {{-- <div class="card bg-base-100 text-primary-content w-96 --}}
         {{-- <div class="card bg-base-100 text-primary-content --}}
-        <div class="card bg-base-100 
+        {{-- <div class="card bg-base-100 
         card-border 
         shadow-lg">
             <div class="card-body">
-                {{-- <h2 class="card-title">Card title!</h2> --}}
+                {{-- <h2 class="card-title">Card title!</h2> --}
                 <h2 class="card-title 
-                text-2xl mb-4 border-b pb-2">Visi & Misi Kota Baubau</h2>
+                text-2xl mb-4 border-b pb-2">Visi & Misi Kota Baubau</h2> --}}
+        <x-section-card title="Visi & Misi Kota Baubau" title-color="">
                 
                 <div class="mb-4">
                     <h3 class="text-secondary
@@ -106,7 +109,8 @@
                         @endforeach
                     </ul>
                 </div>
-            </div>
-        </div>
+            {{-- </div> --}}
+        {{-- </div> --}}
+        </x-section-card>
     </div>
 </x-layout>

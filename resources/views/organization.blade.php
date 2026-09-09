@@ -5,13 +5,13 @@
 
     {{-- <div class="max-w-6xl mx-auto px-4 lg:px-0 space-y-6 mb-8"> --}}
     <div class="max-w-6xl mx-auto px-4 lg:px-0 space-y-6">
-        <div class="card bg-base-100 
+        {{-- <div class="card bg-base-100 
         card-border 
         shadow-lg">
             <div class="card-body">
                 <h2 class="card-title text-primary 
-                text-2xl mb-4 border-b pb-2">Perangkat Kelurahan</h2>
-                
+                text-2xl mb-4 border-b pb-2">Perangkat Kelurahan</h2> --}}
+        <x-section-card title="Perangkat Kelurahan" title-color="text-primary">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="col-span-full flex justify-center mb-2">
                         {{-- <div class="bg-base-200 border-secondary  --}}
@@ -82,18 +82,20 @@
                         <p class="text-base font-bold">{{ $organization->pengelola_surat ?: '-' }}</p>
                     </div>
                 </div>
-            </div>
-        </div>
+            {{-- </div> --}}
+        {{-- </div> --}}
+        </x-section-card>
 
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div class="card bg-base-100 
+            {{-- <div class="card bg-base-100 
             card-border 
             shadow-lg">
-                {{-- <div class="card-body overflow-hidden"> --}}
+                {{-- <div class="card-body overflow-hidden"> --}
                 <div class="card-body">
                     <h2 class="card-title text-secondary 
-                    text-xl mb-4 border-b pb-2">Daftar Ketua RW</h2>
-                    
+                    text-xl mb-4 border-b pb-2">Daftar Ketua RW</h2> --}}
+            <x-section-card title="Daftar Ketua RW" title-size="text-xl">
+
                     @if(empty($organization->daftar_rw))
                         <p class="text-base-content/70 
                         italic">Belum ada data Ketua RW.</p>
@@ -124,15 +126,17 @@
                             </table>
                         </div>
                     @endif
-                </div>
-            </div>
+                {{-- </div> --}}
+            {{-- </div> --}}
+            </x-section-card>
 
-            <div class="card bg-base-100 
+            {{-- <div class="card bg-base-100 
             card-border 
             shadow-lg">
                 <div class="card-body">
                     <h2 class="card-title text-secondary 
-                    text-xl mb-4 border-b pb-2">Daftar Ketua RT</h2>
+                    text-xl mb-4 border-b pb-2">Daftar Ketua RT</h2> --}}
+            <x-section-card title="Daftar Ketua RT" title-size="text-xl">
                     
                     @if(empty($organization->daftar_rt))
                         <p class="text-base-content/70 
@@ -169,8 +173,9 @@
                             </table>
                         </div>
                     @endif
-                </div>
-            </div>
+                {{-- </div> --}}
+            {{-- </div> --}}
+            </x-section-card>
         </div>
     </div>
 </x-layout>

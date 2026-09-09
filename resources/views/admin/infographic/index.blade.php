@@ -44,12 +44,13 @@
             
         </div>
         
-        <div class="card bg-base-100 
+        {{-- <div class="card bg-base-100 
         card-border 
         shadow-lg">
             <div class="card-body">
                 <h2 class="card-title text-secondary 
-                text-xl mb-4 border-b pb-2">Daftar Infografis</h2>
+                text-xl mb-4 border-b pb-2">Daftar Infografis</h2> --}}
+        <x-section-card title="Daftar Infografis" title-size="text-xl">
 
                 @if($infographics->isEmpty())
                     {{-- <x-empty-alert message="Belum ada dokumen infografis." /> --}}
@@ -263,7 +264,8 @@
                         </div>
                     @endif
                 @endif
-            </div>
-        </div>
+            {{-- </div>
+        </div> --}}
+        </x-section-card>
     </div>
 </x-layout-admin>

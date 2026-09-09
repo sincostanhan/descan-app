@@ -10,12 +10,13 @@
             @csrf
             @method('PATCH')
             
-            <div class="card bg-base-100 
+            {{-- <div class="card bg-base-100 
             card-border 
             shadow-lg">
                 <div class="card-body">
                     <h2 class="card-title text-secondary 
-                    text-xl mb-4 border-b pb-2">Identitas Kelurahan</h2>
+                    text-xl mb-4 border-b pb-2">Identitas Kelurahan</h2> --}}
+            <x-section-card title="Identitas Kelurahan" title-size="text-xl">
                     
                     <fieldset class="fieldset 
                     w-full mb-6">
@@ -138,8 +139,9 @@
                         {{-- <button type="reset" class="btn btn-ghost">Batal</button> --}}
                         <button type="submit" class="btn btn-secondary">Simpan Perubahan</button>
                     </div>
-                </div>
-            </div>
+                {{-- </div>
+            </div> --}}
+            </x-section-card>
         </form>
     </div>
 </x-layout-admin>

@@ -10,13 +10,15 @@
     <div class="max-w-4xl mx-auto px-4 lg:px-0 mb-12">
     {{-- <div class="max-w-4xl mx-auto px-4 lg:px-0 mb-12
     py-8"> --}}
-        <div class="card bg-base-100 
+        {{-- <div class="card bg-base-100 
         card-border 
         shadow-lg
         mb-8">
             <div class="card-body">
                 <h2 class="card-title text-secondary 
                 text-xl mb-4 border-b pb-2">Edit Kegiatan dan Tambah Foto Baru</h2>
+        <x-section-card title="Edit Kegiatan dan Tambah Foto Baru" title-size="text-xl"> --}}
+        <x-section-card title="Edit Kegiatan dan Tambah Foto Baru" title-size="text-xl" class="mb-8">
             
                 <form action="{{ route('admin.gallery.update', $gallery->id) }}" method="POST" 
                     enctype="multipart/form-data">
@@ -84,17 +86,19 @@
                         </button>
                     </div>
                 </form>
-            </div>
-        </div>
+            {{-- </div>
+        </div> --}}
+        </x-section-card>
 
-        <div class="card bg-base-100
+        {{-- <div class="card bg-base-100
         card-border 
         shadow-lg
         mb-8">
             <div class="card-body">
                 <h2 class="card-title 
                 text-xl text-secondary border-b pb-2
-                mb-4">Kelola Foto Tersimpan</h2>
+                mb-4">Kelola Foto Tersimpan</h2> --}}
+        <x-section-card title="Kelola Foto Tersimpan" title-size="text-xl" class="mb-8">
                 
                 @if($gallery->photos->isEmpty())
                     <div role="alert" class="alert alert-warning
@@ -169,8 +173,9 @@
                         </div>
                     </div>
                 @endif
-            </div>
-        </div>
+            {{-- </div>
+        </div> --}}
+        </x-section-card>
 
     </div>
 </x-layout-admin>

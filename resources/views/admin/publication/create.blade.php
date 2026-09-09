@@ -4,13 +4,14 @@
     />
 
     <div class="max-w-4xl mx-auto px-4 lg:px-0 mb-12">
-        <div class="card bg-base-100 
+        {{-- <div class="card bg-base-100 
         card-border 
         shadow-lg">
             <div class="card-body">
                 <h2 class="card-title text-secondary 
-                text-xl mb-4 border-b pb-2">Tambah Publikasi</h2>
-            
+                text-xl mb-4 border-b pb-2">Tambah Publikasi</h2> --}}
+        <x-section-card title="Tambah Publikasi" title-size="text-xl">
+        
                 <form action="{{ route('admin.publication.store') }}" method="POST" 
                 enctype="multipart/form-data">
                     @csrf
@@ -109,8 +110,9 @@
                         </button>
                     </div>
                 </form>
-            </div>
-        </div>
+            {{-- </div>
+        </div> --}}
+        </x-section-card>
     </div>
 
     {{-- cover --}}
