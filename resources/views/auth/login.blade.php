@@ -44,8 +44,9 @@
                 </fieldset>
 
                 <div class="card-actions justify-end mt-6">
-                    <button type="submit" class="btn btn-primary w-full text-white">Login</button>
+                    {{-- <button type="submit" class="btn btn-primary w-full text-white">Login</button> --}}
                     {{-- <button type="submit" class="btn btn-primary w-full">Login</button> --}}
+                    <button type="submit" class="btn btn-primary w-full">Login</button>
                 </div>
             </form>
         </div>

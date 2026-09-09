@@ -214,8 +214,10 @@
                                         <td>{{ $info->updated_at->format('d M Y') }}</td>
                                         <td class="text-center space-x-1 
                                         whitespace-nowrap">
-                                            <a href="{{ route('admin.infographic.edit', $info->id) }}" class="btn btn-warning btn-sm 
-                                                text-white">Edit</a>
+                                            {{-- <a href="{{ route('admin.infographic.edit', $info->id) }}" class="btn btn-warning btn-sm 
+                                                text-white">Edit</a> --}}
+                                            {{-- <a href="{{ route('admin.infographic.edit', $info->id) }}" class="btn btn-warning btn-sm">Edit</a> --}}
+                                            <a href="{{ route('admin.infographic.edit', $info->id) }}" class="btn btn-soft btn-warning btn-sm">Edit</a>
                                             {{-- <form action="{{ route('admin.infographic.destroy', $info->id) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus infografis ini?');" class="inline-block">
                                                 @csrf
                                                 @method('DELETE')
@@ -226,7 +228,8 @@
                                                 @csrf
                                                 @method('DELETE')
                                             </form>
-                                            <button type="button" onclick="document.getElementById('modal_confirm_delete_infographic_{{ $info->id }}').showModal()" class="btn btn-error btn-sm">
+                                            {{-- <button type="button" onclick="document.getElementById('modal_confirm_delete_infographic_{{ $info->id }}').showModal()" class="btn btn-error btn-sm"> --}}
+                                            <button type="button" onclick="document.getElementById('modal_confirm_delete_infographic_{{ $info->id }}').showModal()" class="btn btn-soft btn-error btn-sm">
                                                 Hapus
                                             </button>
 
