@@ -52,7 +52,7 @@
                         <x-forms.error name="village_logo" />
                     </fieldset>
 
-                    <fieldset class="fieldset 
+                    {{-- <fieldset class="fieldset 
                     w-full mb-6">
                         <legend class="fieldset-legend">Tema Website</legend>
                         <select name="theme_name" id="theme_name" class="select w-full">
@@ -91,6 +91,45 @@
                             <option value="abyss" {{ old('theme_name', $setting->theme_name) == 'abyss' ? 'selected' : '' }}>abyss</option>
                             <option value="silk" {{ old('theme_name', $setting->theme_name) == 'silk' ? 'selected' : '' }}>silk</option>
                         </select>
+                        <div class="fieldset-label mt-1 text-sm text-base-content/60">Pilih tema warna untuk tampilan website.</div>
+                        <x-forms.error name="theme_name" />
+                    </fieldset> --}}
+                    <fieldset class="fieldset 
+                    w-full mb-6">
+                        <legend class="fieldset-legend">Tema Website</legend>
+
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3">
+                            @foreach([
+                                'emerald', 'light', 'dark', 'cupcake', 'bumblebee', 'corporate', 'synthwave', 'retro',
+                                'cyberpunk', 'halloween', 'garden', 'forest', 'aqua', 'lofi', 'pastel', 'fantasy',
+                                'wireframe', 'black', 'luxury', 'dracula', 'cmyk', 'autumn', 'business', 'acid',
+                                'lemonade', 'night', 'coffee', 'winter', 'dim', 'nord', 'sunset', 'caramellatte',
+                                'abyss', 'silk',
+                            ] as $themeOption)
+                                <label class="cursor-pointer">
+                                    <input
+                                        type="radio"
+                                        name="theme_name"
+                                        value="{{ $themeOption }}"
+                                        class="theme-controller sr-only peer"
+                                        {{ old('theme_name', $setting->theme_name) == $themeOption ? 'checked' : '' }} />
+                                    <div
+                                        data-theme="{{ $themeOption }}"
+                                        class="bg-base-100 border-2 rounded-box p-3 flex flex-col gap-2 transition-colors
+                                        peer-focus-visible:ring-2 peer-focus-visible:ring-offset-2 peer-focus-visible:ring-primary
+                                        {{ old('theme_name', $setting->theme_name) == $themeOption ? 'border-primary' : 'border-base-300' }}">
+                                        <div class="flex gap-1">
+                                            <span class="w-3 h-3 rounded-full bg-primary"></span>
+                                            <span class="w-3 h-3 rounded-full bg-secondary"></span>
+                                            <span class="w-3 h-3 rounded-full bg-accent"></span>
+                                            <span class="w-3 h-3 rounded-full bg-neutral"></span>
+                                        </div>
+                                        <span class="text-xs font-semibold capitalize text-base-content">{{ $themeOption }}</span>
+                                    </div>
+                                </label>
+                            @endforeach
+                        </div>
+
                         <div class="fieldset-label mt-1 text-sm text-base-content/60">Pilih tema warna untuk tampilan website.</div>
                         <x-forms.error name="theme_name" />
                     </fieldset>
