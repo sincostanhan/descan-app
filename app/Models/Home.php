@@ -23,8 +23,8 @@ class Home extends Model
         'show_tujuan',
         'show_output',
         'show_tim',
-        'featured_gallery_photo_id',
-        'featured_potensi_wisata_photo_id',
+        // 'featured_gallery_photo_id',
+        // 'featured_potensi_wisata_photo_id',
     ];
 
     protected function casts(): array
@@ -37,13 +37,13 @@ class Home extends Model
         ];
     }
 
-    public function featuredGalleryPhoto()
-    {
-        return $this->belongsTo(GalleryPhoto::class, 'featured_gallery_photo_id');
-    }
+    // public function featuredGalleryPhoto()
+    // {
+    //     return $this->belongsTo(GalleryPhoto::class, 'featured_gallery_photo_id');
+    // }
 
-    public function featuredPotensiWisataPhoto()
-    {
-        return $this->belongsTo(PotensiWisataPhoto::class, 'featured_potensi_wisata_photo_id');
-    }
+    // public function featuredPotensiWisataPhoto()
+    // {
+    //     return $this->belongsTo(PotensiWisataPhoto::class, 'featured_potensi_wisata_photo_id');
+    // }
 }

@@ -112,6 +112,8 @@ Route::middleware(['auth'])->group(function () {
             ->name('gallery.photo.destroy');
         Route::delete('/galeri/{gallery}', [GalleryController::class, 'destroy'])
             ->name('gallery.destroy');
+        Route::post('/galeri-terpilih', [GalleryController::class, 'updateFeatured'])
+            ->name('gallery.updateFeatured');
 
         Route::get('/potensi-wisata', [PotensiWisataController::class, 'index'])
             ->name('potensi-wisata.index');
@@ -127,6 +129,8 @@ Route::middleware(['auth'])->group(function () {
             ->name('potensi-wisata.photo.destroy');
         Route::delete('/potensi-wisata/{potensi_wisata}', [PotensiWisataController::class, 'destroy'])
             ->name('potensi-wisata.destroy');
+        Route::post('/potensi-wisata-terpilih', [PotensiWisataController::class, 'updateFeatured'])
+            ->name('potensi-wisata.updateFeatured');
 
         Route::resource('publikasi', PublicationController::class)
             ->names('publication')

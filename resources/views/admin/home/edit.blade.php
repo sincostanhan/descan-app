@@ -9,6 +9,74 @@
     <div class="max-w-5xl mx-auto px-4 lg:px-0 mb-12">
         <x-flash-message />
 
+                <div class="mt-10 space-y-10">
+            <div>
+                <h3 class="font-semibold text-lg mb-3">Foto Beranda — Galeri Kegiatan</h3>
+                <p class="text-sm text-base-content/60 mb-3">Centang foto yang ingin ditampilkan sebagai carousel di beranda publik.</p>
+                <form action="{{ route('admin.gallery.updateFeatured') }}" method="POST">
+                    @csrf
+                    <div class="carousel carousel-end rounded-box gap-3 p-3 bg-base-200/40">
+                        @forelse($galleryPhotos as $photo)
+                            <div class="carousel-item">
+                                <label class="flex flex-col items-center gap-2 cursor-pointer">
+                                    <div class="relative">
+                                        <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                             class="w-36 h-36 object-cover rounded-lg" loading="lazy" />
+                                        <input type="checkbox" name="featured_photos[]" value="{{ $photo->id }}"
+                                            class="checkbox checkbox-primary absolute top-2 right-2 bg-base-100"
+                                            {{ $photo->tampil_beranda ? 'checked' : '' }} />
+                                    </div>
+                                    <span class="text-xs text-center max-w-36 truncate">{{ $photo->gallery->judul }}</span>
+                                </label>
+                            </div>
+                        @empty
+                            <x-empty-alert message="Belum ada foto Galeri. Tambahkan lewat menu Galeri terlebih dahulu." />
+                        @endforelse
+                    </div>
+                    @if($galleryPhotos->isNotEmpty())
+                        <div class="flex justify-end mt-3">
+                            <button type="submit" class="btn btn-sm btn-secondary">
+                                <x-lucide-save class="w-4 h-4 mr-1" /> Simpan Pilihan
+                            </button>
+                        </div>
+                    @endif
+                </form>
+            </div>
+
+            <div>
+                <h3 class="font-semibold text-lg mb-3">Foto Beranda — Potensi Wisata</h3>
+                <p class="text-sm text-base-content/60 mb-3">Centang foto yang ingin ditampilkan sebagai carousel di beranda publik.</p>
+                <form action="{{ route('admin.potensi-wisata.updateFeatured') }}" method="POST">
+                    @csrf
+                    <div class="carousel carousel-end rounded-box gap-3 p-3 bg-base-200/40">
+                        @forelse($potensiWisataPhotos as $photo)
+                            <div class="carousel-item">
+                                <label class="flex flex-col items-center gap-2 cursor-pointer">
+                                    <div class="relative">
+                                        <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                             class="w-36 h-36 object-cover rounded-lg" loading="lazy" />
+                                        <input type="checkbox" name="featured_photos[]" value="{{ $photo->id }}"
+                                            class="checkbox checkbox-primary absolute top-2 right-2 bg-base-100"
+                                            {{ $photo->tampil_beranda ? 'checked' : '' }} />
+                                    </div>
+                                    <span class="text-xs text-center max-w-36 truncate">{{ $photo->potensiWisata->nama }}</span>
+                                </label>
+                            </div>
+                        @empty
+                            <x-empty-alert message="Belum ada foto Potensi Wisata. Tambahkan lewat menu Potensi Wisata terlebih dahulu." />
+                        @endforelse
+                    </div>
+                    @if($potensiWisataPhotos->isNotEmpty())
+                        <div class="flex justify-end mt-3">
+                            <button type="submit" class="btn btn-sm btn-secondary">
+                                <x-lucide-save class="w-4 h-4 mr-1" /> Simpan Pilihan
+                            </button>
+                        </div>
+                    @endif
+                </form>
+            </div>
+        </div>
+
         <form action="{{ route('admin.home.update') }}" method="POST">
             @csrf
 
@@ -63,7 +131,7 @@
                 </div> --}}
                 <div class="card-body">
 
-                                        <div class="divider">Gambar Homepage</div>
+                {{-- <div class="divider">Gambar Homepage</div>
 
                     <fieldset class="fieldset w-full mb-6">
                         <legend class="fieldset-legend text-base">Foto Card "Galeri Kegiatan"</legend>
@@ -91,8 +159,8 @@
                             @endforeach
                         </select>
                         <x-forms.error name="featured_potensi_wisata_photo_id" />
-                    </fieldset>
-                    
+                    </fieldset> --}}
+
                     <div class="space-y-3">
                         {{-- 1. Latar Belakang --}}
                         <div class="collapse collapse-plus bg-base-100 border border-base-300">

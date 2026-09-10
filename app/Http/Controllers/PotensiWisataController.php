@@ -10,6 +10,7 @@ use App\Http\Requests\StorePotensiWisataRequest;
 use App\Http\Requests\UpdatePotensiWisataRequest;
 use App\Models\PotensiWisata;
 use App\Models\PotensiWisataPhoto;
+use Illuminate\Http\Request;
 
 class PotensiWisataController extends Controller
 {
@@ -62,5 +63,20 @@ class PotensiWisataController extends Controller
     {
         $action->handle($potensi_wisata);
         return redirect()->route('admin.potensi-wisata.index')->with('success', 'Potensi Wisata berhasil dihapus!');
+    }
+
+    public function updateFeatured(Request $request)
+    {
+        $validated = $request->validate([
+            'featured_photos' => ['nullable', 'array'],
+            'featured_photos.*' => ['exists:potensi_wisata_photos,id'],
+        ]);
+
+        PotensiWisataPhoto::whereHas('potensiWisata')->update(['tampil_beranda' => false]);
+        PotensiWisataPhoto::whereHas('potensiWisata')
+            ->whereIn('id', $validated['featured_photos'] ?? [])
+            ->update(['tampil_beranda' => true]);
+
+        return redirect()->route('admin.home.edit')->with('success', 'Foto Potensi Wisata untuk beranda berhasil diperbarui!');
     }
 }

@@ -62,14 +62,14 @@
             $wisataPhoto = $home->featuredPotensiWisataPhoto ?? \App\Models\PotensiWisataPhoto::latest()->first();
         @endphp
 
-        <section aria-labelledby="feature-heading">
+        {{-- <section aria-labelledby="feature-heading">
             <h2 id="feature-heading" class="text-2xl font-bold mb-6 border-b pb-2">
                 Kegiatan & Potensi Kelurahan
             </h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center md:justify-items-start">
 
-                {{-- Card 1: Galeri Kegiatan --}}
+                {{-- Card 1: Galeri Kegiatan --}
                 <a href="{{ route('gallery.index') }}" aria-label="Lihat Galeri Kegiatan"
                    class="w-60 sm:w-72 block group rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                     <div class="hover-3d w-full">
@@ -98,7 +98,7 @@
                     </div>
                 </a>
 
-                {{-- Card 2: Potensi Wisata --}}
+                {{-- Card 2: Potensi Wisata --}
                 <a href="{{ route('potensi-wisata.index') }}" aria-label="Lihat Potensi Wisata"
                    class="w-60 sm:w-72 block group rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
                     <div class="hover-3d w-full">
@@ -127,7 +127,84 @@
                     </div>
                 </a>
             </div>
+        </section> --}}
+        @php
+            $galleryFeatured = \App\Models\GalleryPhoto::where('tampil_beranda', true)->with('gallery')->latest()->get();
+            if ($galleryFeatured->isEmpty()) {
+                $galleryFeatured = \App\Models\GalleryPhoto::with('gallery')->latest()->take(5)->get();
+            }
+            $wisataFeatured = \App\Models\PotensiWisataPhoto::where('tampil_beranda', true)->with('potensiWisata')->latest()->get();
+            if ($wisataFeatured->isEmpty()) {
+                $wisataFeatured = \App\Models\PotensiWisataPhoto::with('potensiWisata')->latest()->take(5)->get();
+            }
+        @endphp
+
+        <section aria-labelledby="feature-heading">
+            <h2 id="feature-heading" class="text-2xl font-bold mb-6 border-b pb-2">
+                Kegiatan &amp; Potensi Kelurahan
+            </h2>
+
+            <div class="space-y-10">
+                {{-- GALERI — carousel (3) di kiri, label (1) di kanan --}}
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+                    <div class="md:col-span-3 order-2 md:order-1 overflow-hidden">
+                        @if($galleryFeatured->isEmpty())
+                            <x-empty-alert message="Belum ada foto Galeri Kegiatan." />
+                        @else
+                            <div class="carousel carousel-end rounded-box gap-3">
+                                @foreach($galleryFeatured as $photo)
+                                    <div class="carousel-item">
+                                        <figure class="flex flex-col items-center">
+                                            <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                                 alt="{{ $photo->gallery->judul ?? 'Galeri Kegiatan' }}"
+                                                 class="w-64 h-48 object-cover rounded-box" loading="lazy" decoding="async" />
+                                            <figcaption class="text-sm text-center mt-2 text-base-content/70 max-w-64 truncate">
+                                                {{ $photo->gallery->judul ?? '' }}
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                    <a href="{{ route('gallery.index') }}"
+                       class="md:col-span-1 order-1 md:order-2 flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-base-200/60 hover:bg-base-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary group">
+                        <span class="text-xl font-bold group-hover:text-primary transition-colors">Galeri</span>
+                        <span class="text-sm text-base-content/60 mt-1">Lihat semua kegiatan</span>
+                    </a>
+                </div>
+
+                {{-- POTENSI WISATA — label (1) di kiri, carousel (3) di kanan --}}
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
+                    <a href="{{ route('potensi-wisata.index') }}"
+                       class="md:col-span-1 order-1 flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-base-200/60 hover:bg-base-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary group">
+                        <span class="text-xl font-bold group-hover:text-primary transition-colors">Potensi Wisata</span>
+                        <span class="text-sm text-base-content/60 mt-1">Jelajahi destinasi</span>
+                    </a>
+                    <div class="md:col-span-3 order-2 overflow-hidden">
+                        @if($wisataFeatured->isEmpty())
+                            <x-empty-alert message="Belum ada foto Potensi Wisata." />
+                        @else
+                            <div class="carousel carousel-end rounded-box gap-3">
+                                @foreach($wisataFeatured as $photo)
+                                    <div class="carousel-item">
+                                        <figure class="flex flex-col items-center">
+                                            <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                                 alt="{{ $photo->potensiWisata->nama ?? 'Potensi Wisata' }}"
+                                                 class="w-64 h-48 object-cover rounded-box" loading="lazy" decoding="async" />
+                                            <figcaption class="text-sm text-center mt-2 text-base-content/70 max-w-64 truncate">
+                                                {{ $photo->potensiWisata->nama ?? '' }}
+                                            </figcaption>
+                                        </figure>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @endif
+                    </div>
+                </div>
+            </div>
         </section>
+
 
         {{-- Bagian 1: Latar Belakang
         <div class="card bg-base-100 

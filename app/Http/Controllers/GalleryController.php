@@ -106,4 +106,26 @@ class GalleryController extends Controller
 
         return redirect()->route('admin.gallery.index');
     }
+
+    /**
+     * Update daftar foto yang tampil sebagai carousel di beranda publik.
+     */
+    public function updateFeatured(Request $request)
+    {
+        $validated = $request->validate([
+            'featured_photos' => ['nullable', 'array'],
+            'featured_photos.*' => ['exists:gallery_photos,id'],
+        ]);
+
+        // whereHas('gallery') memastikan hanya foto milik kelurahan yang sedang
+        // login yang ikut ter-reset/ter-update — GalleryPhoto sendiri TIDAK pakai
+        // BelongsToVillage (lihat komentar di modelnya), jadi scoping harus lewat
+        // relasi ke Gallery yang sudah punya trait tsb.
+        GalleryPhoto::whereHas('gallery')->update(['tampil_beranda' => false]);
+        GalleryPhoto::whereHas('gallery')
+            ->whereIn('id', $validated['featured_photos'] ?? [])
+            ->update(['tampil_beranda' => true]);
+
+        return redirect()->route('admin.home.edit')->with('success', 'Foto Galeri untuk beranda berhasil diperbarui!');
+    }
 }
