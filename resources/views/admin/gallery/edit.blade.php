@@ -110,16 +110,16 @@
                         <span>Tidak ada foto dalam galeri ini</span>
                     </div>
                 @else
-                    <div class="flex justify-center w-full">
-                        {{-- <div class="carousel carousel-center bg-neutral rounded-box max-w-full space-x-4 p-4 w-full"> --}}
+                    {{-- <div class="flex justify-center w-full">
+                        {{-- <div class="carousel carousel-center bg-neutral rounded-box max-w-full space-x-4 p-4 w-full"> --}
                         <div class="carousel carousel-center bg-neutral rounded-box max-w-full space-x-4 p-4 w-fit">
                             @foreach($gallery->photos as $photo)
                                 <div class="carousel-item 
                                 relative group rounded-box overflow-hidden">
                                     <img src="{{ asset('storage/' . $photo->foto_path) }}"
-                                    {{-- <img src="{{ Storage::url($photo->foto_path) }}"  --}}
+                                    {{-- <img src="{{ Storage::url($photo->foto_path) }}"  --}
                                          alt="Foto {{ $gallery->nama_kegiatan }}"
-                                         {{-- class="h-72 md:h-96 object-cover" /> --}}
+                                         {{-- class="h-72 md:h-96 object-cover" /> --}
                                         class="h-72 md:h-96 object-cover"
                                          loading="lazy" decoding="async" />
                                     
@@ -136,7 +136,7 @@
                                                 mr-1" />
                                                 Hapus
                                             </button>
-                                        </form> --}}
+                                        </form> --}
                                         <form id="form-delete-photo-{{ $photo->id }}" action="{{ route('admin.gallery.photo.destroy', $photo->id) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
@@ -171,7 +171,69 @@
                                 </div>
                             @endforeach
                         </div>
-                    </div>
+                    </div> --}}
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    @foreach($gallery->photos as $photo)
+                        <div class="relative group">
+                            <button type="button" onclick="document.getElementById('modal_view_photo_{{ $photo->id }}').showModal()"
+                                class="block w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg">
+                                <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                     alt="Foto {{ $gallery->judul }}"
+                                     class="w-full h-32 object-cover rounded-lg" loading="lazy" decoding="async" />
+                            </button>
+
+                            <form id="form-delete-photo-{{ $photo->id }}" action="{{ route('admin.gallery.photo.destroy', $photo->id) }}" method="POST" class="absolute top-1 right-1">
+                                @csrf
+                                @method('DELETE')
+                            </form>
+                            <button type="button" onclick="document.getElementById('modal_confirm_delete_photo_{{ $photo->id }}').showModal()"
+                                class="btn btn-circle btn-error btn-xs absolute top-1 right-1">
+                                <x-lucide-x class="w-3 h-3" />
+                            </button>
+
+                            {{-- Modal lightbox: lihat foto full view --}}
+                            <dialog id="modal_view_photo_{{ $photo->id }}" class="modal">
+                                {{-- <div class="modal-box max-w-4xl p-2"> --}}
+                                <div class="modal-box max-w-4xl p-2 flex items-center justify-center">
+                                    <form method="dialog">
+                                        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-10">
+                                            <x-lucide-x class="w-4 h-4" />
+                                        </button>
+                                    </form>
+                                    <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                         alt="Foto {{ $gallery->judul }}"
+                                         {{-- class="w-full h-auto rounded-lg" loading="lazy" /> --}}
+                                         class="max-h-[80vh] w-auto max-w-full object-contain rounded-lg" loading="lazy" />
+                                </div>
+                                <form method="dialog" class="modal-backdrop">
+                                    <button>close</button>
+                                </form>
+                            </dialog>
+
+                            {{-- Modal konfirmasi hapus --}}
+                            <dialog id="modal_confirm_delete_photo_{{ $photo->id }}" class="modal">
+                                <div class="modal-box">
+                                    <div class="flex flex-col items-center text-center">
+                                        <x-lucide-triangle-alert class="w-14 h-14 text-error mb-4" />
+                                        <h3 class="font-bold text-xl text-base-content">Konfirmasi Hapus</h3>
+                                        <p class="py-4 text-base-content/80">Hapus foto ini dari galeri?</p>
+                                    </div>
+                                    <div class="modal-action justify-center">
+                                        <form method="dialog">
+                                            <button class="btn btn-ghost">Batal</button>
+                                        </form>
+                                        <button type="submit" form="form-delete-photo-{{ $photo->id }}" class="btn btn-error">
+                                            Ya, Hapus
+                                        </button>
+                                    </div>
+                                </div>
+                                <form method="dialog" class="modal-backdrop">
+                                    <button>close</button>
+                                </form>
+                            </dialog>
+                        </div>
+                    @endforeach
+                </div>
                 @endif
             {{-- </div>
         </div> --}}

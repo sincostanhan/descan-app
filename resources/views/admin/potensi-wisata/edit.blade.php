@@ -47,7 +47,12 @@
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                     @foreach($item->photos as $photo)
                         <div class="relative group">
-                            <img src="{{ asset('storage/' . $photo->foto_path) }}" class="w-full h-32 object-cover rounded-lg" loading="lazy" />
+                            {{-- <img src="{{ asset('storage/' . $photo->foto_path) }}" class="w-full h-32 object-cover rounded-lg" loading="lazy" /> --}}
+                            <button type="button" onclick="document.getElementById('modal_view_photo_{{ $photo->id }}').showModal()"
+                                class="block w-full focus:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg">
+                                <img src="{{ asset('storage/' . $photo->foto_path) }}" alt="{{ $item->nama }}"
+                                     class="w-full h-32 object-cover rounded-lg" loading="lazy" />
+                            </button>
                             <form action="{{ route('admin.potensi-wisata.photo.destroy', $photo->id) }}" method="POST"
                                 onsubmit="return confirm('Hapus foto ini?')" class="absolute top-1 right-1">
                                 @csrf
@@ -56,6 +61,23 @@
                                     <x-lucide-x class="w-3 h-3" />
                                 </button>
                             </form>
+
+                            <dialog id="modal_view_photo_{{ $photo->id }}" class="modal">
+                                {{-- <div class="modal-box max-w-4xl p-2"> --}}
+                                <div class="modal-box max-w-4xl p-2 flex items-center justify-center">
+                                    <form method="dialog">
+                                        <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2 z-10">
+                                            <x-lucide-x class="w-4 h-4" />
+                                        </button>
+                                    </form>
+                                    <img src="{{ asset('storage/' . $photo->foto_path) }}" alt="{{ $item->nama }}"
+                                         {{-- class="w-full h-auto rounded-lg" loading="lazy" /> --}}
+                                         class="max-h-[80vh] w-auto max-w-full object-contain rounded-lg" loading="lazy" />
+                                </div>
+                                <form method="dialog" class="modal-backdrop">
+                                    <button>close</button>
+                                </form>
+                            </dialog>
                         </div>
                     @endforeach
                 </div>
