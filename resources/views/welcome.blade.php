@@ -40,7 +40,29 @@
 
     <div class="max-w-6xl mx-auto px-4 lg:px-0 mb-20 space-y-16">
 
-        {{-- Bagian 1: Latar Belakang --}}
+        @php
+            $jumlahTabelGrafik = ...;
+            $jumlahPublikasi = ...;
+            $jumlahInfografis = ...;
+            $latestGallery = ...;
+            $latestGalleryPhoto = ...;
+        @endphp
+
+        <section aria-labelledby="statistik-heading"> ... 3 DaisyUI stats ... </section>
+
+        <section aria-labelledby="feature-heading"> ... 2 hover-3d card ... </section>
+
+        <section aria-labelledby="tentang-heading">
+            <div class="space-y-2">
+                accordion collapse-plus x4:
+                1. Latar Belakang   (isi dipindah, TIDAK ditulis ulang)
+                2. Tujuan Program   (isi dipindah, TIDAK ditulis ulang)
+                3. Output           (isi dipindah, TIDAK ditulis ulang)
+                4. Tim Kelurahan Cantik (baru, hardcode sesuai data Anda)
+            </div>
+        </section>
+
+        {{-- Bagian 1: Latar Belakang
         <div class="card bg-base-100 
         card-border 
         shadow-lg 
@@ -50,9 +72,9 @@
                 text-2xl font-bold mb-4 flex items-center gap-2 border-b pb-2">
                     <x-lucide-book-open class="w-6 h-6 mr-1 text-primary" />Latar Belakang
                 </h2>
-                {{-- <div class="text-lg leading-relaxed text-justify"> --}}
+                {{-- <div class="text-lg leading-relaxed text-justify"> --}
                 <div class="text-base leading-relaxed text-justify">
-                    {{-- {!! nl2br(e($home->latar_belakang)) !!} --}}
+                    {{-- {!! nl2br(e($home->latar_belakang)) !!} --}
 
                     @php
                         // Memecah latar belakang per baris (enter)
@@ -61,7 +83,7 @@
                     
                     @foreach($paragraphs as $paragraph)
                         @if(trim($paragraph))
-                            {{-- Class 'indent-8' akan membuat HANYA baris pertama di paragraf ini menjorok ke kanan --}}
+                            {{-- Class 'indent-8' akan membuat HANYA baris pertama di paragraf ini menjorok ke kanan --}
                             <p class="indent-8 mb-4">{{ trim($paragraph) }}</p>
                         @endif
                     @endforeach
@@ -69,14 +91,14 @@
             </div>
         </div>
 
-        {{-- Bagian 2 & 3: Tujuan dan Output (Grid System) --}}
+        {{-- Bagian 2 & 3: Tujuan dan Output (Grid System) --}
         <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
             
-            {{-- Bagian 2: Tujuan --}}
+            {{-- Bagian 2: Tujuan --}
             <div class="card bg-base-100 
             card-border 
             shadow-lg 
-            {{-- border-t-4 border-t-primary"> --}}
+            {{-- border-t-4 border-t-primary"> --}
             border-t-4">
                 <div class="card-body">
                     <h2 class="card-title 
@@ -84,17 +106,17 @@
                         <x-lucide-target class="w-6 h-6 mr-1 text-primary" />Tujuan Program
                     </h2>
                     <div class="text-base leading-relaxed">
-                        {{-- {!! nl2br(e($home->tujuan)) !!} --}}
+                        {{-- {!! nl2br(e($home->tujuan)) !!} --}
                         {!! $renderFormattedList($home->tujuan) !!}
                     </div>
                 </div>
             </div>
 
-            {{-- Bagian 3: Output --}}
+            {{-- Bagian 3: Output --}
             <div class="card bg-base-100 
             card-border 
             shadow-lg 
-            {{-- border-t-4 border-t-secondary"> --}}
+            {{-- border-t-4 border-t-secondary"> --}
             border-t-4">
                 <div class="card-body">
                     <h2 class="card-title 
@@ -102,13 +124,13 @@
                         <x-lucide-award class="w-6 h-6 mr-1 text-secondary" />Output Kelurahan Cantik
                     </h2>
                     <div class="text-base leading-relaxed">
-                        {{-- {!! nl2br(e($home->output)) !!} --}}
+                        {{-- {!! nl2br(e($home->output)) !!} --}
                         {!! $renderFormattedList($home->output) !!}
                     </div>
                 </div>
             </div>
 
-        </div>
+        </div> --}}
 
         {{-- Section Tambahan: CTA (Call to Action) --}}
         {{-- <div class="bg-primary/20 rounded-3xl p-8 md:p-12 text-center">
