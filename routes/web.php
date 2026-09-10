@@ -11,6 +11,7 @@ use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InfographicController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\PotensiWisataController;
 use App\Http\Controllers\PublicationController;
 use App\Http\Controllers\PublicStatisticController;
 use App\Http\Controllers\StatisticalTableController;
@@ -65,6 +66,7 @@ Route::get('/tentang-kami', [AboutController::class, 'index'])->name('about.inde
 Route::get('/sejarah', [HistoryController::class, 'index'])->name('history.index');
 Route::get('/organisasi', [OrganizationController::class, 'index'])->name('organization.index');
 Route::get('/galeri', [GalleryController::class, 'indexPublik'])->name('gallery.index');
+Route::get('/potensi-wisata', [PotensiWisataController::class, 'indexPublik'])->name('potensi-wisata.index');
 Route::get('/publikasi', [PublicationController::class, 'indexPublic'])->name('publication.index');
 Route::get('/infografis', [InfographicController::class, 'indexPublic'])->name('infographic.index');
 Route::get('/statistik', [PublicStatisticController::class, 'index'])->name('public.statistic.index');
@@ -110,6 +112,21 @@ Route::middleware(['auth'])->group(function () {
             ->name('gallery.photo.destroy');
         Route::delete('/galeri/{gallery}', [GalleryController::class, 'destroy'])
             ->name('gallery.destroy');
+
+        Route::get('/potensi-wisata', [PotensiWisataController::class, 'index'])
+            ->name('potensi-wisata.index');
+        Route::get('/potensi-wisata/create', [PotensiWisataController::class, 'create'])
+            ->name('potensi-wisata.create');
+        Route::post('/potensi-wisata', [PotensiWisataController::class, 'store'])
+           ->name('potensi-wisata.store');
+        Route::get('/potensi-wisata/{potensi_wisata}/edit', [PotensiWisataController::class, 'edit'])
+            ->name('potensi-wisata.edit');
+        Route::patch('/potensi-wisata/{potensi_wisata}', [PotensiWisataController::class, 'update'])
+            ->name('potensi-wisata.update');
+        Route::delete('/potensi-wisata/foto/{photo}', [PotensiWisataController::class, 'destroyPhoto'])
+            ->name('potensi-wisata.photo.destroy');
+        Route::delete('/potensi-wisata/{potensi_wisata}', [PotensiWisataController::class, 'destroy'])
+            ->name('potensi-wisata.destroy');
 
         Route::resource('publikasi', PublicationController::class)
             ->names('publication')

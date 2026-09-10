@@ -43,6 +43,8 @@ class UpdateHomeRequest extends FormRequest
             'show_tujuan' => ['boolean'],
             'show_output' => ['boolean'],
             'show_tim' => ['boolean'],
+            'featured_gallery_photo_id' => ['nullable', 'exists:gallery_photos,id'],
+            'featured_potensi_wisata_photo_id' => ['nullable', 'exists:potensi_wisata_photos,id'],
         ];
     }
 

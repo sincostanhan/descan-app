@@ -63,6 +63,36 @@
                 </div> --}}
                 <div class="card-body">
 
+                                        <div class="divider">Gambar Homepage</div>
+
+                    <fieldset class="fieldset w-full mb-6">
+                        <legend class="fieldset-legend text-base">Foto Card "Galeri Kegiatan"</legend>
+                        <select name="featured_gallery_photo_id" class="select w-full">
+                            <option value="">-- Otomatis (foto terbaru) --</option>
+                            @foreach($galleryPhotos as $photo)
+                                <option value="{{ $photo->id }}"
+                                    {{ old('featured_gallery_photo_id', $home->featured_gallery_photo_id) == $photo->id ? 'selected' : '' }}>
+                                    {{ $photo->gallery->judul }} — {{ $photo->created_at->format('d M Y') }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <x-forms.error name="featured_gallery_photo_id" />
+                    </fieldset>
+
+                    <fieldset class="fieldset w-full mb-6">
+                        <legend class="fieldset-legend text-base">Foto Card "Potensi Wisata"</legend>
+                        <select name="featured_potensi_wisata_photo_id" class="select w-full">
+                            <option value="">-- Otomatis (foto terbaru) --</option>
+                            @foreach($potensiWisataPhotos as $photo)
+                                <option value="{{ $photo->id }}"
+                                    {{ old('featured_potensi_wisata_photo_id', $home->featured_potensi_wisata_photo_id) == $photo->id ? 'selected' : '' }}>
+                                    {{ $photo->potensiWisata->nama }} ({{ $photo->potensiWisata->kategori_label }}) — {{ $photo->created_at->format('d M Y') }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <x-forms.error name="featured_potensi_wisata_photo_id" />
+                    </fieldset>
+                    
                     <div class="space-y-3">
                         {{-- 1. Latar Belakang --}}
                         <div class="collapse collapse-plus bg-base-100 border border-base-300">

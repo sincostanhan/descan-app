@@ -57,7 +57,77 @@
 
         <section aria-labelledby="statistik-heading"> ... 3 DaisyUI stats ... </section>
 
-        <section aria-labelledby="feature-heading"> ... 2 hover-3d card ... </section>
+        @php
+            $galleryPhoto = $home->featuredGalleryPhoto ?? \App\Models\GalleryPhoto::latest()->first();
+            $wisataPhoto = $home->featuredPotensiWisataPhoto ?? \App\Models\PotensiWisataPhoto::latest()->first();
+        @endphp
+
+        <section aria-labelledby="feature-heading">
+            <h2 id="feature-heading" class="text-2xl font-bold mb-6 border-b pb-2">
+                Kegiatan & Potensi Kelurahan
+            </h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 justify-items-center md:justify-items-start">
+
+                {{-- Card 1: Galeri Kegiatan --}}
+                <a href="{{ route('gallery.index') }}" aria-label="Lihat Galeri Kegiatan"
+                   class="w-60 sm:w-72 block group rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+                    <div class="hover-3d w-full">
+                        <figure class="w-full rounded-2xl overflow-hidden aspect-[4/3] bg-base-200">
+                            @if($galleryPhoto)
+                                <img src="{{ asset('storage/' . $galleryPhoto->foto_path) }}"
+                                     alt="Foto kegiatan: {{ $galleryPhoto->gallery->judul ?? '' }}"
+                                     class="w-full h-full object-cover" loading="lazy" decoding="async" />
+                            @else
+                                <div class="w-full h-full flex flex-col items-center justify-center text-base-content/40">
+                                    <x-lucide-image class="w-10 h-10 mb-2" />
+                                    <span class="text-sm text-center px-2">Belum ada foto kegiatan</span>
+                                </div>
+                            @endif
+                        </figure>
+                        <div></div><div></div><div></div><div></div>
+                        <div></div><div></div><div></div><div></div>
+                    </div>
+                    <div class="mt-3 flex items-center justify-between gap-2">
+                        <h3 class="font-semibold text-base sm:text-lg group-hover:text-primary transition-colors">
+                            Galeri Kegiatan
+                        </h3>
+                        <span class="btn btn-xs sm:btn-sm btn-outline btn-primary pointer-events-none shrink-0">
+                            Lihat <x-lucide-arrow-right class="w-4 h-4" />
+                        </span>
+                    </div>
+                </a>
+
+                {{-- Card 2: Potensi Wisata --}}
+                <a href="{{ route('potensi-wisata.index') }}" aria-label="Lihat Potensi Wisata"
+                   class="w-60 sm:w-72 block group rounded-2xl focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2">
+                    <div class="hover-3d w-full">
+                        <figure class="w-full rounded-2xl overflow-hidden aspect-[4/3] bg-base-200">
+                            @if($wisataPhoto)
+                                <img src="{{ asset('storage/' . $wisataPhoto->foto_path) }}"
+                                     alt="Potensi Wisata: {{ $wisataPhoto->potensiWisata->nama ?? '' }}"
+                                     class="w-full h-full object-cover" loading="lazy" decoding="async" />
+                            @else
+                                <div class="w-full h-full flex flex-col items-center justify-center text-base-content/40">
+                                    <x-lucide-image class="w-10 h-10 mb-2" />
+                                    <span class="text-sm text-center px-2">Belum ada foto Potensi Wisata</span>
+                                </div>
+                            @endif
+                        </figure>
+                        <div></div><div></div><div></div><div></div>
+                        <div></div><div></div><div></div><div></div>
+                    </div>
+                    <div class="mt-3 flex items-center justify-between gap-2">
+                        <h3 class="font-semibold text-base sm:text-lg group-hover:text-primary transition-colors">
+                            Potensi Wisata
+                        </h3>
+                        <span class="btn btn-xs sm:btn-sm btn-outline btn-primary pointer-events-none shrink-0">
+                            Lihat <x-lucide-arrow-right class="w-4 h-4" />
+                        </span>
+                    </div>
+                </a>
+            </div>
+        </section>
 
         {{-- Bagian 1: Latar Belakang
         <div class="card bg-base-100 
