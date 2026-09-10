@@ -8,26 +8,30 @@
                 @if($umum->isEmpty())
                     <x-empty-alert message="Belum ada data Potensi Wisata." />
                 @else
-                    {{-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"> --}}
-                    <div class="carousel rounded-box gap-4">
+                    {{-- <div class="space-y-8"> --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach($umum as $item)
-                            {{-- <div class="card bg-base-100 border border-base-300 shadow-sm">
-                                <figure class="aspect-[4/3] bg-base-200"> --}}
-                            <div class="carousel-item">
-                                <div class="card bg-base-100 border border-base-300 shadow-sm w-64">
-                                <figure class="aspect-[4/3] bg-base-200 w-64">
-                                    @if($item->photos->first())
-                                        <img src="{{ asset('storage/' . $item->photos->first()->foto_path) }}"
-                                             alt="{{ $item->nama }}" class="w-full h-full object-cover" loading="lazy" />
-                                    @else
-                                        <div class="w-full h-full flex items-center justify-center text-base-content/40">
-                                            <x-lucide-image class="w-8 h-8" />
-                                        </div>
-                                    @endif
-                                </figure>
+                            {{-- <div class="card bg-base-100 border border-base-300 shadow-sm rounded-2xl overflow-hidden lg:w-[20vw]"> --}}
+                            <div class="card bg-base-100 border border-base-300 shadow-sm rounded-2xl overflow-hidden w-full">
+                                @if($item->photos->isEmpty())
+                                    <div class="aspect-[4/3] bg-base-200 flex items-center justify-center text-base-content/40">
+                                        <x-lucide-image class="w-8 h-8" />
+                                    </div>
+                                @else
+                                    <div class="carousel w-full">
+                                        @foreach($item->photos as $photo)
+                                            <div class="carousel-item w-full">
+                                                <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                                     alt="{{ $item->nama }}"
+                                                     {{-- class="w-full h-48 object-cover" loading="lazy" decoding="async" /> --}}
+                                                     class="w-full h-48 object-contain bg-base-200" loading="lazy" decoding="async" />
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                                 <div class="card-body p-4">
                                     <h3 class="font-semibold">{{ $item->nama }}</h3>
-                                </div>
+                                    <p class="text-xs text-base-content/60">Diperbarui pada: {{ $item->updated_at->format('d F Y, H:i') }}</p>
                                 </div>
                             </div>
                         @endforeach
@@ -40,26 +44,30 @@
                 @if($situsBersejarah->isEmpty())
                     <x-empty-alert message="Belum ada data Situs Bersejarah." />
                 @else
-                    {{-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"> --}}
-                    <div class="carousel rounded-box gap-4">
+                    {{-- <div class="space-y-8"> --}}
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         @foreach($situsBersejarah as $item)
-                            {{-- <div class="card bg-base-100 border border-base-300 shadow-sm">
-                                <figure class="aspect-[4/3] bg-base-200"> --}}
-                            <div class="carousel-item">
-                                <div class="card bg-base-100 border border-base-300 shadow-sm w-64">
-                                <figure class="aspect-[4/3] bg-base-200 w-64">
-                                    @if($item->photos->first())
-                                        <img src="{{ asset('storage/' . $item->photos->first()->foto_path) }}"
-                                             alt="{{ $item->nama }}" class="w-full h-full object-cover" loading="lazy" />
-                                    @else
-                                        <div class="w-full h-full flex items-center justify-center text-base-content/40">
-                                            <x-lucide-image class="w-8 h-8" />
-                                        </div>
-                                    @endif
-                                </figure>
+                            {{-- <div class="card bg-base-100 border border-base-300 shadow-sm rounded-2xl overflow-hidden lg:w-[20vw]"> --}}
+                            <div class="card bg-base-100 border border-base-300 shadow-sm rounded-2xl overflow-hidden w-full">
+                                @if($item->photos->isEmpty())
+                                    <div class="aspect-[4/3] bg-base-200 flex items-center justify-center text-base-content/40">
+                                        <x-lucide-image class="w-8 h-8" />
+                                    </div>
+                                @else
+                                    <div class="carousel w-full">
+                                        @foreach($item->photos as $photo)
+                                            <div class="carousel-item w-full">
+                                                <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                                     alt="{{ $item->nama }}"
+                                                     {{-- class="w-full h-48 object-cover" loading="lazy" decoding="async" /> --}}
+                                                     class="w-full h-48 object-contain " loading="lazy" decoding="async" />
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                @endif
                                 <div class="card-body p-4">
                                     <h3 class="font-semibold">{{ $item->nama }}</h3>
-                                </div>
+                                    <p class="text-xs text-base-content/60">Diperbarui pada: {{ $item->updated_at->format('d F Y, H:i') }}</p>
                                 </div>
                             </div>
                         @endforeach
