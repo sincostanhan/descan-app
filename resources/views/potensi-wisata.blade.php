@@ -31,7 +31,11 @@
                                 @endif
                                 <div class="card-body p-4">
                                     <h3 class="font-semibold">{{ $item->nama }}</h3>
-                                    <p class="text-xs text-base-content/60">Diperbarui pada: {{ $item->updated_at->format('d F Y, H:i') }}</p>
+                                    {{-- <p class="text-xs text-base-content/60">Diperbarui pada: {{ $item->updated_at->format('d F Y, H:i') }}</p> --}}
+                                    <p class="text-xs text-base-content/60 flex items-center">
+                                        <x-lucide-calendar class="w-3.5 h-3.5 mr-1" />
+                                        Dipublikasikan pada tanggal {{ $item->created_at->translatedFormat('d F Y') }}
+                                    </p>
                                 </div>
                             </div>
                         @endforeach
@@ -60,14 +64,19 @@
                                                 <img src="{{ asset('storage/' . $photo->foto_path) }}"
                                                      alt="{{ $item->nama }}"
                                                      {{-- class="w-full h-48 object-cover" loading="lazy" decoding="async" /> --}}
-                                                     class="w-full h-48 object-contain " loading="lazy" decoding="async" />
+                                                     {{-- class="w-full h-48 object-contain " loading="lazy" decoding="async" /> --}}
+                                                     class="w-full h-48 object-contain bg-base-200" loading="lazy" decoding="async" />
                                             </div>
                                         @endforeach
                                     </div>
                                 @endif
                                 <div class="card-body p-4">
                                     <h3 class="font-semibold">{{ $item->nama }}</h3>
-                                    <p class="text-xs text-base-content/60">Diperbarui pada: {{ $item->updated_at->format('d F Y, H:i') }}</p>
+                                    {{-- <p class="text-xs text-base-content/60">Diperbarui pada: {{ $item->updated_at->format('d F Y, H:i') }}</p> --}}
+                                    <p class="text-xs text-base-content/60 flex items-center">
+                                        <x-lucide-calendar class="w-3.5 h-3.5 mr-1" />
+                                        Dipublikasikan pada tanggal {{ $item->created_at->translatedFormat('d F Y') }}
+                                    </p>
                                 </div>
                             </div>
                         @endforeach

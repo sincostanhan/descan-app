@@ -81,8 +81,8 @@
         @empty
             <x-empty-alert message="Belum ada kegiatan di galeri." />
         @endforelse --}}
-    </div>
-        <div class="max-w-6xl mx-auto px-4 lg:px-0 mb-20">
+    {{-- </div> --}}
+    <div class="max-w-6xl mx-auto px-4 lg:px-0 mb-20">
         @forelse($galleries as $gallery)
             <p></p>
         @empty
