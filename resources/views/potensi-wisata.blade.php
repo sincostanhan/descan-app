@@ -8,10 +8,14 @@
                 @if($umum->isEmpty())
                     <x-empty-alert message="Belum ada data Potensi Wisata." />
                 @else
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {{-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"> --}}
+                    <div class="carousel rounded-box gap-4">
                         @foreach($umum as $item)
-                            <div class="card bg-base-100 border border-base-300 shadow-sm">
-                                <figure class="aspect-[4/3] bg-base-200">
+                            {{-- <div class="card bg-base-100 border border-base-300 shadow-sm">
+                                <figure class="aspect-[4/3] bg-base-200"> --}}
+                            <div class="carousel-item">
+                                <div class="card bg-base-100 border border-base-300 shadow-sm w-64">
+                                <figure class="aspect-[4/3] bg-base-200 w-64">
                                     @if($item->photos->first())
                                         <img src="{{ asset('storage/' . $item->photos->first()->foto_path) }}"
                                              alt="{{ $item->nama }}" class="w-full h-full object-cover" loading="lazy" />
@@ -24,6 +28,7 @@
                                 <div class="card-body p-4">
                                     <h3 class="font-semibold">{{ $item->nama }}</h3>
                                 </div>
+                                </div>
                             </div>
                         @endforeach
                     </div>
@@ -35,10 +40,14 @@
                 @if($situsBersejarah->isEmpty())
                     <x-empty-alert message="Belum ada data Situs Bersejarah." />
                 @else
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                    {{-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"> --}}
+                    <div class="carousel rounded-box gap-4">
                         @foreach($situsBersejarah as $item)
-                            <div class="card bg-base-100 border border-base-300 shadow-sm">
-                                <figure class="aspect-[4/3] bg-base-200">
+                            {{-- <div class="card bg-base-100 border border-base-300 shadow-sm">
+                                <figure class="aspect-[4/3] bg-base-200"> --}}
+                            <div class="carousel-item">
+                                <div class="card bg-base-100 border border-base-300 shadow-sm w-64">
+                                <figure class="aspect-[4/3] bg-base-200 w-64">
                                     @if($item->photos->first())
                                         <img src="{{ asset('storage/' . $item->photos->first()->foto_path) }}"
                                              alt="{{ $item->nama }}" class="w-full h-full object-cover" loading="lazy" />
@@ -50,6 +59,7 @@
                                 </figure>
                                 <div class="card-body p-4">
                                     <h3 class="font-semibold">{{ $item->nama }}</h3>
+                                </div>
                                 </div>
                             </div>
                         @endforeach

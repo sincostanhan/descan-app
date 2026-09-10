@@ -66,13 +66,13 @@
                                                 text-white">
                                                 Lihat
                                             </a> --}}
-                                            <button onclick="document.getElementById('modal_show_{{ $gallery->id }}').showModal()" 
-                                                {{-- class="btn btn-info btn-sm  --}}
+                                            {{-- <button onclick="document.getElementById('modal_show_{{ $gallery->id }}').showModal()" 
+                                                {{-- class="btn btn-info btn-sm  --}
                                                 class="btn btn-soft btn-info btn-sm 
-                                                {{-- text-white --}}
+                                                {{-- text-white --}
                                                 ">
                                                 Lihat
-                                            </button>
+                                            </button> --}}
                                             <a href="{{ route('admin.gallery.edit', $gallery->id) }}" 
                                                 {{-- class="btn btn-warning btn-sm  --}}
                                                 class="btn btn-soft btn-warning btn-sm 
@@ -122,20 +122,20 @@
                                         </td>
                                     </tr>
 
-                                    <dialog id="modal_show_{{ $gallery->id }}" class="modal
+                                    {{-- <dialog id="modal_show_{{ $gallery->id }}" class="modal
                                         modal-middle">
                                         <div class="modal-box w-11/12 max-w-5xl">
                                             <form method="dialog">
-                                                {{-- <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button> --}}
+                                                {{-- <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">✕</button> --}
                                                 <button class="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
                                                     <x-lucide-x class="w-4 h-4" />
                                                 </button>
                                             </form>
                                             
-                                            {{-- <h3 class="text-lg font-bold mb-1">{{ $gallery->nama_kegiatan }}</h3> --}}
-                                            {{-- <h3 class="text-xl font-bold mb-1">{{ $gallery->nama_kegiatan }}</h3> --}}
+                                            {{-- <h3 class="text-lg font-bold mb-1">{{ $gallery->nama_kegiatan }}</h3> --}
+                                            {{-- <h3 class="text-xl font-bold mb-1">{{ $gallery->nama_kegiatan }}</h3> --}
                                             <h3 class="text-2xl font-bold mb-1">{{ $gallery->judul }}</h3>
-                                            {{-- <p class="text-base text-base-content/70 mb-6">Diperbarui pada: {{ $gallery->updated_at->format('d F Y, H:i') }}</p> --}}
+                                            {{-- <p class="text-base text-base-content/70 mb-6">Diperbarui pada: {{ $gallery->updated_at->format('d F Y, H:i') }}</p> --}
                                             <p class="text-sm text-base-content/70 mb-6">Diperbarui pada: {{ $gallery->updated_at->format('d F Y, H:i') }}</p>
                                             
                                             @if($gallery->photos->isEmpty())
@@ -148,18 +148,18 @@
                                                 </div>    
                                             @else
                                                 <div class="flex justify-center w-full">
-                                                    {{-- <div class="carousel carousel-center bg-neutral rounded-box max-w-md space-x-4 p-4"> --}}
-                                                    {{-- <div class="carousel carousel-center bg-neutral rounded-box w-full space-x-4 p-4 --}}
+                                                    {{-- <div class="carousel carousel-center bg-neutral rounded-box max-w-md space-x-4 p-4"> --}
+                                                    {{-- <div class="carousel carousel-center bg-neutral rounded-box w-full space-x-4 p-4 --}
                                                     <div class="carousel carousel-center bg-neutral rounded-box max-w-full space-x-4 p-4
                                                     w-fit">
                                                         @foreach($gallery->photos as $photo)
                                                             <div class="carousel-item">
                                                                 <img src="{{ asset('storage/' . $photo->foto_path) }}"
-                                                                {{-- <img src="{{ Storage::url($photo->foto_path) }}"  --}}
+                                                                {{-- <img src="{{ Storage::url($photo->foto_path) }}"  --}
                                                                     alt="Foto {{ $gallery->judul }}"
-                                                                    {{-- class="rounded-box" /> --}}
+                                                                    {{-- class="rounded-box" /> --}
                                                                     class="rounded-box 
-                                                                    {{-- h-72 md:h-96 object-cover" /> --}}
+                                                                    {{-- h-72 md:h-96 object-cover" /> --}
                                                                     h-72 md:h-96 object-cover"
                                                                     loading="lazy" decoding="async" />
                                                             </div>
@@ -174,7 +174,7 @@
                                                 </form>
                                             </div>
                                         </div>
-                                    </dialog>
+                                    </dialog> --}}
                                 @endforeach
                             </tbody>
                         </table>
