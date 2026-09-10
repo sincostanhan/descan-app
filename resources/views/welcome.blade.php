@@ -29,7 +29,14 @@
                     $lastMargin = 'pl-6'; 
                     $html .= '<div class="flex items-start mb-1"><span class="w-6 shrink-0 font-medium">' . e($matches[1]) . '</span><div class="flex-1">' . e($matches[2]) . '</div></div>';
                 }
+                // 4. Cek baris judul kelompok yang diakhiri titik dua (:) -> Reset indentasi + tebal
+                //    Contoh: "Agen Data Pengolah:", "Agen Data Lapangan:"
+                elseif (preg_match('/:$/', $line)) {
+                    $lastMargin = '';
+                    $html .= '<div class="mb-1 font-semibold">' . e($line) . '</div>';
+                }
                 // 4. Baris Normal (Contoh: Lanjutan kalimat jika ditekan Enter secara manual)
+                // 5. Baris Normal (Contoh: Lanjutan kalimat jika ditekan Enter secara manual)
                 else {
                     $html .= '<div class="mb-1 ' . $lastMargin . '">' . e($line) . '</div>';
                 }
@@ -41,26 +48,16 @@
     <div class="max-w-6xl mx-auto px-4 lg:px-0 mb-20 space-y-16">
 
         @php
-            $jumlahTabelGrafik = ...;
-            $jumlahPublikasi = ...;
-            $jumlahInfografis = ...;
-            $latestGallery = ...;
-            $latestGalleryPhoto = ...;
+            // $jumlahTabelGrafik = ...;
+            // $jumlahPublikasi = ...;
+            // $jumlahInfografis = ...;
+            // $latestGallery = ...;
+            // $latestGalleryPhoto = ...;
         @endphp
 
         <section aria-labelledby="statistik-heading"> ... 3 DaisyUI stats ... </section>
 
         <section aria-labelledby="feature-heading"> ... 2 hover-3d card ... </section>
-
-        <section aria-labelledby="tentang-heading">
-            <div class="space-y-2">
-                accordion collapse-plus x4:
-                1. Latar Belakang   (isi dipindah, TIDAK ditulis ulang)
-                2. Tujuan Program   (isi dipindah, TIDAK ditulis ulang)
-                3. Output           (isi dipindah, TIDAK ditulis ulang)
-                4. Tim Kelurahan Cantik (baru, hardcode sesuai data Anda)
-            </div>
-        </section>
 
         {{-- Bagian 1: Latar Belakang
         <div class="card bg-base-100 
@@ -141,5 +138,146 @@
                 <a href="{{ route('statistical-table.index') }}" class="btn btn-outline btn-primary">Data Statistik</a>
             </div>
         </div> --}}
+
+        <section aria-labelledby="tentang-heading">
+            {{-- <h2 id="tentang-heading" class="text-2xl font-bold mb-6 flex items-center gap-2 border-b pb-2">
+                <x-lucide-info class="w-6 h-6 text-primary" /> Apa itu Desa Cantik
+            </h2> --}}
+            <h2 id="tentang-heading" class="text-2xl font-bold mb-6 border-b pb-2">
+                Apa itu Kelurahan Cantik?
+            </h2>
+
+            {{-- <div class="space-y-2">
+                {{-- 1. Latar Belakang --}
+                <div class="collapse collapse-plus bg-base-100 border border-base-300">
+                    <input type="radio" name="accordion-tentang-descan" checked="checked" />
+                    <div class="collapse-title font-semibold">
+                        <h3 class="flex items-center gap-2">
+                            <x-lucide-book-open class="w-5 h-5 text-primary" /> Latar Belakang
+                        </h3>
+                    </div>
+                    <div class="collapse-content text-sm">
+                        @php
+                            $paragraphs = explode("\n", $home->latar_belakang);
+                        @endphp
+                        @foreach($paragraphs as $paragraph)
+                            @if(trim($paragraph))
+                                <p class="indent-8 mb-4">{{ trim($paragraph) }}</p>
+                            @endif
+                        @endforeach
+                    </div>
+                </div>
+
+                {{-- 2. Tujuan Program --}
+                <div class="collapse collapse-plus bg-base-100 border border-base-300">
+                    <input type="radio" name="accordion-tentang-descan" />
+                    <div class="collapse-title font-semibold">
+                        <h3 class="flex items-center gap-2">
+                            <x-lucide-target class="w-5 h-5 text-primary" /> Tujuan Program
+                        </h3>
+                    </div>
+                    <div class="collapse-content text-sm">
+                        {!! $renderFormattedList($home->tujuan) !!}
+                    </div>
+                </div>
+
+                {{-- 3. Output Kelurahan Cantik --}
+                <div class="collapse collapse-plus bg-base-100 border border-base-300">
+                    <input type="radio" name="accordion-tentang-descan" />
+                    <div class="collapse-title font-semibold">
+                        <h3 class="flex items-center gap-2">
+                            <x-lucide-award class="w-5 h-5 text-secondary" /> Output Kelurahan Cantik
+                        </h3>
+                    </div>
+                    <div class="collapse-content text-sm">
+                        {!! $renderFormattedList($home->output) !!}
+                    </div>
+                </div>
+            </div> --}}
+            <div class="space-y-2">
+                @php $firstOpened = false; @endphp
+
+                {{-- 1. Latar Belakang --}}
+                @if($home->show_latar_belakang ?? true)
+                    @php $isFirst = !$firstOpened; $firstOpened = true; @endphp
+                    <div class="collapse collapse-plus bg-base-100 border border-base-300">
+                        <input type="radio" name="accordion-tentang-descan" {{ $isFirst ? 'checked="checked"' : '' }} />
+                        <div class="collapse-title font-semibold">
+                            <h3 class="flex items-center gap-2">
+                                <x-lucide-book-open class="w-5 h-5 text-primary" /> Latar Belakang
+                            </h3>
+                        </div>
+                        {{-- <div class="collapse-content text-sm"> --}}
+                        {{-- <div class="collapse-content text-sm pl-7"> --}}
+                        <div class="collapse-content text-sm pl-11">
+                            @php $paragraphs = explode("\n", $home->latar_belakang); @endphp
+                            @foreach($paragraphs as $paragraph)
+                                @if(trim($paragraph))
+                                    <p class="indent-8 mb-4">{{ trim($paragraph) }}</p>
+                                @endif
+                            @endforeach
+                        </div>
+                    </div>
+                @endif
+
+                {{-- 2. Tujuan Program --}}
+                @if($home->show_tujuan ?? true)
+                    @php $isFirst = !$firstOpened; $firstOpened = true; @endphp
+                    <div class="collapse collapse-plus bg-base-100 border border-base-300">
+                        <input type="radio" name="accordion-tentang-descan" {{ $isFirst ? 'checked="checked"' : '' }} />
+                        <div class="collapse-title font-semibold">
+                            <h3 class="flex items-center gap-2">
+                                <x-lucide-target class="w-5 h-5 text-primary" /> Tujuan Program
+                            </h3>
+                        </div>
+                        {{-- <div class="collapse-content text-sm"> --}}
+                        {{-- <div class="collapse-content text-sm pl-7"> --}}
+                        <div class="collapse-content text-sm pl-11">
+                            {!! $renderFormattedList($home->tujuan) !!}
+                        </div>
+                    </div>
+                @endif
+
+                {{-- 3. Output Kelurahan Cantik --}}
+                @if($home->show_output ?? true)
+                    @php $isFirst = !$firstOpened; $firstOpened = true; @endphp
+                    <div class="collapse collapse-plus bg-base-100 border border-base-300">
+                        <input type="radio" name="accordion-tentang-descan" {{ $isFirst ? 'checked="checked"' : '' }} />
+                        <div class="collapse-title font-semibold">
+                            <h3 class="flex items-center gap-2">
+                                <x-lucide-award class="w-5 h-5 text-secondary" /> Output Kelurahan Cantik
+                            </h3>
+                        </div>
+                        {{-- <div class="collapse-content text-sm"> --}}
+                        {{-- <div class="collapse-content text-sm pl-7"> --}}
+                        <div class="collapse-content text-sm pl-11">
+                            {!! $renderFormattedList($home->output) !!}
+                        </div>
+                    </div>
+                @endif
+
+                {{-- 4. Tim Kelurahan Cantik (baru, dinamis) --}}
+                @if($home->show_tim ?? true)
+                    @php $isFirst = !$firstOpened; $firstOpened = true; @endphp
+                    <div class="collapse collapse-plus bg-base-100 border border-base-300">
+                        <input type="radio" name="accordion-tentang-descan" {{ $isFirst ? 'checked="checked"' : '' }} />
+                        <div class="collapse-title font-semibold">
+                            <h3 class="flex items-center gap-2">
+                                <x-lucide-users class="w-5 h-5 text-secondary" /> Tim Kelurahan Cantik
+                            </h3>
+                        </div>
+                        {{-- <div class="collapse-content text-sm"> --}}
+                        {{-- <div class="collapse-content text-sm pl-7"> --}}
+                        <div class="collapse-content text-sm pl-11">
+                            @if(trim($home->tim_kelurahan ?? ''))
+                                {!! $renderFormattedList($home->tim_kelurahan) !!}
+                            @else
+                                <x-empty-alert message="Data Tim Kelurahan Cantik belum diisi." />
+                            @endif
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </section>
     </div>
 </x-layout>

@@ -18,5 +18,20 @@ class Home extends Model
         'latar_belakang',
         'tujuan',
         'output',
+        'tim_kelurahan',
+        'show_latar_belakang',
+        'show_tujuan',
+        'show_output',
+        'show_tim',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'show_latar_belakang' => 'boolean',
+            'show_tujuan' => 'boolean',
+            'show_output' => 'boolean',
+            'show_tim' => 'boolean',
+        ];
+    }
 }

@@ -15,6 +15,18 @@ class UpdateHomeRequest extends FormRequest
         return true;
     }
 
+    protected function prepareForValidation(): void
+    {
+        // Checkbox yang tidak dicentang tidak dikirim browser → default false.
+        // Pola sama persis dengan UpdateHistoryRequest::prepareForValidation()
+        $this->merge([
+            'show_latar_belakang' => $this->has('show_latar_belakang'),
+            'show_tujuan'         => $this->has('show_tujuan'),
+            'show_output'         => $this->has('show_output'),
+            'show_tim'            => $this->has('show_tim'),
+        ]);
+    }
+
     /**
      * Get the validation rules that apply to the request.
      *
@@ -26,6 +38,11 @@ class UpdateHomeRequest extends FormRequest
             'latar_belakang' => ['required', 'string'],
             'tujuan' => ['required', 'string'],
             'output' => ['required', 'string'],
+            'tim_kelurahan' => ['nullable', 'string'],
+            'show_latar_belakang' => ['boolean'],
+            'show_tujuan' => ['boolean'],
+            'show_output' => ['boolean'],
+            'show_tim' => ['boolean'],
         ];
     }
 
@@ -38,6 +55,7 @@ class UpdateHomeRequest extends FormRequest
             'latar_belakang' => 'Latar Belakang',
             'tujuan'         => 'Tujuan',
             'output'         => 'Output',
+            'tim_kelurahan'  => 'Tim Kelurahan Cantik',
         ];
     }
 
