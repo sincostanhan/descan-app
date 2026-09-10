@@ -57,10 +57,10 @@
 
         <section aria-labelledby="statistik-heading"> ... 3 DaisyUI stats ... </section>
 
-        @php
+        {{-- @php
             $galleryPhoto = $home->featuredGalleryPhoto ?? \App\Models\GalleryPhoto::latest()->first();
             $wisataPhoto = $home->featuredPotensiWisataPhoto ?? \App\Models\PotensiWisataPhoto::latest()->first();
-        @endphp
+        @endphp --}}
 
         {{-- <section aria-labelledby="feature-heading">
             <h2 id="feature-heading" class="text-2xl font-bold mb-6 border-b pb-2">
@@ -140,24 +140,31 @@
         @endphp
 
         <section aria-labelledby="feature-heading">
-            <h2 id="feature-heading" class="text-2xl font-bold mb-6 border-b pb-2">
+            {{-- <h2 id="feature-heading" class="text-2xl font-bold mb-6 border-b pb-2">
                 Kegiatan &amp; Potensi Kelurahan
-            </h2>
+            </h2> --}}
+            {{-- <h2 id="feature-heading" class="feature-headline text-2xl font-bold mb-6 border-b pb-2"> --}}
+            <h2 id="feature-heading" class="feature-headline text-3xl font-bold mb-6 border-b pb-2 text-center">
+                Galeri Kelurahan
+             </h2>
 
             <div class="space-y-10">
                 {{-- GALERI — carousel (3) di kiri, label (1) di kanan --}}
                 <div class="grid grid-cols-1 md:grid-cols-4 gap-6 items-center">
                     <div class="md:col-span-3 order-2 md:order-1 overflow-hidden">
-                        @if($galleryFeatured->isEmpty())
+                        {{-- @if($galleryFeatured->isEmpty())
                             <x-empty-alert message="Belum ada foto Galeri Kegiatan." />
                         @else
                             <div class="carousel carousel-end rounded-box gap-3">
+                            {{-- <div class="carousel carousel-end rounded-box
+                            bg-base-200/60 hover:bg-base-200"> --}
                                 @foreach($galleryFeatured as $photo)
                                     <div class="carousel-item">
                                         <figure class="flex flex-col items-center">
                                             <img src="{{ asset('storage/' . $photo->foto_path) }}"
                                                  alt="{{ $photo->gallery->judul ?? 'Galeri Kegiatan' }}"
                                                  class="w-64 h-48 object-cover rounded-box" loading="lazy" decoding="async" />
+                                                 {{-- class="w-64 h-48 object-cover" loading="lazy" decoding="async" /> --}
                                             <figcaption class="text-sm text-center mt-2 text-base-content/70 max-w-64 truncate">
                                                 {{ $photo->gallery->judul ?? '' }}
                                             </figcaption>
@@ -165,7 +172,31 @@
                                     </div>
                                 @endforeach
                             </div>
-                        @endif
+                        @endif --}}
+                        <div class="border border-base-300 rounded-2xl p-4 bg-base-100">
+                            @if($galleryFeatured->isEmpty())
+                                <x-empty-alert message="Belum ada foto Galeri Kegiatan." />
+                            @else
+                                <div class="carousel carousel-end rounded-box gap-3">
+                                    @foreach($galleryFeatured as $photo)
+                                        <div class="carousel-item">
+                                            <figure class="flex flex-col items-center">
+                                                {{-- <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                                     alt="{{ $photo->gallery->judul ?? 'Galeri Kegiatan' }}"
+                                                     class="w-64 h-48 object-cover rounded-box" loading="lazy" decoding="async" /> --}}
+                                                <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                                     alt="{{ $photo->gallery->judul ?? 'Galeri Kegiatan' }}"
+                                                     class="w-64 h-48 object-contain bg-base-200 rounded-box" loading="lazy" decoding="async" />
+                                                     {{-- class="w-64 h-48 object-contain rounded-box" loading="lazy" decoding="async" /> --}}
+                                                <figcaption class="text-sm text-center mt-2 text-base-content/70 max-w-64 truncate">
+                                                    {{ $photo->gallery->judul ?? '' }}
+                                                </figcaption>
+                                            </figure>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>                        
                     </div>
                     <a href="{{ route('gallery.index') }}"
                        class="md:col-span-1 order-1 md:order-2 flex flex-col items-center justify-center text-center p-6 rounded-2xl bg-base-200/60 hover:bg-base-200 transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-primary group">
@@ -182,16 +213,19 @@
                         <span class="text-sm text-base-content/60 mt-1">Jelajahi destinasi</span>
                     </a>
                     <div class="md:col-span-3 order-2 overflow-hidden">
-                        @if($wisataFeatured->isEmpty())
+                        {{-- @if($wisataFeatured->isEmpty())
                             <x-empty-alert message="Belum ada foto Potensi Wisata." />
                         @else
                             <div class="carousel carousel-end rounded-box gap-3">
+                            {{-- <div class="carousel carousel-end rounded-box
+                            bg-base-200/60 hover:bg-base-200"> --}
                                 @foreach($wisataFeatured as $photo)
                                     <div class="carousel-item">
                                         <figure class="flex flex-col items-center">
                                             <img src="{{ asset('storage/' . $photo->foto_path) }}"
                                                  alt="{{ $photo->potensiWisata->nama ?? 'Potensi Wisata' }}"
                                                  class="w-64 h-48 object-cover rounded-box" loading="lazy" decoding="async" />
+                                                 {{-- class="w-64 h-48 object-cover" loading="lazy" decoding="async" /> --}
                                             <figcaption class="text-sm text-center mt-2 text-base-content/70 max-w-64 truncate">
                                                 {{ $photo->potensiWisata->nama ?? '' }}
                                             </figcaption>
@@ -199,12 +233,82 @@
                                     </div>
                                 @endforeach
                             </div>
-                        @endif
+                        @endif --}}
+                        <div class="border border-base-300 rounded-2xl p-4 bg-base-100">
+                            @if($wisataFeatured->isEmpty())
+                                <x-empty-alert message="Belum ada foto Potensi Wisata." />
+                            @else
+                                <div class="carousel carousel-end rounded-box gap-3">
+                                    @foreach($wisataFeatured as $photo)
+                                        <div class="carousel-item">
+                                            <figure class="flex flex-col items-center">
+                                                {{-- <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                                     alt="{{ $photo->potensiWisata->nama ?? 'Potensi Wisata' }}"
+                                                     class="w-64 h-48 object-cover rounded-box" loading="lazy" decoding="async" /> --}}
+                                                <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                                     alt="{{ $photo->potensiWisata->nama ?? 'Potensi Wisata' }}"
+                                                     class="w-64 h-48 object-contain bg-base-200 rounded-box" loading="lazy" decoding="async" />
+                                                <figcaption class="text-sm text-center mt-2 text-base-content/70 max-w-64 truncate">
+                                                    {{ $photo->potensiWisata->nama ?? '' }}
+                                                </figcaption>
+                                            </figure>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
+                        </div>
                     </div>
                 </div>
             </div>
         </section>
 
+        <style>
+            .feature-headline .char {
+                display: inline-block;
+                transition: transform 0.2s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+                cursor: default;
+            }
+            .feature-headline .char:hover {
+                transform: translateY(-6px) scale(1.1) rotate(4deg);
+            }
+            .feature-headline .highlight {
+                display: inline-block;
+                transition: transform 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+                cursor: default;
+            }
+            .feature-headline .highlight:hover {
+                transform: scale(1.08) rotate(-2deg);
+            }
+            @media (prefers-reduced-motion: reduce) {
+                .feature-headline .char,
+                .feature-headline .highlight {
+                    transition: none !important;
+                }
+                .feature-headline .char:hover,
+                .feature-headline .highlight:hover {
+                    transform: none !important;
+                }
+            }
+        </style>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                const el = document.querySelector('.feature-headline');
+                if (!el) return;
+
+                // const wordToHighlight = 'Galeri'; // ganti ke 'Kelurahan' kalau ingin kata itu yang di-highlight
+                const wordToHighlight = 'Kelurahan'; // ganti ke 'Kelurahan' kalau ingin kata itu yang di-highlight
+                const originalText = el.textContent.trim();
+                const words = originalText.split(' ');
+
+                el.innerHTML = words.map((word) => {
+                    if (word === wordToHighlight) {
+                        return '<span class="highlight text-primary font-extrabold">' + word + '</span>';
+                    }
+                    return word.split('').map((ch) => '<span class="char">' + ch + '</span>').join('');
+                }).join(' ');
+            });
+        </script>
 
         {{-- Bagian 1: Latar Belakang
         <div class="card bg-base-100 

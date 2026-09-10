@@ -20,6 +20,7 @@ sticky top-0 z-50">
                     <li><a href="{{ route('admin.organization.edit', 1) }}">Organisasi</a></li>
                     {{-- <li><a href="{{ route('admin.gallery.index', 1) }}">Galeri</a></li> --}}
                     <li><a href="{{ route('admin.gallery.index') }}">Galeri</a></li>
+                <li><a href="{{ route('admin.potensi-wisata.index') }}">Potensi Wisata</a></li>
                 </ul>
             </li>
             <li>
@@ -61,6 +62,7 @@ sticky top-0 z-50">
                 <li><a href="{{ route('admin.organization.edit', 1) }}">Organisasi</a></li>
                 {{-- <li><a href="{{ route('admin.gallery.index', 1) }}">Galeri</a></li> --}}
                 <li><a href="{{ route('admin.gallery.index') }}">Galeri</a></li>
+                <li><a href="{{ route('admin.potensi-wisata.index') }}">Potensi Wisata</a></li>
             </ul>
             </details>
         </li>
