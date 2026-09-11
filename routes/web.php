@@ -131,6 +131,8 @@ Route::middleware(['auth'])->group(function () {
             ->name('potensi-wisata.destroy');
         Route::post('/potensi-wisata-terpilih', [PotensiWisataController::class, 'updateFeatured'])
             ->name('potensi-wisata.updateFeatured');
+        Route::post('/beranda-galeri-terpilih', [HomeController::class, 'updateFeaturedGallery'])
+            ->name('home.updateFeaturedGallery');
 
         Route::resource('publikasi', PublicationController::class)
             ->names('publication')
