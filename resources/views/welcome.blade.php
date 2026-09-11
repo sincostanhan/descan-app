@@ -47,15 +47,88 @@
 
     <div class="max-w-6xl mx-auto px-4 lg:px-0 mb-20 space-y-16">
 
-                @php
-            // $jumlahTabelGrafik = ...;
-            // $jumlahPublikasi = ...;
-            // $jumlahInfografis = ...;
-            // $latestGallery = ...;
-            // $latestGalleryPhoto = ...;
+        @php
+            $jumlahTabelGrafik = \App\Models\StatisticTableEntry::whereHas('template', fn($q) => $q->where('is_active', true))->count();
+            $jumlahPublikasi = \App\Models\Publication::count();
+            $jumlahInfografis = \App\Models\Infographic::count();
+
+            $publicationCovers = \App\Models\Publication::whereNotNull('cover_path')
+                ->latest()->take(4)->pluck('cover_path');
+
+            $infographicCovers = \App\Models\Infographic::latest()->take(8)->get()
+                ->map(function ($item) {
+                    if ($item->cover_path) return $item->cover_path;
+                    if (\Illuminate\Support\Str::endsWith(strtolower($item->file_path), ['.jpg', '.jpeg', '.png'])) {
+                        return $item->file_path;
+                    }
+                    return null;
+                })
+                ->filter()
+                ->take(4);
         @endphp
 
-        <section aria-labelledby="statistik-heading"> ... 3 DaisyUI stats ... </section>
+        <section aria-labelledby="statistik-heading">
+            <h2 id="statistik-heading" class="text-2xl font-bold mb-6 pt-10 border-t border-base-300">
+                Ringkasan Data
+            </h2>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                <div class="stats bg-base-100 border-base-300 border w-full shadow">
+                    <div class="stat">
+                        <div class="stat-figure text-primary">
+                            <x-lucide-table-2 class="w-8 h-8" />
+                        </div>
+                        <div class="stat-title">Tabel dan Grafik</div>
+                        <div class="stat-value text-primary">{{ $jumlahTabelGrafik }}</div>
+                        <div class="stat-actions">
+                            <a href="{{ route('public.statistic.index') }}" class="btn btn-xs btn-primary">Lihat</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats bg-base-100 border-base-300 border w-full shadow">
+                    <div class="stat">
+                        <div class="stat-figure text-secondary">
+                            @if($publicationCovers->isNotEmpty())
+                                <figure class="hover-gallery w-16">
+                                    @foreach($publicationCovers as $cover)
+                                        <img src="{{ asset('storage/' . $cover) }}" alt="Cover Publikasi" loading="lazy" />
+                                    @endforeach
+                                </figure>
+                            @else
+                                <x-lucide-file-text class="w-8 h-8" />
+                            @endif
+                        </div>
+                        <div class="stat-title">Publikasi</div>
+                        <div class="stat-value text-secondary">{{ $jumlahPublikasi }}</div>
+                        <div class="stat-actions">
+                            <a href="{{ route('publication.index') }}" class="btn btn-xs btn-secondary">Lihat</a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats bg-base-100 border-base-300 border w-full shadow">
+                    <div class="stat">
+                        <div class="stat-figure text-accent">
+                            @if($infographicCovers->isNotEmpty())
+                                <figure class="hover-gallery w-16">
+                                    @foreach($infographicCovers as $cover)
+                                        <img src="{{ asset('storage/' . $cover) }}" alt="Cover Infografis" loading="lazy" />
+                                    @endforeach
+                                </figure>
+                            @else
+                                <x-lucide-image class="w-8 h-8" />
+                            @endif
+                        </div>
+                        <div class="stat-title">Infografis</div>
+                        <div class="stat-value text-accent">{{ $jumlahInfografis }}</div>
+                        <div class="stat-actions">
+                            <a href="{{ route('infographic.index') }}" class="btn btn-xs btn-accent">Lihat</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
 
         @php
             $galleryItems = \App\Models\Gallery::whereHas('photos', fn($q) => $q->where('tampil_beranda', true))
