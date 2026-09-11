@@ -117,14 +117,48 @@
                         </div>
                     </div>
 
-                    <div class="flex justify-end items-center gap-3 pt-4 border-t border-base-200">
+                    {{-- <div class="flex justify-end items-center gap-3 pt-4 border-t border-base-200">
                         <p id="gallery-min-warning" class="text-error text-sm hidden">Pilih minimal 5 galeri.</p>
                         <p id="wisata-min-warning" class="text-error text-sm hidden">Pilih minimal 5 Potensi Wisata.</p>
                         <button type="submit" class="btn btn-secondary">
                             <x-lucide-save class="w-4 h-4 mr-1" /> Simpan Pilihan
                         </button>
                     </div>
+                    @error('featured_galleries')
+                        <p class="text-error text-sm mt-2">{{ $message }}</p>
+                    @enderror
+                    @error('featured_potensi_wisata')
+                        <p class="text-error text-sm mt-2">{{ $message }}</p>
+                    @enderror --}}
+                                        <div class="flex justify-end items-center gap-3 pt-4 border-t border-base-200">
+                        <button type="submit" class="btn btn-secondary">
+                            <x-lucide-save class="w-4 h-4 mr-1" /> Simpan Pilihan
+                        </button>
+                    </div>
+                    @error('featured_galleries')
+                        <p class="text-error text-sm mt-2">{{ $message }}</p>
+                    @enderror
+                    @error('featured_potensi_wisata')
+                        <p class="text-error text-sm mt-2">{{ $message }}</p>
+                    @enderror
                 </form>
+                <dialog id="modal_warning_featured_home" class="modal">
+                        <div class="modal-box">
+                            <div class="flex flex-col items-center text-center">
+                                <x-lucide-triangle-alert class="w-14 h-14 text-warning mb-4" />
+                                <h3 class="font-bold text-xl text-base-content">Belum Bisa Disimpan</h3>
+                                <ul id="modal_warning_list" class="py-4 text-base-content/80 list-disc text-left space-y-1"></ul>
+                            </div>
+                            <div class="modal-action justify-center">
+                                <form method="dialog">
+                                    <button class="btn btn-warning">Mengerti</button>
+                                </form>
+                            </div>
+                        </div>
+                        <form method="dialog" class="modal-backdrop">
+                            <button>close</button>
+                        </form>
+                    </dialog>
             </div>
 
             <input type="radio" name="home_tabs" class="tab" aria-label="Kelurahan Cantik" />
@@ -232,11 +266,13 @@
                 // const warning = document.getElementById('gallery-min-warning');
                 const galleryCheckboxes = document.querySelectorAll('.gallery-featured-checkbox');
                 const galleryCounter = document.getElementById('gallery-selected-count');
-                const galleryWarning = document.getElementById('gallery-min-warning');
+                // const galleryWarning = document.getElementById('gallery-min-warning');
                 const wisataCheckboxes = document.querySelectorAll('.wisata-featured-checkbox');
                 const wisataCounter = document.getElementById('wisata-selected-count');
-                const wisataWarning = document.getElementById('wisata-min-warning');
+                // const wisataWarning = document.getElementById('wisata-min-warning');
                 const form = document.getElementById('form-featured-home');
+                const warningModal = document.getElementById('modal_warning_featured_home');
+                const warningList = document.getElementById('modal_warning_list');
 
                 // function updateCount() {
                 //     const checkedCount = document.querySelectorAll('.gallery-featured-checkbox:checked').length;
@@ -264,25 +300,33 @@
                     // if (checkedCount < 5) {
                     const galleryChecked = document.querySelectorAll('.gallery-featured-checkbox:checked').length;
                     const wisataChecked = document.querySelectorAll('.wisata-featured-checkbox:checked').length;
-                    let valid = true;
+                    // let valid = true;
+                    const messages = [];
 
                     if (galleryChecked < 5) {
                         e.preventDefault();
                         // warning.classList.remove('hidden');
-                        galleryWarning.classList.remove('hidden');
-                        valid = false;
-                    } else {
-                        warning.classList.add('hidden');
+                    //     galleryWarning.classList.remove('hidden');
+                    //     valid = false;
+                    // } else {
+                        // warning.classList.add('hidden');
                     // }
-                        galleryWarning.classList.add('hidden');
+                        // galleryWarning.classList.add('hidden');
+                        messages.push('Pilih minimal 5 Galeri (saat ini baru ' + galleryChecked + ').');
                      }
 
                     if (wisataChecked < 5) {
                         e.preventDefault();
-                        wisataWarning.classList.remove('hidden');
-                        valid = false;
-                    } else {
-                        wisataWarning.classList.add('hidden');
+                    //     wisataWarning.classList.remove('hidden');
+                    //     valid = false;
+                    // } else {
+                    //     wisataWarning.classList.add('hidden');
+                        messages.push('Pilih minimal 5 Potensi Wisata (saat ini baru ' + wisataChecked + ').');
+                    }
+
+                    if (messages.length > 0) {
+                        warningList.innerHTML = messages.map((msg) => '<li>' + msg + '</li>').join('');
+                        warningModal.showModal();
                     }
                 });
             });
