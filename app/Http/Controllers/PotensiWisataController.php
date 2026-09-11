@@ -65,18 +65,33 @@ class PotensiWisataController extends Controller
         return redirect()->route('admin.potensi-wisata.index')->with('success', 'Potensi Wisata berhasil dihapus!');
     }
 
+    // public function updateFeatured(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'featured_photos' => ['nullable', 'array'],
+    //         'featured_photos.*' => ['exists:potensi_wisata_photos,id'],
+    //     ]);
+
+    //     PotensiWisataPhoto::whereHas('potensiWisata')->update(['tampil_beranda' => false]);
+    //     PotensiWisataPhoto::whereHas('potensiWisata')
+    //         ->whereIn('id', $validated['featured_photos'] ?? [])
+    //         ->update(['tampil_beranda' => true]);
+
+    //     return redirect()->route('admin.home.edit')->with('success', 'Foto Potensi Wisata untuk beranda berhasil diperbarui!');
+    // }
     public function updateFeatured(Request $request)
     {
         $validated = $request->validate([
-            'featured_photos' => ['nullable', 'array'],
-            'featured_photos.*' => ['exists:potensi_wisata_photos,id'],
+            'featured_potensi_wisata' => ['nullable', 'array'],
+            'featured_potensi_wisata.*' => ['exists:potensi_wisatas,id'],
         ]);
 
+        $selectedIds = $validated['featured_potensi_wisata'] ?? [];
+
         PotensiWisataPhoto::whereHas('potensiWisata')->update(['tampil_beranda' => false]);
-        PotensiWisataPhoto::whereHas('potensiWisata')
-            ->whereIn('id', $validated['featured_photos'] ?? [])
+        PotensiWisataPhoto::whereHas('potensiWisata', fn ($q) => $q->whereIn('id', $selectedIds))
             ->update(['tampil_beranda' => true]);
 
-        return redirect()->route('admin.home.edit')->with('success', 'Foto Potensi Wisata untuk beranda berhasil diperbarui!');
+        return redirect()->route('admin.home.edit')->with('success', 'Potensi Wisata untuk beranda berhasil diperbarui!');
     }
 }

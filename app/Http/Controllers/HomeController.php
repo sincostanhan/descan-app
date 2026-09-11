@@ -23,9 +23,12 @@ class HomeController extends Controller
     {
         $home = Home::first() ?? new Home();
         // return view('admin.home.edit', compact('home'));
-        $galleryPhotos = GalleryPhoto::with('gallery')->latest()->get();
-        $potensiWisataPhotos = PotensiWisataPhoto::with('potensiWisata')->latest()->get();
-        return view('admin.home.edit', compact('home', 'galleryPhotos', 'potensiWisataPhotos'));
+        // $galleryPhotos = GalleryPhoto::with('gallery')->latest()->get();
+        // $potensiWisataPhotos = PotensiWisataPhoto::with('potensiWisata')->latest()->get();
+        // return view('admin.home.edit', compact('home', 'galleryPhotos', 'potensiWisataPhotos'));
+        $galleries = \App\Models\Gallery::with('photos')->orderBy('id')->get();
+        $potensiWisatas = \App\Models\PotensiWisata::with('photos')->orderBy('id')->get();
+        return view('admin.home.edit', compact('home', 'galleries', 'potensiWisatas'));
     }
 
     // Proses Simpan Admin

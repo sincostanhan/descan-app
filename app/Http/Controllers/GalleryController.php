@@ -110,22 +110,41 @@ class GalleryController extends Controller
     /**
      * Update daftar foto yang tampil sebagai carousel di beranda publik.
      */
+    // public function updateFeatured(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'featured_photos' => ['nullable', 'array'],
+    //         'featured_photos.*' => ['exists:gallery_photos,id'],
+    //     ]);
+
+    //     // whereHas('gallery') memastikan hanya foto milik kelurahan yang sedang
+    //     // login yang ikut ter-reset/ter-update — GalleryPhoto sendiri TIDAK pakai
+    //     // BelongsToVillage (lihat komentar di modelnya), jadi scoping harus lewat
+    //     // relasi ke Gallery yang sudah punya trait tsb.
+    //     GalleryPhoto::whereHas('gallery')->update(['tampil_beranda' => false]);
+    //     GalleryPhoto::whereHas('gallery')
+    //         ->whereIn('id', $validated['featured_photos'] ?? [])
+    //         ->update(['tampil_beranda' => true]);
+
+    //     return redirect()->route('admin.home.edit')->with('success', 'Foto Galeri untuk beranda berhasil diperbarui!');
+    // }
     public function updateFeatured(Request $request)
     {
         $validated = $request->validate([
-            'featured_photos' => ['nullable', 'array'],
-            'featured_photos.*' => ['exists:gallery_photos,id'],
+            // 'featured_galleries' => ['nullable', 'array'],
+            'featured_galleries' => ['required', 'array', 'min:5'],
+            'featured_galleries.*' => ['exists:galleries,id'],
+        ], [
+            'featured_galleries.required' => 'Pilih minimal 5 Galeri untuk ditampilkan di beranda.',
+            'featured_galleries.min' => 'Pilih minimal 5 Galeri untuk ditampilkan di beranda (saat ini baru :min dipilih minimal).',
         ]);
 
-        // whereHas('gallery') memastikan hanya foto milik kelurahan yang sedang
-        // login yang ikut ter-reset/ter-update — GalleryPhoto sendiri TIDAK pakai
-        // BelongsToVillage (lihat komentar di modelnya), jadi scoping harus lewat
-        // relasi ke Gallery yang sudah punya trait tsb.
+        $selectedIds = $validated['featured_galleries'] ?? [];
+
         GalleryPhoto::whereHas('gallery')->update(['tampil_beranda' => false]);
-        GalleryPhoto::whereHas('gallery')
-            ->whereIn('id', $validated['featured_photos'] ?? [])
+        GalleryPhoto::whereHas('gallery', fn ($q) => $q->whereIn('id', $selectedIds))
             ->update(['tampil_beranda' => true]);
 
-        return redirect()->route('admin.home.edit')->with('success', 'Foto Galeri untuk beranda berhasil diperbarui!');
+        return redirect()->route('admin.home.edit')->with('success', 'Galeri untuk beranda berhasil diperbarui!');
     }
 }

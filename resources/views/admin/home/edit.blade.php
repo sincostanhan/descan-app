@@ -9,7 +9,7 @@
     <div class="max-w-5xl mx-auto px-4 lg:px-0 mb-12">
         <x-flash-message />
 
-                <div class="mt-10 space-y-10">
+        {{-- <div class="mt-10 space-y-10">
             <div>
                 <h3 class="font-semibold text-lg mb-3">Foto Beranda — Galeri Kegiatan</h3>
                 <p class="text-sm text-base-content/60 mb-3">Centang foto yang ingin ditampilkan sebagai carousel di beranda publik.</p>
@@ -68,6 +68,114 @@
                     </div>
                     @if($potensiWisataPhotos->isNotEmpty())
                         <div class="flex justify-end mt-3">
+                            <button type="submit" class="btn btn-sm btn-secondary">
+                                <x-lucide-save class="w-4 h-4 mr-1" /> Simpan Pilihan
+                            </button>
+                        </div>
+                    @endif
+                </form>
+            </div>
+        </div> --}}
+        <div class="mt-10 space-y-10">
+            <div>
+                <h3 class="font-semibold text-lg mb-3">Galeri untuk Beranda</h3>
+                {{-- <p class="text-sm text-base-content/60 mb-3">Centang galeri yang ingin ditampilkan di beranda publik.</p>
+                <form action="{{ route('admin.gallery.updateFeatured') }}" method="POST"> --}}
+                <p class="text-sm text-base-content/60 mb-1">Centang minimal <strong>5 galeri</strong> yang ingin ditampilkan di beranda publik.</p>
+                <p class="text-sm mb-3">
+                    <span id="gallery-selected-count" class="font-semibold text-primary">0</span> dipilih
+                    <span class="text-base-content/60">(minimal 5)</span>
+                </p>
+                <form action="{{ route('admin.gallery.updateFeatured') }}" method="POST" id="form-featured-galleries">
+                    @csrf
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @forelse($galleries as $gallery)
+                            <label class="relative block cursor-pointer">
+                                <input type="checkbox" name="featured_galleries[]" value="{{ $gallery->id }}"
+                                    class="checkbox checkbox-primary absolute top-3 right-3 z-10 bg-base-100"
+                                    {{ $gallery->photos->contains('tampil_beranda', true) ? 'checked' : '' }} />
+                                <div class="card bg-base-100 border border-base-300 shadow-sm rounded-2xl overflow-hidden w-full">
+                                    @if($gallery->photos->isEmpty())
+                                        <div class="aspect-[4/3] bg-base-200 flex items-center justify-center text-base-content/40">
+                                            <x-lucide-image class="w-8 h-8" />
+                                        </div>
+                                    @else
+                                        <div class="carousel w-full">
+                                            @foreach($gallery->photos as $photo)
+                                                <div class="carousel-item w-full">
+                                                    <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                                         alt="Foto {{ $gallery->judul }}"
+                                                         class="w-full h-48 object-contain bg-base-200" loading="lazy" decoding="async" />
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    <div class="card-body p-4">
+                                        <h3 class="font-semibold">{{ $gallery->judul }}</h3>
+                                        <p class="text-xs text-base-content/60 flex items-center">
+                                            <x-lucide-calendar class="w-3.5 h-3.5 mr-1" />
+                                            Dipublikasikan pada tanggal {{ $gallery->created_at->translatedFormat('d F Y') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </label>
+                        @empty
+                            <x-empty-alert message="Belum ada data Galeri." />
+                        @endforelse
+                    </div>
+                    @if($galleries->isNotEmpty())
+                        <div class="flex justify-end mt-4">
+                            <p id="gallery-min-warning" class="text-error text-sm self-center mr-3 hidden">Pilih minimal 5 galeri.</p>
+                            <button type="submit" class="btn btn-sm btn-secondary">
+                                <x-lucide-save class="w-4 h-4 mr-1" /> Simpan Pilihan
+                            </button>
+                        </div>
+                    @endif
+                </form>
+            </div>
+
+            <div>
+                <h3 class="font-semibold text-lg mb-3">Potensi Wisata untuk Beranda</h3>
+                <p class="text-sm text-base-content/60 mb-3">Centang destinasi yang ingin ditampilkan di beranda publik.</p>
+                <form action="{{ route('admin.potensi-wisata.updateFeatured') }}" method="POST">
+                    @csrf
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        @forelse($potensiWisatas as $item)
+                            <label class="relative block cursor-pointer">
+                                <input type="checkbox" name="featured_potensi_wisata[]" value="{{ $item->id }}"
+                                    class="checkbox checkbox-primary absolute top-3 right-3 z-10 bg-base-100"
+                                    {{ $item->photos->contains('tampil_beranda', true) ? 'checked' : '' }} />
+                                <div class="card bg-base-100 border border-base-300 shadow-sm rounded-2xl overflow-hidden w-full">
+                                    @if($item->photos->isEmpty())
+                                        <div class="aspect-[4/3] bg-base-200 flex items-center justify-center text-base-content/40">
+                                            <x-lucide-image class="w-8 h-8" />
+                                        </div>
+                                    @else
+                                        <div class="carousel w-full">
+                                            @foreach($item->photos as $photo)
+                                                <div class="carousel-item w-full">
+                                                    <img src="{{ asset('storage/' . $photo->foto_path) }}"
+                                                         alt="{{ $item->nama }}"
+                                                         class="w-full h-48 object-contain bg-base-200" loading="lazy" decoding="async" />
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
+                                    <div class="card-body p-4">
+                                        <h3 class="font-semibold">{{ $item->nama }}</h3>
+                                        <p class="text-xs text-base-content/60 flex items-center">
+                                            <x-lucide-calendar class="w-3.5 h-3.5 mr-1" />
+                                            Dipublikasikan pada tanggal {{ $item->created_at->translatedFormat('d F Y') }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </label>
+                        @empty
+                            <x-empty-alert message="Belum ada data Potensi Wisata." />
+                        @endforelse
+                    </div>
+                    @if($potensiWisatas->isNotEmpty())
+                        <div class="flex justify-end mt-4">
                             <button type="submit" class="btn btn-sm btn-secondary">
                                 <x-lucide-save class="w-4 h-4 mr-1" /> Simpan Pilihan
                             </button>
