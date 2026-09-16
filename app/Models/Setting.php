@@ -12,8 +12,18 @@ class Setting extends Model
     // protected $guarded = ['id'];
 
     protected $fillable = [
+        'village_id',
         'village_name',
+        'kecamatan',
         'village_logo',
         'theme_name',
+        'is_published',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'is_published' => 'boolean',
+        ];
+    }
 }

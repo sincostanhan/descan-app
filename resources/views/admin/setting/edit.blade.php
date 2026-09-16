@@ -34,6 +34,20 @@
 
                     <fieldset class="fieldset 
                     w-full mb-6">
+                        <legend class="fieldset-legend">Kecamatan</legend>
+                        <input 
+                            type="text" 
+                            id="kecamatan" 
+                            name="kecamatan" 
+                            value="{{ old('kecamatan', $setting->kecamatan) }}" 
+                            class="input w-full" 
+                            placeholder="Masukkan nama kecamatan ..." />
+                        <div class="fieldset-label mt-1 text-sm text-base-content/60">Ditampilkan pada popup Dashboard Peta Publik.</div>
+                        <x-forms.error name="kecamatan" />
+                    </fieldset>
+
+                    <fieldset class="fieldset 
+                    w-full mb-6">
                         <legend class="fieldset-legend">Logo Kelurahan</legend>
                         
                         @if($setting->village_logo)
@@ -133,6 +147,45 @@
 
                         <div class="fieldset-label mt-1 text-sm text-base-content/60">Pilih tema warna untuk tampilan website.</div>
                         <x-forms.error name="theme_name" />
+                    </fieldset>
+
+                    <div class="divider"></div>
+
+                    <h2 class="card-title text-secondary text-xl mb-4 border-b pb-2">Status Publikasi</h2>
+
+                    <div class="mb-4 space-y-2">
+                        @foreach($checklist as $item)
+                            <div class="flex items-center gap-2 text-sm">
+                                @if($item['complete'])
+                                    <x-lucide-check-circle class="w-4 h-4 text-success shrink-0" />
+                                @else
+                                    <x-lucide-circle-dashed class="w-4 h-4 text-base-content/40 shrink-0" />
+                                @endif
+                                <span class="{{ $item['complete'] ? '' : 'text-base-content/60' }}">{{ $item['label'] }}</span>
+                                @unless($item['complete'])
+                                    <a href="{{ $item['url'] }}" class="link link-primary text-xs ml-1">Isi sekarang</a>
+                                @endunless
+                            </div>
+                        @endforeach
+                        <p class="text-xs text-base-content/50 italic mt-2">
+                            Checklist ini hanya informasi — kamu tetap bisa publish walau belum semua terisi.
+                        </p>
+                    </div>
+
+                    <fieldset class="fieldset w-full mb-6">
+                        <label class="label cursor-pointer justify-start gap-3">
+                            <input
+                                type="checkbox"
+                                name="is_published"
+                                value="1"
+                                class="toggle toggle-success"
+                                {{ old('is_published', $setting->is_published) ? 'checked' : '' }}
+                            />
+                            <span class="label-text text-base font-medium">Publish Website</span>
+                        </label>
+                        <div class="fieldset-label mt-1 text-sm text-base-content/60">
+                            Kalau dimatikan, pengunjung publik akan melihat halaman "Website Belum Dipublikasikan" alih-alih konten situs.
+                        </div>
                     </fieldset>
 
                     <div class="card-actions justify-end mt-8 border-t pt-4">

@@ -27,8 +27,10 @@ sticky top-0 z-50">
         <ul
             tabindex="-1"
             class="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-3 w-52 p-2 shadow">        
+            <li><a href="{{ route('admin-bps.villages.index') }}">Kelurahan</a></li>
             <li><a href="{{ route('admin-bps.users.index') }}">Users</a></li>
             <li><a href="{{ route('admin-bps.statistic-templates.index') }}">Template Tabel</a></li>
+            <li><a href="{{ route('admin-bps.region-geometries.index') }}">Peta Wilayah</a></li>
         </ul>
         </div>
         <a class="btn btn-ghost text-xl">Panel Admin BPS</a>
@@ -37,9 +39,11 @@ sticky top-0 z-50">
         </a> --}}
     </div>
     <div class="navbar-center hidden lg:flex">
-        <ul class="menu menu-horizontal px-1">        
+        <ul class="menu menu-horizontal px-1">
+            <li><a href="{{ route('admin-bps.villages.index') }}">Kelurahan</a></li>        
             <li><a href="{{ route('admin-bps.users.index') }}">Users</a></li>
             <li><a href="{{ route('admin-bps.statistic-templates.index') }}">Template Tabel</a></li>
+            <li><a href="{{ route('admin-bps.region-geometries.index') }}">Peta Wilayah</a></li>
         </ul>
     </div>
     <div class="navbar-end">

@@ -14,10 +14,12 @@ sticky top-0 z-50">
             <li>
                 <a>Profil</a>
                 <ul class="p-2">
-                    <li><a href="{{ route('admin.about.edit', 1) }}">Tentang Kami</a></li>
+                    {{-- <li><a href="{{ route('admin.about.edit', 1) }}">Tentang Kami</a></li> --}}
+                    <li><a href="{{ route('admin.about.edit') }}">Tentang Kami</a></li>
                     {{-- <li><a href="{{ route('admin.history.edit', 1) }}">Sejarah</a></li> --}}
                     <li><a href="{{ route('admin.history.edit') }}">Sejarah</a></li>
-                    <li><a href="{{ route('admin.organization.edit', 1) }}">Organisasi</a></li>
+                    {{-- <li><a href="{{ route('admin.organization.edit', 1) }}">Organisasi</a></li> --}}
+                    <li><a href="{{ route('admin.organization.edit') }}">Organisasi</a></li>
                     {{-- <li><a href="{{ route('admin.gallery.index', 1) }}">Galeri</a></li> --}}
                     <li><a href="{{ route('admin.gallery.index') }}">Galeri</a></li>
                 <li><a href="{{ route('admin.potensi-wisata.index') }}">Potensi Wisata</a></li>
@@ -56,10 +58,12 @@ sticky top-0 z-50">
             <details>
             <summary>Profil</summary>
             <ul class="p-2 bg-base-100 w-40 z-1">
-                <li><a href="{{ route('admin.about.edit', 1) }}">Tentang Kami</a></li>
+                {{-- <li><a href="{{ route('admin.about.edit', 1) }}">Tentang Kami</a></li> --}}
+                <li><a href="{{ route('admin.about.edit') }}">Tentang Kami</a></li>
                 {{-- <li><a href="{{ route('admin.history.edit', 1) }}">Sejarah</a></li> --}}
                 <li><a href="{{ route('admin.history.edit') }}">Sejarah</a></li>
-                <li><a href="{{ route('admin.organization.edit', 1) }}">Organisasi</a></li>
+                {{-- <li><a href="{{ route('admin.organization.edit', 1) }}">Organisasi</a></li> --}}
+                <li><a href="{{ route('admin.organization.edit') }}">Organisasi</a></li>
                 {{-- <li><a href="{{ route('admin.gallery.index', 1) }}">Galeri</a></li> --}}
                 <li><a href="{{ route('admin.gallery.index') }}">Galeri</a></li>
                 <li><a href="{{ route('admin.potensi-wisata.index') }}">Potensi Wisata</a></li>

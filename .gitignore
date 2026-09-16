@@ -22,3 +22,10 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Local Claude / development files
+.agents/
+.claude/
+instruksi.md
+skills-lock.json
+vaporo-vineyard-hero-test.html

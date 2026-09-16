@@ -47,6 +47,7 @@ class GenerateRtRowsForVillage
                     'key' => "rt-{$rt['rt']}-rw-{$rt['rw']}-village-{$village->id}",
                     'is_leaf' => true,
                     'rt_value' => $rt['rt'], // nilai mentah, dipakai JOIN ke region_geometries
+                    'rw_value' => $rt['rw'], // nilai mentah, dipakai JOIN ke region_geometries (bersama rt_value)
                     'village_id' => $village->id,
                     'order' => $order,
                 ]);

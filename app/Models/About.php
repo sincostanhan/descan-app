@@ -15,6 +15,7 @@ class About extends Model
 
 
     protected $fillable = [
+        'village_id',
         'deskripsi',
         'batas_utara',
         'batas_barat',

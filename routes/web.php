@@ -3,8 +3,10 @@
 use App\Http\Controllers\AboutController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SetupController;
+use App\Http\Controllers\AdminBps\RegionGeometryController;
 use App\Http\Controllers\AdminBps\StatisticTemplateController;
 use App\Http\Controllers\AdminBps\UserController;
+use App\Http\Controllers\AdminBps\VillageController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HistoryController;
@@ -13,6 +15,7 @@ use App\Http\Controllers\InfographicController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PotensiWisataController;
 use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\PublicMapDashboardController;
 use App\Http\Controllers\PublicStatisticController;
 use App\Http\Controllers\StatisticalTableController;
 use App\Http\Controllers\StatisticTableEntryController;
@@ -39,6 +42,9 @@ Route::domain(env('APP_URL_BASE', 'descan.scthan.tech'))->group(function () {
 
     Route::middleware(['auth'])->group(function () {
         Route::prefix('admin-bps')->name('admin-bps.')->middleware(['role.bps'])->group(function () {
+            // CRUD Kelurahan
+            Route::resource('villages', VillageController::class)->except(['show']);
+
             // CRUD Admin Kelurahan
             Route::get('/users', [UserController::class, 'index'])->name('users.index');
             Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
@@ -51,6 +57,11 @@ Route::domain(env('APP_URL_BASE', 'descan.scthan.tech'))->group(function () {
             Route::resource('statistic-templates', StatisticTemplateController::class)->except(['show']);
             Route::post('statistic-templates/{statistic_template}/logs/{log}/restore', [StatisticTemplateController::class, 'restoreLog'])
             ->name('statistic-templates.logs.restore');
+
+            // Import massal poligon RT/RW (Dashboard Peta Publik) — lintas Kelurahan sekaligus,
+            // dicocokkan otomatis via properties.NAMA_KELURAHAN pada GeoJSON yang ditempel.
+            Route::get('/peta-wilayah', [RegionGeometryController::class, 'index'])->name('region-geometries.index');
+            Route::post('/peta-wilayah', [RegionGeometryController::class, 'store'])->name('region-geometries.store');
         });
     });
 });
@@ -61,17 +72,24 @@ Route::domain('{subdomain}.' . env('APP_URL_BASE', 'descan.scthan.tech'))->group
 // Route::get('/', function () {
 //     return view('welcome');
 // });
-Route::get('/', [HomeController::class, 'index'])->name('home.index');
-Route::get('/tentang-kami', [AboutController::class, 'index'])->name('about.index');
-Route::get('/sejarah', [HistoryController::class, 'index'])->name('history.index');
-Route::get('/organisasi', [OrganizationController::class, 'index'])->name('organization.index');
-Route::get('/galeri', [GalleryController::class, 'indexPublik'])->name('gallery.index');
-Route::get('/potensi-wisata', [PotensiWisataController::class, 'indexPublik'])->name('potensi-wisata.index');
-Route::get('/publikasi', [PublicationController::class, 'indexPublic'])->name('publication.index');
-Route::get('/infografis', [InfographicController::class, 'indexPublic'])->name('infographic.index');
-Route::get('/statistik', [PublicStatisticController::class, 'index'])->name('public.statistic.index');
-Route::get('/statistik/{statistic}', [PublicStatisticController::class, 'show'])->name('public.statistic.show');
+Route::middleware(['site.published'])->group(function () {
+    Route::get('/', [HomeController::class, 'index'])->name('home.index');
+    Route::get('/tentang-kami', [AboutController::class, 'index'])->name('about.index');
+    Route::get('/sejarah', [HistoryController::class, 'index'])->name('history.index');
+    Route::get('/organisasi', [OrganizationController::class, 'index'])->name('organization.index');
+    Route::get('/galeri', [GalleryController::class, 'indexPublik'])->name('gallery.index');
+    Route::get('/potensi-wisata', [PotensiWisataController::class, 'indexPublik'])->name('potensi-wisata.index');
+    Route::get('/publikasi', [PublicationController::class, 'indexPublic'])->name('publication.index');
+    Route::get('/infografis', [InfographicController::class, 'indexPublic'])->name('infographic.index');
+    Route::get('/statistik', [PublicStatisticController::class, 'index'])->name('public.statistic.index');
+    Route::get('/statistik/{statistic}', [PublicStatisticController::class, 'show'])->name('public.statistic.show');
 
+    // Dashboard Peta Publik: pencarian 3 dropdown (Template → Kolom → RT/RW) → render GeoJSON.
+    Route::get('/peta-statistik', [PublicMapDashboardController::class, 'index'])->name('public.map.index');
+    Route::get('/peta-statistik/kolom/{statistic_template}', [PublicMapDashboardController::class, 'columns'])->name('public.map.columns');
+    Route::get('/peta-statistik/rt-rw', [PublicMapDashboardController::class, 'rtRwOptions'])->name('public.map.rt-rw-options');
+    Route::get('/peta-statistik/data', [PublicMapDashboardController::class, 'data'])->name('public.map.data');
+});
 // Route::middleware('guest')->group(function () {
 //     Route::get('/login', [AuthController::class, 'login'])->name('login');
 //     Route::post('/login', [AuthController::class, 'authenticate'])->name('login.authenticate');
@@ -79,22 +97,27 @@ Route::get('/statistik/{statistic}', [PublicStatisticController::class, 'show'])
 
 Route::middleware(['auth'])->group(function () {
     // Route::prefix('admin')->name('admin.')->middleware(['role.kelurahan'])->group(function () {
-    Route::prefix('admin')->name('admin.')->middleware(['role.kelurahan', 'setup.check'])->group(function () {
+    // Route::prefix('admin')->name('admin.')->middleware(['role.kelurahan', 'setup.check'])->group(function () {
+    Route::prefix('admin')->name('admin.')->middleware(['role.kelurahan'])->group(function () {
         // Route::get('/dashboard', function () {
         //     return view('admin.dashboard');
         // })->name('dashboard');
         Route::get('/beranda', [HomeController::class, 'edit'])->name('home.edit');
         Route::post('/beranda', [HomeController::class, 'update'])->name('home.update');
         
-        Route::get('/tentang-kami/{about}/edit', [AboutController::class, 'edit'])
+        // Route::get('/tentang-kami/{about}/edit', [AboutController::class, 'edit'])
+        Route::get('/tentang-kami/edit', [AboutController::class, 'edit'])
             ->name('about.edit');
-        Route::patch('/tentang-kami/{about}', [AboutController::class, 'update'])
+        // Route::patch('/tentang-kami/{about}', [AboutController::class, 'update'])
+        Route::patch('/tentang-kami', [AboutController::class, 'update'])
             ->name('about.update');
         Route::get('/sejarah', [HistoryController::class, 'edit'])->name('history.edit');
         Route::post('/sejarah', [HistoryController::class, 'update'])->name('history.update');
-        Route::get('/organisasi/{organization}/edit', [OrganizationController::class, 'edit'])
+        // Route::get('/organisasi/{organization}/edit', [OrganizationController::class, 'edit'])
+        Route::get('/organisasi/edit', [OrganizationController::class, 'edit'])
             ->name('organization.edit');
-        Route::patch('/organisasi/{organization}', [OrganizationController::class, 'update'])
+        // Route::patch('/organisasi/{organization}', [OrganizationController::class, 'update'])
+        Route::patch('/organisasi', [OrganizationController::class, 'update'])
             ->name('organization.update');
         Route::get('/galeri', [GalleryController::class, 'index'])
             ->name('gallery.index');
@@ -185,20 +208,20 @@ Route::middleware(['auth'])->group(function () {
     });
 
     // Route::prefix('admin/setup')->name('admin.setup.')->middleware(['role.kelurahan'])->group(function () {
-    Route::prefix('admin/setup')->name('admin.setup.')->middleware(['role.kelurahan', 'setup.check'])->group(function () {
-        Route::get('/', [SetupController::class, 'index'])->name('index');
+    // Route::prefix('admin/setup')->name('admin.setup.')->middleware(['role.kelurahan', 'setup.check'])->group(function () {
+    //     Route::get('/', [SetupController::class, 'index'])->name('index');
         
-        // Step 1: Kelurahan (Setting)
-        Route::get('/setting', [SetupController::class, 'setting'])->name('setting');
-        Route::post('/setting', [SetupController::class, 'storeSetting'])->name('storeSetting');
+    //     // Step 1: Kelurahan (Setting)
+    //     Route::get('/setting', [SetupController::class, 'setting'])->name('setting');
+    //     Route::post('/setting', [SetupController::class, 'storeSetting'])->name('storeSetting');
         
-        // Step 2: Organisasi
-        Route::get('/organization', [SetupController::class, 'organization'])->name('organization');
-        Route::post('/organization', [SetupController::class, 'storeOrganization'])->name('storeOrganization');
+    //     // Step 2: Organisasi
+    //     Route::get('/organization', [SetupController::class, 'organization'])->name('organization');
+    //     Route::post('/organization', [SetupController::class, 'storeOrganization'])->name('storeOrganization');
 
-        // Step 3: Tentang Kami
-        Route::get('/about', [SetupController::class, 'about'])->name('about');
-        Route::post('/about', [SetupController::class, 'storeAbout'])->name('storeAbout');
-    });
+    //     // Step 3: Tentang Kami
+    //     Route::get('/about', [SetupController::class, 'about'])->name('about');
+    //     Route::post('/about', [SetupController::class, 'storeAbout'])->name('storeAbout');
+    // });
 });
 });

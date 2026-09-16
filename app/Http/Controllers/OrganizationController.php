@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\UpdateOrganization;
 use App\Http\Requests\UpdateOrganizationRequest;
 use App\Models\Organization;
 use Illuminate\Http\Request;
@@ -43,22 +44,37 @@ class OrganizationController extends Controller
 
     /**
      * Show the form for editing the specified resource.
+     *
+     * TIDAK pakai route-model-binding lagi (konsisten dengan HomeController/HistoryController) —
+     * supaya Kelurahan yang BELUM PERNAH punya baris Organization sekalipun tetap bisa buka form ini.
      */
     public function edit(Organization $organization)
     {
+        $organization = Organization::first() ?? new Organization();
+
         return view('admin.organization.edit', compact('organization'));
     }
 
+    // /**
+    //  * Update the specified resource in storage.
+    //  */
+    // public function update(UpdateOrganizationRequest $request, Organization $organization)
+    // {
+    //     $validatedData = $request->validated();
+
+    //     $organization->update($validatedData);
+
+    //     return back();
+    // }
     /**
      * Update the specified resource in storage.
+     * Create-or-update lewat Action Class, bukan update() langsung ke instance ter-bind.
      */
-    public function update(UpdateOrganizationRequest $request, Organization $organization)
+    public function update(UpdateOrganizationRequest $request, UpdateOrganization $updater)
     {
-        $validatedData = $request->validated();
+        $updater->handle($request->validated());
 
-        $organization->update($validatedData);
-
-        return back();
+        return back()->with('success', 'Data Organisasi berhasil diperbarui.');
     }
 
     /**

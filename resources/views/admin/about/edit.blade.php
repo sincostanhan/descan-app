@@ -10,7 +10,8 @@
         
         <x-flash-message />
 
-        <form action="{{ route('admin.about.update', $about->id) }}" method="POST">
+        {{-- <form action="{{ route('admin.about.update', $about->id) }}" method="POST"> --}}
+        <form action="{{ route('admin.about.update') }}" method="POST">
             @csrf
             @method('PATCH')
             

@@ -22,7 +22,8 @@ return Application::configure(basePath: dirname(__DIR__))
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
             'role.bps' => \App\Http\Middleware\EnsureUserIsAdminBps::class,
             'role.kelurahan' => \App\Http\Middleware\EnsureUserIsAdminKelurahan::class,
-            'setup.check' => \App\Http\Middleware\CheckInitialSetup::class,
+            // 'setup.check' => \App\Http\Middleware\CheckInitialSetup::class,
+            'site.published' => \App\Http\Middleware\EnsurePublicSiteIsPublished::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

@@ -6,7 +6,8 @@
     <div class="max-w-6xl mx-auto px-4 lg:px-0 mb-12">
         <x-flash-message />
 
-        <form action="{{ route('admin.organization.update', $organization->id) }}" method="POST">
+        {{-- <form action="{{ route('admin.organization.update', $organization->id) }}" method="POST"> --}}
+        <form action="{{ route('admin.organization.update') }}" method="POST">
             @csrf
             @method('PATCH')
 

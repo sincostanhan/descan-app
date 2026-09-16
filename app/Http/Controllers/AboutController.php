@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\UpdateAbout;
 use App\Http\Requests\UpdateAboutRequest;
 use App\Models\About;
 use Illuminate\Http\Request;
@@ -54,10 +55,16 @@ class AboutController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified resource.     
+     * 
+     * TIDAK pakai route-model-binding lagi (konsisten dengan HomeController/HistoryController) —
+     * supaya Kelurahan yang BELUM PERNAH punya baris About sekalipun tetap bisa buka form ini.
      */
-    public function edit(About $about)
+    // public function edit(About $about)
+    public function edit()
     {
+        $about = About::first() ?? new About();
+
         // return view('admin.about.edit', [
         //     'about' => $about
         // ]);
@@ -66,16 +73,20 @@ class AboutController extends Controller
 
     /**
      * Update the specified resource in storage.
+     * Create-or-update lewat Action Class, bukan update() langsung ke instance ter-bind.
      */
-    public function update(UpdateAboutRequest $request, About $about)
+    // public function update(UpdateAboutRequest $request, About $about)
+    public function update(UpdateAboutRequest $request, UpdateAbout $updater)
     {
         // $validatedData = $request->validated();
         
         // $about->update($validatedData);
-        $about->update($request->validated());
+        // $about->update($request->validated());
+        $updater->handle($request->validated());
 
         // return redirect("/admin/tentang-kami/{$about->id}/edit");
-        return back();
+        // return back();
+        return back()->with('success', 'Konten Tentang Kami berhasil diperbarui.');
     }
 
     /**

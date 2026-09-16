@@ -20,6 +20,7 @@ class StatisticTemplateHeader extends Model
         'data_type',
         'is_leaf',
         'rt_value',
+        'rw_value',
         'order',
         'village_id',
     ];
@@ -80,5 +81,19 @@ class StatisticTemplateHeader extends Model
         }
 
         return $this->parent ? $this->parent->resolveRtValue() : null;
+    }
+
+    /**
+     * Telusuri node ini ke atas (termasuk diri sendiri) sampai menemukan rw_value terisi.
+     * Dipakai berpasangan dengan resolveRtValue() saat JOIN ke region_geometries —
+     * rt_value saja tidak cukup karena nomor RT bisa berulang lintas RW.
+     */
+    public function resolveRwValue(): ?string
+    {
+        if (!empty($this->rw_value)) {
+            return $this->rw_value;
+        }
+
+        return $this->parent ? $this->parent->resolveRwValue() : null;
     }
 }
