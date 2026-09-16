@@ -48,7 +48,8 @@ class OrganizationController extends Controller
      * TIDAK pakai route-model-binding lagi (konsisten dengan HomeController/HistoryController) —
      * supaya Kelurahan yang BELUM PERNAH punya baris Organization sekalipun tetap bisa buka form ini.
      */
-    public function edit(Organization $organization)
+    // public function edit(Organization $organization)
+    public function edit()
     {
         $organization = Organization::first() ?? new Organization();
 
