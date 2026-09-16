@@ -7,7 +7,8 @@
 ])
 
 @php
-    $activeTheme = \App\Models\Setting::first()->theme_name ?? 'emerald';
+    // $activeTheme = \App\Models\Setting::first()->theme_name ?? 'emerald';
+    $activeTheme = \App\Models\Setting::first()?->theme_name ?? 'emerald';
 
     if (isset($currentVillage)) {
         $nama = trim($currentVillage->name);
