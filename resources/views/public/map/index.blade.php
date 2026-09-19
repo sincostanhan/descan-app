@@ -39,17 +39,28 @@
                 <span id="mapAlertText"></span>
             </div>
 
-            <div id="map" class="w-full rounded-box border border-base-200" style="height: 500px;"></div>
+            <div id="map" class="w-full rounded-box border border-base-200" style="height: 500px; position: relative; overflow: hidden; z-index: 0;"></div>
+            <style>
+                /* Sama seperti di halaman import Admin BPS: cegah browser menggambar bounding-box
+                   persegi sebagai focus outline bawaan saat polygon diklik. */
+                .leaflet-interactive:focus {
+                    outline: none;
+                }
+                /* Paksa panel Leaflet tetap terkurung di dalam #map — jangan andalkan
+                   .leaflet-container dari leaflet.css saja, karena bisa keserobot timing Tailwind CDN. */
+                #map .leaflet-pane,
+                #map .leaflet-control-container {
+                    z-index: 1;
+                }
+            </style>
 
         </x-section-card>
     </div>
 
     {{-- Leaflet dimuat via CDN, konsisten dengan pola Chart.js (statistic/show.blade.php) & pdf.js
          (admin/infographic/create.blade.php) — proyek ini tidak memakai bundel Vite di runtime. --}}
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

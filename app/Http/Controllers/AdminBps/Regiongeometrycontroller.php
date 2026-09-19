@@ -5,6 +5,7 @@ namespace App\Http\Controllers\AdminBps;
 use App\Actions\ImportRegionGeometriesFromGeoJson;
 use App\Http\Controllers\Controller;
 use App\Models\RegionGeometry;
+use App\Models\Village;
 use Illuminate\Http\Request;
 
 class RegionGeometryController extends Controller
@@ -17,6 +18,7 @@ class RegionGeometryController extends Controller
     public function index()
     {
         $existing = RegionGeometry::with('village')->get();
+        $villages = Village::orderBy('name')->get(['id', 'name']);
 
         $featureCollection = [
             'type' => 'FeatureCollection',
@@ -35,6 +37,7 @@ class RegionGeometryController extends Controller
         return view('admin-bps.region-geometries.index', [
             'geojsonText' => json_encode($featureCollection, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
             'existingCount' => $existing->count(),
+            'villages' => $villages,
         ]);
     }
 
