@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\ResolveMapChoroplethData;
 use App\Actions\ResolveMapFeatureData;
 use App\Models\RegionGeometry;
 use App\Models\StatisticTemplate;
@@ -80,5 +81,28 @@ class PublicMapDashboardController extends Controller
         }
 
         return response()->json($feature);
+    }
+
+    /**
+     * AJAX: SELURUH RT/RW (FeatureCollection) untuk 1 kombinasi template + kolom —
+     * dipakai render choropleth penuh.
+     */
+    public function dataAll(Request $request, ResolveMapChoroplethData $action): JsonResponse
+    {
+        $validated = $request->validate([
+            'template_id' => ['required', 'integer', 'exists:statistic_templates,id'],
+            'column_id' => ['required', 'integer', 'exists:statistic_template_headers,id'],
+        ]);
+
+        $template = StatisticTemplate::where('is_mapped', true)
+            ->where('is_active', true)
+            ->findOrFail($validated['template_id']);
+
+        $columnHeader = StatisticTemplateHeader::where('statistic_template_id', $template->id)
+            ->where('axis', 'column')
+            ->where('is_leaf', true)
+            ->findOrFail($validated['column_id']);
+
+        return response()->json($action->handle($template, $columnHeader));
     }
 }

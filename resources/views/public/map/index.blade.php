@@ -40,6 +40,7 @@
             </div>
 
             <div id="map" class="w-full rounded-box border border-base-200" style="height: 500px; position: relative; overflow: hidden; z-index: 0;"></div>
+            <div id="mapLegend" class="mt-3"></div>
             <style>
                 /* Sama seperti di halaman import Admin BPS: cegah browser menggambar bounding-box
                    persegi sebagai focus outline bawaan saat polygon diklik. */
@@ -86,139 +87,145 @@
             osmLayer.addTo(map);
             L.control.layers({ 'Peta Jalan': osmLayer, 'Satelit': satelliteLayer }, null, { position: 'topright' }).addTo(map);
 
-            let activeLayer = null;
+            let choroplethLayer = null; // ganti nama dari activeLayer, lebih jelas maksudnya
 
-            function showAlert(message) {
-                alertText.textContent = message;
-                alertBox.classList.remove('hidden');
+            const CATEGORICAL_PALETTE = ['#2563eb', '#dc2626', '#059669', '#d97706', '#7c3aed', '#db2777', '#0891b2', '#65a30d'];
+
+            function isNumericValue(v) {
+                if (v === null || v === undefined || v === '') return false;
+                return !isNaN(parseFloat(v)) && isFinite(v);
             }
 
-            function hideAlert() {
-                alertBox.classList.add('hidden');
+            function numericColor(value, min, max) {
+                if (!isNumericValue(value)) return '#d1d5db'; // abu-abu = belum diisi
+                const v = parseFloat(value);
+                const t = min === max ? 1 : (v - min) / (max - min); // 0=rendah, 1=tinggi
+                const lightness = 85 - (t * 60); // terang (85%) -> gelap (25%)
+                return `hsl(158, 64%, ${lightness}%)`;
             }
 
-            function resetSelect(select, placeholder) {
-                select.innerHTML = `<option value="">${placeholder}</option>`;
-                select.disabled = true;
+            function buildCategoryColorMap(values) {
+                const unique = [...new Set(values.filter(v => v !== null && v !== undefined && v !== ''))].sort();
+                const map = {};
+                unique.forEach((v, i) => { map[v] = CATEGORICAL_PALETTE[i % CATEGORICAL_PALETTE.length]; });
+                return map;
             }
 
-            // Daftar wilayah (RT/RW) diambil sekali saat halaman dimuat — sumbernya region_geometries
-            // (BUKAN organizations.daftar_rt), supaya hanya menampilkan RT/RW yang sudah punya poligon.
-            fetch('{{ route('public.map.rt-rw-options') }}')
-                .then(res => res.json())
-                .then(options => {
-                    if (options.length === 0) {
-                        resetSelect(wilayahSelect, '-- Belum ada wilayah dengan peta --');
-                        return;
-                    }
-                    wilayahSelect.innerHTML = '<option value="">-- Pilih Wilayah --</option>';
-                    options.forEach(opt => {
-                        const el = document.createElement('option');
-                        el.value = `${opt.rt}|${opt.rw}`;
-                        el.textContent = `RT ${opt.rt} / RW ${opt.rw}`;
-                        wilayahSelect.appendChild(el);
-                    });
-                    wilayahSelect.disabled = false;
-                })
-                .catch(() => showAlert('Gagal memuat daftar wilayah. Silakan muat ulang halaman.'));
+            function categoricalColor(value, map) {
+                if (value === null || value === undefined || value === '') return '#d1d5db';
+                return map[value] || '#9ca3af';
+            }
 
-            templateSelect.addEventListener('change', function () {
-                hideAlert();
-                resetSelect(columnSelect, '-- Memuat kolom... --');
+            function clearLegend() {
+                document.getElementById('mapLegend').innerHTML = '';
+            }
 
-                if (!this.value) {
-                    resetSelect(columnSelect, '-- Pilih Judul Tabel Dahulu --');
+            function renderLegend(mode, min, max, categoryColorMap) {
+                const el = document.getElementById('mapLegend');
+                if (mode === 'numeric') {
+                    el.innerHTML = `<div class="flex items-center gap-2 text-sm">
+                        <span>${min}</span>
+                        <div class="h-3 w-40 rounded" style="background: linear-gradient(to right, hsl(158,64%,85%), hsl(158,64%,25%));"></div>
+                        <span>${max}</span>
+                        <span class="text-base-content/60 ml-2">(terang = rendah, gelap = tinggi)</span>
+                    </div>`;
+                } else {
+                    const items = Object.entries(categoryColorMap).map(([label, color]) =>
+                        `<span class="inline-flex items-center gap-1 mr-3 text-sm">
+                            <span class="inline-block w-3 h-3 rounded-sm" style="background:${color}"></span>${label}
+                        </span>`
+                    ).join('');
+                    el.innerHTML = `<div class="flex flex-wrap items-center">${items}</div>`;
+                }
+            }
+
+            function renderChoropleth(collection) {
+                if (choroplethLayer) { map.removeLayer(choroplethLayer); choroplethLayer = null; }
+                clearLegend();
+
+                const features = collection.features || [];
+                if (features.length === 0) {
+                    showAlert('Belum ada RT/RW dengan poligon untuk kombinasi Tabel/Kolom ini.');
                     return;
                 }
+                hideAlert();
 
-                const url = '{{ route('public.map.columns', ['statistic_template' => '__ID__']) }}'
-                    .replace('__ID__', this.value);
+                const values = features.map(f => f.properties.value);
+                const declaredType = collection.meta && collection.meta.data_type;
+                const allNumeric = values.filter(v => v !== null && v !== '').every(isNumericValue);
+                const mode = declaredType === 'numeric' ? 'numeric'
+                    : declaredType === 'text' ? 'categorical'
+                    : (allNumeric ? 'numeric' : 'categorical'); // fallback utk data_type null/'both'
 
-                fetch(url)
-                    .then(res => res.json())
-                    .then(columns => {
-                        if (columns.length === 0) {
-                            resetSelect(columnSelect, '-- Tabel ini belum punya kolom --');
-                            return;
-                        }
-                        columnSelect.innerHTML = '<option value="">-- Pilih Kolom --</option>';
-                        columns.forEach(col => {
-                            const el = document.createElement('option');
-                            el.value = col.id;
-                            el.textContent = col.label;
-                            columnSelect.appendChild(el);
-                        });
-                        columnSelect.disabled = false;
-                    })
-                    .catch(() => showAlert('Gagal memuat daftar kolom. Silakan coba lagi.'));
-            });
+                let min = 0, max = 0, categoryColorMap = {};
+                if (mode === 'numeric') {
+                    const nums = values.filter(isNumericValue).map(parseFloat);
+                    min = nums.length ? Math.min(...nums) : 0;
+                    max = nums.length ? Math.max(...nums) : 0;
+                } else {
+                    categoryColorMap = buildCategoryColorMap(values);
+                }
 
-            [columnSelect, wilayahSelect].forEach(select => {
-                select.addEventListener('change', renderMapIfReady);
-            });
-            templateSelect.addEventListener('change', renderMapIfReady);
+                choroplethLayer = L.geoJSON(collection, {
+                    style: function (feature) {
+                        const v = feature.properties.value;
+                        const fillColor = mode === 'numeric' ? numericColor(v, min, max) : categoricalColor(v, categoryColorMap);
+                        return { color: '#1f2937', weight: 1, fillColor, fillOpacity: 0.75 };
+                    },
+                    onEachFeature: function (feature, layer) {
+                        const p = feature.properties;
+                        layer.bindPopup(`
+                            <div class="text-sm">
+                                <strong>${p.kelurahan ?? '-'}</strong><br>
+                                ${p.kecamatan ? p.kecamatan + '<br>' : ''}
+                                ${p.rw_label ?? ''} / ${p.rt_label ?? ''}<br>
+                                ${p.column_label}: <strong>${p.value ?? 'Belum diisi'}</strong>
+                            </div>
+                        `);
+                        layer.on('mouseover', function () { layer.setStyle({ weight: 3 }); layer.bringToFront(); });
+                        layer.on('mouseout', function () { choroplethLayer.resetStyle(layer); });
+                    },
+                }).addTo(map);
+
+                if (choroplethLayer.getBounds().isValid()) {
+                    map.fitBounds(choroplethLayer.getBounds());
+                }
+                renderLegend(mode, min, max, categoryColorMap);
+            }
+
+            // Template/Kolom berubah -> render ulang seluruh choropleth (Wilayah TIDAK lagi jadi syarat)
+            [templateSelect, columnSelect].forEach(select => select.addEventListener('change', renderMapIfReady));
 
             function renderMapIfReady() {
                 const templateId = templateSelect.value;
                 const columnId = columnSelect.value;
-                const wilayah = wilayahSelect.value;
+                if (!templateId || !columnId) return;
 
-                if (!templateId || !columnId || !wilayah) {
-                    return;
-                }
-
-                const [rt, rw] = wilayah.split('|');
                 hideAlert();
+                const params = new URLSearchParams({ template_id: templateId, column_id: columnId });
 
-                const params = new URLSearchParams({
-                    template_id: templateId,
-                    column_id: columnId,
-                    rt: rt,
-                    rw: rw,
-                });
-
-                fetch(`{{ route('public.map.data') }}?${params.toString()}`)
-                    .then(res => {
-                        if (!res.ok) {
-                            throw new Error('not_found');
-                        }
-                        return res.json();
-                    })
-                    .then(feature => {
-                        if (activeLayer) {
-                            map.removeLayer(activeLayer);
-                        }
-
-                        const geoJsonFeature = {
-                            type: 'Feature',
-                            properties: feature.properties,
-                            geometry: feature.geojson,
-                        };
-
-                        activeLayer = L.geoJSON(geoJsonFeature, {
-                            style: { color: '#059669', weight: 2, fillOpacity: 0.3 },
-                        }).addTo(map);
-
-                        const p = feature.properties;
-                        const popupHtml = `
-                            <div class="text-sm">
-                                <strong>${p.kelurahan ?? '-'}</strong><br>
-                                ${p.kecamatan ? p.kecamatan + '<br>' : ''}
-                                RT ${p.rt} / RW ${p.rw}<br>
-                                ${p.column_label}: <strong>${p.value ?? 'Belum diisi'}</strong>
-                            </div>
-                        `;
-                        activeLayer.bindPopup(popupHtml).openPopup();
-                        map.fitBounds(activeLayer.getBounds());
-                    })
+                fetch(`{{ route('public.map.data-all') }}?${params.toString()}`)
+                    .then(res => { if (!res.ok) throw new Error('failed'); return res.json(); })
+                    .then(renderChoropleth)
                     .catch(() => {
-                        if (activeLayer) {
-                            map.removeLayer(activeLayer);
-                            activeLayer = null;
-                        }
-                        showAlert('Data tidak ditemukan untuk kombinasi Tabel/Kolom/Wilayah ini.');
+                        if (choroplethLayer) { map.removeLayer(choroplethLayer); choroplethLayer = null; }
+                        clearLegend();
+                        showAlert('Gagal memuat data peta. Silakan coba lagi.');
                     });
             }
+
+            // Wilayah sekarang cuma "zoom to" — poligon lain tetap tampil, tidak trigger fetch baru
+            wilayahSelect.addEventListener('change', function () {
+                if (!this.value || !choroplethLayer) return;
+                const [rt, rw] = this.value.split('|');
+                let target = null;
+                choroplethLayer.eachLayer(function (layer) {
+                    if (String(layer.feature.properties.rt) === rt && String(layer.feature.properties.rw) === rw) {
+                        target = layer;
+                    }
+                });
+                if (target) { map.fitBounds(target.getBounds()); target.openPopup(); }
+            });
         });
     </script>
 </x-layout>

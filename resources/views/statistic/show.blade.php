@@ -1,6 +1,7 @@
 {{-- <x-layout title="{{ $statistic->title }}"> --}}
 <x-layout title="Tabel {{ $statistic->title }}">
-    <x-hero title="Bab {{ $statistic->chapter }}" subtitle="Publikasi {{ $statistic->publication }}" />
+    {{-- <x-hero title="Bab {{ $statistic->chapter }}" subtitle="Publikasi {{ $statistic->publication }}" /> --}}
+    <x-hero title="{{ $statistic->title ?? $statistic->template->title }}" :subtitle="$statistic->template->description" />
 
     <div class="max-w-6xl mx-auto px-4 lg:px-0 mb-12">
         
@@ -21,7 +22,7 @@
                     bg-base-50 p-6">
                         <h2 class="text-xl md:text-2xl font-bold text-secondary mb-4 text-center">{{ $statistic->title }}</h2>
 
-                        <div class="overflow-x-auto 
+                        {{-- <div class="overflow-x-auto 
                         rounded border border-base-200 
                         shadow-sm">
                             <table class="table table-zebra 
@@ -45,7 +46,9 @@
                                     @endforeach
                                 </tbody>
                             </table>
-                        </div>
+                        </div> --}}
+                        @php $existingValues = $statistic->values->pluck('value', 'statistic_template_cell_id')->all(); @endphp
+                        <x-statistic-table-readonly :template="$statistic->template" :values="$existingValues" />
                         
                         @if($statistic->source)
                             <p class="mt-4 text-base-content text-sm">

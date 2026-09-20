@@ -44,12 +44,19 @@ class PublicStatisticController extends Controller
         //     ->when($request->get('search'), function ($query, $search) {
         //         $query->where('title', 'like', '%' . $search . '%');
         //     });
+        // $query = StatisticTableEntry::query()
+        //     ->whereHas('template', fn ($q) => $q->where('is_active', true))
+        //     ->with('template')
+        //     ->when($request->get('search'), function ($q, $search) {
+        //         $q->where('title', 'like', "%{$search}%")
+        //           ->orWhereHas('template', fn ($t) => $t->where('title', 'like', "%{$search}%"));
+        //     });
         $query = StatisticTableEntry::query()
             ->whereHas('template', fn ($q) => $q->where('is_active', true))
-            ->with('template')
+            ->with(['template', 'chart'])   // tambah 'chart', dipakai badge status Grafik
             ->when($request->get('search'), function ($q, $search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhereHas('template', fn ($t) => $t->where('title', 'like', "%{$search}%"));
+                ->orWhereHas('template', fn ($t) => $t->where('title', 'like', "%{$search}%"));
             });
 
         if ($sortBy && in_array($sortBy, ['title', 'updated_at'])) {
@@ -78,11 +85,31 @@ class PublicStatisticController extends Controller
         return view('statistic.index', compact('tables', 'perPage'));
     }
 
+    // public function show(StatisticTableEntry $statistic)
+    // {
+    //     // // Muat relasi chart agar bisa ditampilkan
+    //     // $statistic->load('chart');
+    //     $statistic->load(['chart', 'template.headers', 'values.templateCell.columnHeader']);
+
+    //     return view('statistic.show', compact('statistic'));
+    // }
     public function show(StatisticTableEntry $statistic)
     {
-        // // Muat relasi chart agar bisa ditampilkan
-        // $statistic->load('chart');
-        $statistic->load(['chart', 'template.headers', 'values.templateCell.columnHeader']);
+        $villageId = $statistic->village_id;
+
+        // Sama seperti eager-load StatisticTableEntryController::edit() — dibutuhkan supaya
+        // <x-statistic-table-readonly> bisa render header bertingkat tanpa N+1.
+        // 'values.templateCell.columnHeader' tetap dipertahankan karena masih dipakai
+        // accessor legacy $statistic->columns / $statistic->content untuk skrip Chart.js di bawah.
+        $statistic->load([
+            'chart',
+            'template.rowHeaders' => fn ($q) => $q->where(fn ($qq) => $qq->whereNull('village_id')->orWhere('village_id', $villageId)),
+            'template.rowHeaders.children',
+            'template.rowHeaders.children.children',
+            'template.columnHeaders.children.children',
+            'template.cells' => fn ($q) => $q->where(fn ($qq) => $qq->whereNull('village_id')->orWhere('village_id', $villageId)),
+            'values.templateCell.columnHeader',
+        ]);
 
         return view('statistic.show', compact('statistic'));
     }

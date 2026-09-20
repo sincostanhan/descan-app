@@ -14,7 +14,9 @@ class HomeController extends Controller
     // Halaman Publik
     public function index()
     {
-        $home = Home::first();
+        // $home = Home::first();
+        // return view('welcome', compact('home'));
+        $home = Home::first() ?? new Home();
         return view('welcome', compact('home'));
     }
 

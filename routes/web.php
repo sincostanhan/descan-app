@@ -89,6 +89,7 @@ Route::middleware(['site.published'])->group(function () {
     Route::get('/peta-statistik/kolom/{statistic_template}', [PublicMapDashboardController::class, 'columns'])->name('public.map.columns');
     Route::get('/peta-statistik/rt-rw', [PublicMapDashboardController::class, 'rtRwOptions'])->name('public.map.rt-rw-options');
     Route::get('/peta-statistik/data', [PublicMapDashboardController::class, 'data'])->name('public.map.data');
+    Route::get('/peta-statistik/data-semua', [PublicMapDashboardController::class, 'dataAll'])->name('public.map.data-all');
 });
 // Route::middleware('guest')->group(function () {
 //     Route::get('/login', [AuthController::class, 'login'])->name('login');
