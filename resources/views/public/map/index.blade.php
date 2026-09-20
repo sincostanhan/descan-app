@@ -73,9 +73,18 @@
             // Koordinat default: pusatkan ke wilayah kelurahan aktif secara kasar.
             // Peta akan otomatis fitBounds() ke poligon begitu data pertama tampil.
             const map = L.map('map').setView([-5.481, 122.617], 14);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+            // Basemap: OSM (default, jalan/kota) & Esri World Imagery (satelit) — keduanya gratis tanpa API key.
+            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors',
-            }).addTo(map);
+                maxZoom: 19,
+            });
+            const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri',
+                maxZoom: 19,
+            });
+            osmLayer.addTo(map);
+            L.control.layers({ 'Peta Jalan': osmLayer, 'Satelit': satelliteLayer }, null, { position: 'topright' }).addTo(map);
 
             let activeLayer = null;
 

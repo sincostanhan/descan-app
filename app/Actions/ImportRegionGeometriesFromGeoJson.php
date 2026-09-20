@@ -17,7 +17,7 @@ class ImportRegionGeometriesFromGeoJson
      * SELURUH import ditolak (tidak ada perubahan sebagian tersimpan) — supaya region_geometries
      * tidak pernah berakhir dalam kondisi "separuh ter-update, separuh nyangkut error".
      *
-     * @return array{created:int,updated:int,total:int}
+     * @return array{total:int,before:int}
      */
     public function handle(string $rawGeoJson): array
     {
@@ -84,21 +84,30 @@ class ImportRegionGeometriesFromGeoJson
             throw ValidationException::withMessages(['geojson' => $errors]);
         }
 
-        // TAHAP 2: semua feature valid — baru simpan, dibungkus transaction.
-        $created = 0;
-        $updated = 0;
+        // TAHAP 2: semua feature valid — SINKRONISASI PENUH.
+        // Textarea/tabel di halaman ini SELALU di-load ulang dari kondisi region_geometries
+        // TERKINI (lihat RegionGeometryController::index()), jadi apa yang disubmit di sini
+        // dianggap representasi LENGKAP & BENAR — baris lama yang tidak ada di submission ini
+        // SENGAJA dihapus (bukan cuma di-skip), supaya "hapus baris di tabel lalu Import" benar-benar
+        // menghapus datanya, bukan cuma menyembunyikannya sementara di layar.
+        $before = RegionGeometry::count();
 
-        DB::transaction(function () use ($resolved, &$created, &$updated) {
+        DB::transaction(function () use ($resolved) {
+            RegionGeometry::query()->delete();
+
             foreach ($resolved as $row) {
-                $geometry = RegionGeometry::updateOrCreate(
-                    ['village_id' => $row['village_id'], 'rt' => $row['rt'], 'rw' => $row['rw']],
-                    ['geojson' => $row['geojson']]
-                );
-
-                $geometry->wasRecentlyCreated ? $created++ : $updated++;
+                RegionGeometry::create([
+                    'village_id' => $row['village_id'],
+                    'rt' => $row['rt'],
+                    'rw' => $row['rw'],
+                    'geojson' => $row['geojson'],
+                ]);
             }
         });
 
-        return ['created' => $created, 'updated' => $updated, 'total' => count($resolved)];
+        return [
+            'total' => count($resolved),
+            'before' => $before,
+        ];
     }
 }

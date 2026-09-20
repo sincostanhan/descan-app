@@ -23,20 +23,50 @@
             </div>
         @endif
 
-        <div class="alert alert-info shadow-sm mb-4">
-            <x-lucide-info class="w-5 h-5" />
-            <span>Saat ini ada <strong>{{ $existingCount }}</strong> poligon RT/RW tersimpan. Import bersifat <strong>semua-atau-tidak-sama-sekali</strong> — kalau ada 1 Kelurahan yang tidak cocok, seluruh import dibatalkan.</span>
+        <div class="alert alert-warning shadow-sm mb-4">
+            <x-lucide-alert-triangle class="w-5 h-5" />
+            <span>Saat ini ada <strong>{{ $existingCount }}</strong> poligon RT/RW tersimpan. <strong>Import di sini adalah SINKRONISASI PENUH</strong> — data yang kamu submit akan MENGGANTI SELURUH data lama (baris yang kamu hapus dari sini akan ikut terhapus di database). Import juga tetap <strong>semua-atau-tidak-sama-sekali</strong>: kalau ada 1 Kelurahan yang tidak cocok, seluruh proses dibatalkan (data lama tidak tersentuh).</span>
         </div>
 
-        <form action="{{ route('admin-bps.region-geometries.store') }}" method="POST">
+        <div class="mb-4">
+            <label class="label" for="filterKelurahan">
+                <span class="label-text font-medium">Filter Kelurahan</span>
+            </label>
+            <select id="filterKelurahan" class="select select-sm w-full max-w-xs">
+                <option value="">-- Semua Kelurahan --</option>
+                @foreach($villages as $v)
+                    <option value="{{ $v->name }}">{{ $v->name }}</option>
+                @endforeach
+            </select>
+            <span id="filterCount" class="text-xs text-base-content/50 ml-2"></span>
+        </div>
+
+        <form id="importForm" action="{{ route('admin-bps.region-geometries.store') }}" method="POST">
             @csrf
 
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 mb-4">
                 <x-section-card title="Preview Peta" title-size="text-lg">
-                    <div id="geoPreviewMap" class="w-full rounded-box border border-base-200" style="height: 600px; position: relative; overflow: hidden; z-index: 0;"></div>
-                    <button type="button" id="btnRenderPreview" class="btn btn-outline btn-sm mt-3">
-                        <x-lucide-refresh-cw class="w-4 h-4 mr-1" /> Render Ulang Preview
-                    </button>
+                    <div class="relative">
+                        <div id="geoPreviewMap" class="w-full rounded-box border border-base-200" style="height: 600px; position: relative; overflow: hidden; z-index: 0;"></div>
+                        <div id="drawControls" class="hidden" style="position: absolute; top: 10px; right: 10px; z-index: 10; background: white; padding: 10px; border-radius: 0.5rem; box-shadow: 0 2px 8px rgba(0,0,0,0.25);">
+                            <div class="text-xs mb-2">Titik: <span id="drawPointCount">0</span></div>
+                            <button type="button" id="btnDrawFinish" class="btn btn-success btn-xs w-full mb-1">Selesai</button>
+                            <button type="button" id="btnDrawCancel" class="btn btn-ghost btn-xs w-full">Batal</button>
+                        </div>
+                    </div>
+                    <div id="drawHint" class="alert alert-info shadow-sm mt-3 hidden">
+                        <x-lucide-info class="w-4 h-4" />
+                        <span id="drawHintText">Mode gambar aktif — klik di peta untuk menambah titik polygon (minimal 3 titik), lalu klik "Selesai".</span>
+                    </div>
+                    <div class="flex items-center gap-2 mt-3">
+                        <button type="button" id="btnRenderPreview" class="btn btn-outline btn-sm">
+                            <x-lucide-refresh-cw class="w-4 h-4 mr-1" /> Render Ulang Preview
+                        </button>
+                        <span id="filterActiveBadge" class="badge badge-warning gap-1 hidden">
+                            <x-lucide-filter class="w-3 h-3" />
+                            <span id="filterActiveBadgeText"></span>
+                        </span>
+                    </div>
                     <div id="previewError" class="alert alert-warning shadow-sm mt-3 hidden">
                         <x-lucide-info class="w-4 h-4" />
                         <span id="previewErrorText" class="text-sm"></span>
@@ -77,26 +107,51 @@
                     </div>
 
                     <div id="tabTablePane" class="hidden">
-                        <div class="overflow-x-auto rounded-box border border-base-200 mb-3" style="max-height: 480px; overflow-y: auto;">
-                            <table class="table table-sm table-pin-rows w-full">
+                        <div class="flex justify-between items-center mb-2">
+                            <button type="button" id="btnAddRow" class="btn btn-outline btn-sm">
+                                <x-lucide-plus class="w-4 h-4 mr-1" /> Tambah Baris RT
+                            </button>
+                            <button type="button" id="btnToggleFullscreen" class="btn btn-outline btn-sm">
+                                <x-lucide-maximize id="iconMaximize" class="w-4 h-4 mr-1" />
+                                <x-lucide-minimize id="iconMinimize" class="w-4 h-4 mr-1 hidden" />
+                                <span id="fullscreenBtnText">Full Screen</span>
+                            </button>
+                        </div>
+                        <div id="tableWrapper" class="overflow-x-auto rounded-box border border-base-200 mb-3" style="max-height: 480px; overflow-y: auto;">
+                            <table class="table table-sm table-pin-rows table-fixed" id="rowsTable" style="min-width: 900px;">
                                 <thead class="bg-base-200/70">
                                     <tr>
-                                        <th class="w-40">Kelurahan</th>
-                                        <th class="w-20">RW</th>
-                                        <th class="w-20">RT</th>
-                                        <th>Koordinat Ring (array [lng,lat])</th>
-                                        <th class="w-16"></th>
+                                        <th class="w-10"></th>
+                                        <th class="w-56 resizable-col relative" data-col-key="kelurahan">Kelurahan<span class="col-resize-handle"></span></th>
+                                        <th class="w-16 resizable-col relative" data-col-key="rw">RW<span class="col-resize-handle"></span></th>
+                                        <th class="w-16 resizable-col relative" data-col-key="rt">RT<span class="col-resize-handle"></span></th>
+                                        <th class="w-64">Koordinat Ring (array [lng,lat])</th>
+                                        <th class="w-28 whitespace-nowrap">Gambar</th>
+                                        <th class="w-20 whitespace-nowrap">Hapus</th>
                                     </tr>
                                 </thead>
                                 <tbody id="rowsTableBody"></tbody>
                             </table>
                         </div>
-                        <button type="button" id="btnAddRow" class="btn btn-outline btn-sm">
-                            <x-lucide-plus class="w-4 h-4 mr-1" /> Tambah Baris RT
-                        </button>
+                        <style>
+                            .col-resize-handle {
+                                position: absolute;
+                                top: 0;
+                                right: 0;
+                                width: 6px;
+                                height: 100%;
+                                cursor: col-resize;
+                                user-select: none;
+                            }
+                            .col-resize-handle:hover,
+                            .col-resize-handle.resizing {
+                                background: rgba(0, 0, 0, 0.15);
+                            }
+                        </style>
                         <p class="text-xs text-base-content/50 italic mt-2">
                             Kolom Koordinat diisi array [longitude, latitude] untuk 1 ring polygon, contoh:
                             [[122.6107, -5.4607], [122.6109, -5.4607], [122.6107, -5.4607]] (titik pertama & terakhir harus sama, poligon tertutup).
+                            Centang kotak di kolom paling kiri untuk geser titik polygon baris itu langsung di peta.
                         </p>
                     </div>
 
@@ -129,11 +184,29 @@
             const tabTablePane = document.getElementById('tabTablePane');
             const rowsTableBody = document.getElementById('rowsTableBody');
             const btnAddRow = document.getElementById('btnAddRow');
+            const filterSelect = document.getElementById('filterKelurahan');
+            const filterCount = document.getElementById('filterCount');
+            let activeFilter = '';
+
+            // Ikon kustom (gaya Lucide) untuk kolom pilih baris — dipakai lewat innerHTML karena
+            // baris tabel di-generate murni via JS, tidak bisa panggil komponen Blade dari sini.
+            const ICON_SQUARE = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/></svg>';
+            const ICON_SQUARE_CHECK = '<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2"/><path d="m9 12 2 2 4-4"/></svg>';
+            let selectedRowId = null;
 
             const map = L.map('geoPreviewMap').setView([-5.481, 122.617], 13);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+
+            // Basemap: OSM (default, jalan/kota) & Esri World Imagery (satelit) — keduanya gratis tanpa API key.
+            const osmLayer = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '&copy; OpenStreetMap contributors',
-            }).addTo(map);
+                maxZoom: 19,
+            });
+            const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri',
+                maxZoom: 19,
+            });
+            osmLayer.addTo(map);
+            L.control.layers({ 'Peta Jalan': osmLayer, 'Satelit': satelliteLayer }, null, { position: 'topright' }).addTo(map);
 
             let currentLayer = null;
             let selectedFeatureLayer = null;
@@ -171,8 +244,17 @@
                 }
                 selectedFeatureLayer = null;
 
+                let featuresToRender = Array.isArray(parsed.features) ? parsed.features : [];
+                if (activeFilter) {
+                    featuresToRender = featuresToRender.filter(function (f) {
+                        const nama = (f.properties && f.properties.NAMA_KELURAHAN) || '';
+                        return String(nama).toLowerCase() === activeFilter.toLowerCase();
+                    });
+                }
+                const filteredCollection = { type: 'FeatureCollection', features: featuresToRender };
+
                 try {
-                    currentLayer = L.geoJSON(parsed, {
+                    currentLayer = L.geoJSON(filteredCollection, {
                         style: defaultStyle,
                         onEachFeature: function (feature, layer) {
                             const p = feature.properties || {};
@@ -271,9 +353,25 @@
             function renderTable() {
                 rowsTableBody.innerHTML = '';
 
+                let shownCount = 0;
+
                 rows.forEach(function (r) {
+                    if (activeFilter && String(r.kelurahan || '').toLowerCase() !== activeFilter.toLowerCase()) {
+                        return; // disembunyikan oleh filter, TETAP ada di array `rows` & di textarea
+                    }
+                    shownCount++;
+
                     const tr = document.createElement('tr');
                     tr.dataset.rowId = r.id;
+
+                    // Kolom pilih (checkbox kustom square/square-check) — centang = mode edit-vertex aktif
+                    const tdSelect = document.createElement('td');
+                    const btnSelect = document.createElement('button');
+                    btnSelect.type = 'button';
+                    btnSelect.className = 'row-select-toggle text-base-content/60 hover:text-primary';
+                    btnSelect.title = 'Centang untuk geser titik polygon baris ini langsung di peta (edit bentuk yang sudah ada, bukan gambar dari nol)';
+                    btnSelect.innerHTML = (selectedRowId === r.id) ? ICON_SQUARE_CHECK : ICON_SQUARE;
+                    tdSelect.appendChild(btnSelect);
 
                     // Kolom Kelurahan (select)
                     const tdKel = document.createElement('td');
@@ -287,7 +385,11 @@
                         const opt = document.createElement('option');
                         opt.value = name;
                         opt.textContent = name;
-                        if (name === r.kelurahan) opt.selected = true;
+                        // Case-insensitive: data lama tersimpan uppercase ("BATARAGURU") sementara
+                        // villages.name di database bisa campuran ("Bataraguru") — samakan dulu.
+                        if (String(name).toLowerCase() === String(r.kelurahan).toLowerCase()) {
+                            opt.selected = true;
+                        }
                         selectKel.appendChild(opt);
                     });
                     tdKel.appendChild(selectKel);
@@ -318,7 +420,16 @@
                     textareaRing.value = r.ringText;
                     tdRing.appendChild(textareaRing);
 
-                    // Kolom Aksi
+                    // Kolom Aksi Gambar
+                    const tdDraw = document.createElement('td');
+                    const btnDraw = document.createElement('button');
+                    btnDraw.type = 'button';
+                    btnDraw.className = 'btn btn-primary btn-xs row-draw whitespace-nowrap';
+                    btnDraw.textContent = 'Gambar Baru';
+                    btnDraw.title = 'Gambar polygon BARU dari awal di peta — akan MENGGANTI koordinat yang sudah ada di baris ini. Untuk perbaiki bentuk yang sudah ada tanpa mengulang dari nol, pakai checkbox di kolom paling kiri.';
+                    tdDraw.appendChild(btnDraw);
+
+                    // Kolom Aksi Hapus
                     const tdAction = document.createElement('td');
                     const btnDelete = document.createElement('button');
                     btnDelete.type = 'button';
@@ -326,9 +437,13 @@
                     btnDelete.textContent = 'Hapus';
                     tdAction.appendChild(btnDelete);
 
-                    tr.append(tdKel, tdRw, tdRt, tdRing, tdAction);
+                    tr.append(tdSelect, tdKel, tdRw, tdRt, tdRing, tdDraw, tdAction);
                     rowsTableBody.appendChild(tr);
                 });
+
+                filterCount.textContent = activeFilter
+                    ? `Menampilkan ${shownCount} dari ${rows.length} baris (Kelurahan lain disembunyikan, tidak dihapus)`
+                    : '';
             }
 
             // Delegasi event: perubahan input di dalam tabel -> update state `rows` + textarea live
@@ -350,18 +465,228 @@
             }
 
             rowsTableBody.addEventListener('click', function (e) {
-                if (!e.target.classList.contains('row-delete')) return;
-                const tr = e.target.closest('tr');
-                rows = rows.filter(function (r) { return r.id !== tr.dataset.rowId; });
+                if (e.target.classList.contains('row-delete')) {
+                    const tr = e.target.closest('tr');
+                    if (selectedRowId === tr.dataset.rowId) {
+                        selectedRowId = null;
+                        endEditMode();
+                    }
+                    rows = rows.filter(function (r) { return r.id !== tr.dataset.rowId; });
+                    renderTable();
+                    rebuildTextareaFromRows();
+                    return;
+                }
+                if (e.target.classList.contains('row-draw')) {
+                    const tr = e.target.closest('tr');
+                    const row = rows.find(function (r) { return r.id === tr.dataset.rowId; });
+                    if (row) startDrawMode(row);
+                    return;
+                }
+                const selectBtn = e.target.closest('.row-select-toggle');
+                if (selectBtn) {
+                    const tr = selectBtn.closest('tr');
+                    const row = rows.find(function (r) { return r.id === tr.dataset.rowId; });
+                    if (!row) return;
+
+                    if (selectedRowId === row.id) {
+                        selectedRowId = null;
+                        endEditMode();
+                    } else {
+                        selectedRowId = row.id;
+                        startEditMode(row);
+                    }
+                    renderTable();
+                }
+            });
+
+            // ===== Mode gambar polygon / edit-vertex langsung di peta (saling eksklusif) =====
+            let currentMode = null; // 'draw' | 'edit' | null
+            let drawingRow = null;
+            let drawPoints = [];
+            let drawPreviewLayer = null;
+            let drawMarkers = [];
+
+            let editingRow = null;
+            let editingRowPoints = null;
+            let editPolygonLayer = null;
+            let editMarkers = [];
+
+            function startDrawMode(row) {
+                if (currentMode === 'draw') endDrawMode();
+                if (currentMode === 'edit') { endEditMode(); selectedRowId = null; renderTable(); }
+
+                drawingRow = row;
+                drawPoints = [];
+                drawPreviewLayer = L.polyline([], { color: '#2563eb', weight: 3, dashArray: '6,4' }).addTo(map);
+                drawMarkers = [];
+                currentMode = 'draw';
+
+                document.getElementById('drawControls').classList.remove('hidden');
+                document.getElementById('drawHint').classList.remove('hidden');
+                document.getElementById('drawHintText').textContent =
+                    'Mode gambar aktif — klik di peta untuk menambah titik polygon (minimal 3 titik), lalu klik "Selesai".';
+                document.getElementById('drawPointCount').textContent = '0';
+                map.getContainer().style.cursor = 'crosshair';
+                map.on('click', handleDrawClick);
+            }
+
+            function handleDrawClick(e) {
+                // Simpan sebagai [lng, lat] — konvensi GeoJSON, sama seperti format ring di kolom Koordinat.
+                drawPoints.push([e.latlng.lng, e.latlng.lat]);
+                drawPreviewLayer.setLatLngs(drawPoints.map(function (p) { return [p[1], p[0]]; })); // Leaflet pakai [lat,lng]
+
+                const marker = L.circleMarker(e.latlng, {
+                    radius: 4, color: '#2563eb', fillColor: '#2563eb', fillOpacity: 1,
+                }).addTo(map);
+                drawMarkers.push(marker);
+
+                document.getElementById('drawPointCount').textContent = drawPoints.length;
+            }
+
+            function finishDraw() {
+                if (drawPoints.length < 3) {
+                    alert('Minimal 3 titik untuk membentuk polygon. Tambah titik dulu, atau klik Batal.');
+                    return;
+                }
+                const closedRing = drawPoints.concat([drawPoints[0]]); // tutup polygon: titik awal = titik akhir
+                drawingRow.ringText = JSON.stringify(closedRing);
+
+                endDrawMode();
                 renderTable();
                 rebuildTextareaFromRows();
+                renderPreview();
+            }
+
+            function cancelDraw() {
+                endDrawMode();
+            }
+
+            function endDrawMode() {
+                map.off('click', handleDrawClick);
+                map.getContainer().style.cursor = '';
+                if (drawPreviewLayer) {
+                    map.removeLayer(drawPreviewLayer);
+                    drawPreviewLayer = null;
+                }
+                drawMarkers.forEach(function (m) { map.removeLayer(m); });
+                drawMarkers = [];
+                drawPoints = [];
+                drawingRow = null;
+
+                document.getElementById('drawControls').classList.add('hidden');
+                document.getElementById('drawHint').classList.add('hidden');
+                currentMode = null;
+            }
+
+            // ===== Mode edit-vertex: geser titik polygon yang SUDAH ADA lewat baris tercentang =====
+            function startEditMode(row) {
+                if (currentMode === 'draw') endDrawMode();
+                if (currentMode === 'edit') endEditMode();
+
+                let ring;
+                try {
+                    ring = JSON.parse(row.ringText);
+                    if (!Array.isArray(ring) || ring.length < 3) throw new Error('kurang titik');
+                } catch (e) {
+                    alert('Baris ini belum punya koordinat yang valid untuk diedit. Gambar dulu lewat tombol "Gambar".');
+                    selectedRowId = null;
+                    renderTable();
+                    return;
+                }
+
+                editingRow = row;
+                // Buang titik penutup duplikat (titik terakhir == titik pertama) supaya tidak dobel marker.
+                editingRowPoints = ring.slice(0, -1);
+
+                editPolygonLayer = L.polygon(
+                    editingRowPoints.map(function (p) { return [p[1], p[0]]; }),
+                    { color: '#f59e0b', weight: 2, fillOpacity: 0.3 }
+                ).addTo(map);
+
+                editMarkers = editingRowPoints.map(function (p, idx) {
+                    const marker = L.marker([p[1], p[0]], { draggable: true }).addTo(map);
+                    marker.on('drag', function () {
+                        const latlng = marker.getLatLng();
+                        editingRowPoints[idx] = [latlng.lng, latlng.lat];
+                        editPolygonLayer.setLatLngs(editingRowPoints.map(function (pp) { return [pp[1], pp[0]]; }));
+                    });
+                    return marker;
+                });
+
+                if (editPolygonLayer.getBounds().isValid()) {
+                    map.fitBounds(editPolygonLayer.getBounds());
+                }
+
+                currentMode = 'edit';
+                document.getElementById('drawControls').classList.remove('hidden');
+                document.getElementById('drawHint').classList.remove('hidden');
+                document.getElementById('drawHintText').textContent =
+                    'Mode edit aktif — geser titik kuning di peta untuk ubah bentuk polygon, lalu klik "Selesai".';
+                document.getElementById('drawPointCount').textContent = editingRowPoints.length;
+            }
+
+            function finishEdit() {
+                if (!editingRow || !editingRowPoints) return;
+                const closedRing = editingRowPoints.concat([editingRowPoints[0]]);
+                editingRow.ringText = JSON.stringify(closedRing);
+
+                endEditMode();
+                selectedRowId = null;
+                renderTable();
+                rebuildTextareaFromRows();
+                renderPreview();
+            }
+
+            function cancelEdit() {
+                endEditMode();
+                selectedRowId = null;
+                renderTable();
+            }
+
+            function endEditMode() {
+                if (editPolygonLayer) { map.removeLayer(editPolygonLayer); editPolygonLayer = null; }
+                editMarkers.forEach(function (m) { map.removeLayer(m); });
+                editMarkers = [];
+                editingRow = null;
+                editingRowPoints = null;
+
+                document.getElementById('drawControls').classList.add('hidden');
+                document.getElementById('drawHint').classList.add('hidden');
+                currentMode = null;
+            }
+
+            document.getElementById('btnDrawFinish').addEventListener('click', function () {
+                if (currentMode === 'draw') finishDraw();
+                else if (currentMode === 'edit') finishEdit();
+            });
+            document.getElementById('btnDrawCancel').addEventListener('click', function () {
+                if (currentMode === 'draw') cancelDraw();
+                else if (currentMode === 'edit') cancelEdit();
             });
 
             btnAddRow.addEventListener('click', function () {
-                rows.push({ id: 'row-' + (rowIdCounter++), kelurahan: '', rw: '', rt: '', ringText: '' });
+                rows.push({ id: 'row-' + (rowIdCounter++), kelurahan: activeFilter || '', rw: '', rt: '', ringText: '' });
                 renderTable();
                 // Baris baru masih kosong -> tidak ikut masuk textarea sampai diisi, tidak perlu rebuild.
             });
+
+            filterSelect.addEventListener('change', function () {
+                activeFilter = this.value;
+                renderTable();
+                renderPreview();
+                updateFilterBadge();
+            });
+
+            function updateFilterBadge() {
+                const badge = document.getElementById('filterActiveBadge');
+                const badgeText = document.getElementById('filterActiveBadgeText');
+                if (activeFilter) {
+                    badgeText.textContent = 'Filter aktif: ' + activeFilter;
+                    badge.classList.remove('hidden');
+                } else {
+                    badge.classList.add('hidden');
+                }
+            }
 
             // ===== Tombol tab =====
             tabTableBtn.addEventListener('click', function () {
@@ -385,6 +710,114 @@
                 tabTableBtn.classList.remove('tab-active');
                 tabTextBtn.classList.add('tab-active');
                 // Textarea sudah otomatis ter-update live tiap kali tabel diedit — tidak perlu rebuild di sini.
+            });
+
+            // ===== Full Screen untuk tab Tabel per RT =====
+            const btnToggleFullscreen = document.getElementById('btnToggleFullscreen');
+            const iconMaximize = document.getElementById('iconMaximize');
+            const iconMinimize = document.getElementById('iconMinimize');
+            const fullscreenBtnText = document.getElementById('fullscreenBtnText');
+            const tableWrapper = document.getElementById('tableWrapper');
+
+            btnToggleFullscreen.addEventListener('click', function () {
+                const isNowFullscreen = tabTablePane.classList.toggle('fixed');
+                tabTablePane.classList.toggle('inset-4', isNowFullscreen);
+                tabTablePane.classList.toggle('z-[1200]', isNowFullscreen);
+                tabTablePane.classList.toggle('bg-base-100', isNowFullscreen);
+                tabTablePane.classList.toggle('p-6', isNowFullscreen);
+                tabTablePane.classList.toggle('overflow-auto', isNowFullscreen);
+                tabTablePane.classList.toggle('shadow-2xl', isNowFullscreen);
+                tabTablePane.classList.toggle('rounded-box', isNowFullscreen);
+                tabTablePane.classList.toggle('border', isNowFullscreen);
+                tabTablePane.classList.toggle('border-base-300', isNowFullscreen);
+
+                tableWrapper.style.maxHeight = isNowFullscreen ? 'calc(100vh - 14rem)' : '480px';
+
+                iconMaximize.classList.toggle('hidden', isNowFullscreen);
+                iconMinimize.classList.toggle('hidden', !isNowFullscreen);
+                fullscreenBtnText.textContent = isNowFullscreen ? 'Tutup Full Screen' : 'Full Screen';
+            });
+
+            // ===== Resize kolom tabel (drag garis pembatas di header) =====
+            // Lebar kolom di-persist ke localStorage: preferensi tampilan per-browser per-user,
+            // bukan data penting — cukup diingat lokal, tidak perlu ke server.
+            const COL_WIDTH_STORAGE_KEY = 'regionGeometries.tableColWidths.v1';
+
+            function loadStoredWidths() {
+                try {
+                    return JSON.parse(localStorage.getItem(COL_WIDTH_STORAGE_KEY) || '{}');
+                } catch (e) {
+                    return {};
+                }
+            }
+
+            function saveStoredWidths(widths) {
+                try {
+                    localStorage.setItem(COL_WIDTH_STORAGE_KEY, JSON.stringify(widths));
+                } catch (e) {
+                    // localStorage bisa penuh atau dimatikan user — silent fail, tidak mengganggu flow utama
+                }
+            }
+
+            const storedWidths = loadStoredWidths();
+
+            document.querySelectorAll('#rowsTable .resizable-col').forEach(function (th) {
+                const colKey = th.dataset.colKey;
+
+                // Restore lebar tersimpan (kalau ada) saat halaman pertama dibuka
+                if (colKey && storedWidths[colKey]) {
+                    th.style.width = storedWidths[colKey] + 'px';
+                }
+
+                const handle = th.querySelector('.col-resize-handle');
+                let startX = 0;
+                let startWidth = 0;
+
+                handle.addEventListener('mousedown', function (e) {
+                    e.preventDefault();
+                    startX = e.clientX;
+                    startWidth = th.offsetWidth;
+                    handle.classList.add('resizing');
+                    document.addEventListener('mousemove', onResizeMove);
+                    document.addEventListener('mouseup', onResizeEnd);
+                });
+
+                function onResizeMove(e) {
+                    const newWidth = Math.max(48, startWidth + (e.clientX - startX)); // minimal 48px
+                    th.style.width = newWidth + 'px';
+                }
+
+                function onResizeEnd() {
+                    handle.classList.remove('resizing');
+                    document.removeEventListener('mousemove', onResizeMove);
+                    document.removeEventListener('mouseup', onResizeEnd);
+
+                    // Simpan lebar akhir setelah drag selesai (bukan setiap mousemove, biar tidak berisik)
+                    if (colKey) {
+                        const widths = loadStoredWidths();
+                        widths[colKey] = th.offsetWidth;
+                        saveStoredWidths(widths);
+                    }
+                }
+            });
+
+            // ===== Konfirmasi sebelum submit — Import bersifat full-sync (bisa menghapus data lama) =====
+            document.getElementById('importForm').addEventListener('submit', function (e) {
+                let featureCount = 0;
+                try {
+                    const parsed = JSON.parse(textarea.value);
+                    featureCount = Array.isArray(parsed.features) ? parsed.features.length : 0;
+                } catch (err) {
+                    // Biarkan validasi server yang menangani JSON tidak valid, jangan blokir submit di sini.
+                }
+
+                const confirmed = confirm(
+                    `Import ini akan MENGGANTI SELURUH data poligon tersimpan (saat ini {{ $existingCount }} poligon) ` +
+                    `dengan ${featureCount} feature yang ada di form ini sekarang. Baris yang tidak ada di sini akan DIHAPUS. Lanjutkan?`
+                );
+                if (!confirmed) {
+                    e.preventDefault();
+                }
             });
         });
     </script>

@@ -55,7 +55,7 @@ class RegionGeometryController extends Controller
 
         return back()->with(
             'success',
-            "Import berhasil: {$summary['created']} poligon baru dibuat, {$summary['updated']} diperbarui (total {$summary['total']} feature diproses)."
+            "Sinkronisasi berhasil: {$summary['total']} poligon tersimpan (sebelumnya {$summary['before']} poligon, sekarang diganti seluruhnya dengan data yang kamu submit)."
         );
     }
 }
