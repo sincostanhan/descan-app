@@ -29,6 +29,10 @@ class UpdateStatisticChartRequest extends FormRequest
             'included_rows' => ['nullable', 'array'],
             'included_rows.*' => ['integer'],
             'is_active' => ['nullable'],
+            'category_columns' => ['nullable', 'array'],        // BARU
+            'category_columns.*' => ['string'],                  // BARU
+            'category_chart_types' => ['nullable', 'array'],      // BARU
+            'category_chart_types.*' => ['in:pie,bar'],           // BARU
         ];
     }
 

@@ -7,27 +7,45 @@ use App\Models\StatisticChart;
 class UpdateStatisticChart
 {
     /**
-     * Jika chart_type dikosongkan di form, grafik dihapus sepenuhnya (bukan di-update jadi kosong) —
-     * meniru tombol "-- Kosongkan Jika Ingin Menghapus Grafik --" pada versi lama.
+     * Chart dihapus SEPENUHNYA hanya kalau KEDUA bagian dikosongkan (numerik DAN kategori) —
+     * beda dari sebelumnya yang menghapus chart begitu chart_type numerik dikosongkan,
+     * padahal grafik kategorinya mungkin masih diisi.
      */
     public function handle(StatisticChart $chart, array $attributes): ?StatisticChart
     {
-        if (empty($attributes['chart_type'])) {
+        $attributes['category_columns'] = $this->normalizeCategoryColumns($attributes);
+        unset($attributes['category_chart_types']);
+
+        $hasNumeric = !empty($attributes['chart_type']);
+        $hasCategory = !empty($attributes['category_columns']);
+
+        if (!$hasNumeric && !$hasCategory) {
             $chart->delete();
             return null;
         }
 
-        // $attributes['title'] = $attributes['title'] ?: $chart->statisticTableEntry->template->title;
         $attributes['title'] = $attributes['title'] ?: $chart->statisticTableEntry->template->title;
 
-        // Kosong (misal semua checkbox baris kelewat tercentang lalu di-uncheck semua) = tampilkan semua baris.
-        if (empty($attributes['included_rows'])) {
-            // $attributes['included_rows'] = range(0, count($statisticTableEntry->content) - 1);
-            $attributes['included_rows'] = range(0, count($chart->statisticTableEntry->content) - 1);
-        }
+        // included_rows cuma relevan untuk grafik numerik — lihat catatan sama di CreateStatisticChart.
+        $attributes['included_rows'] = $hasNumeric
+            ? (empty($attributes['included_rows'])
+                ? range(0, count($chart->statisticTableEntry->content) - 1)
+                : array_map('intval', $attributes['included_rows']))
+            : [];
 
         $chart->update($attributes);
 
         return $chart->fresh();
+    }
+
+    private function normalizeCategoryColumns(array $attributes): array
+    {
+        return collect($attributes['category_columns'] ?? [])
+            ->map(fn ($col) => [
+                'column' => $col,
+                'chart_type' => $attributes['category_chart_types'][$col] ?? 'pie',
+            ])
+            ->values()
+            ->all();
     }
 }

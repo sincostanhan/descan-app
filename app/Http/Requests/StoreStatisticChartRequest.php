@@ -23,26 +23,26 @@ class StoreStatisticChartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            // 'title' => ['required', 'string', 'max:255'],
-            'title' => ['nullable', 'string', 'max:255'], // kosong = ikut judul tabel (sesuai desain lama)
-            'chart_type' => ['required', 'string'],
-            'x_axis_column' => ['required', 'string'],
-            'y_axis_columns' => ['required', 'array', 'min:1'],
+            'title' => ['nullable', 'string', 'max:255'], // ganti dari required, konsisten dengan Update
+            'chart_type' => ['nullable', 'string'],        // ganti dari required — boleh kosong (grafik kategori-saja)
+            'x_axis_column' => ['required_with:chart_type', 'nullable', 'string'],   // ganti
+            'y_axis_columns' => ['required_with:chart_type', 'nullable', 'array'],   // ganti (hapus min:1)
             'y_axis_columns.*' => ['string'],
             'y_axis_colors' => ['nullable', 'array'],
             'y_axis_colors.*' => ['nullable', 'string'],
-            // 'has_total_row' => ['nullable'],
             'included_rows' => ['nullable', 'array'],
             'included_rows.*' => ['integer'],
-            'is_active' => ['nullable'], // Checkbox dari form
+            'is_active' => ['nullable'],
+            'category_columns' => ['nullable', 'array'],        // BARU
+            'category_columns.*' => ['string'],                  // BARU
+            'category_chart_types' => ['nullable', 'array'],      // BARU
+            'category_chart_types.*' => ['in:pie,bar'],           // BARU
         ];
     }
 
-    // Ubah nilai checkbox is_active menjadi boolean (true/false) sebelum divalidasi
     protected function prepareForValidation()
     {
         $this->merge([
-            // 'has_total_row' => $this->has('has_total_row'),
             'is_active' => $this->has('is_active'),
         ]);
     }

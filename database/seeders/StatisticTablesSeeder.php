@@ -104,6 +104,87 @@ class StatisticTablesSeeder extends Seeder
                 ],
             ]
         );
+        // Tabel 2.2
+        $this->seedSharedRtRwTemplate(
+            'Tabel 2.2 Topografi Sebagian Besar Wilayah RT',
+            null,
+            [
+                ['label' => 'Topografi Sebagian Besar Wilayah', 'data_type' => 'text'],
+                ['label' => 'Keberadaan Permukiman Penduduk Jika Berisi Puncak/Tebing/Lereng', 'data_type' => 'text'],
+            ],
+            [
+                'Bataraguru' => [
+                    'source' => 'Pokelcan 2026 – Bataraguru',
+                    'rows' => [
+                        ['rt' => 1, 'rw' => 1, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 1, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 1, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 2, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 2, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 2, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 3, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 3, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 3, 'values' => ['Dataran', null]],
+                        ['rt' => 4, 'rw' => 3, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 4, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 4, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 4, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 5, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 5, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 5, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 6, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 6, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 6, 'values' => ['Dataran', null]],
+                        ['rt' => 4, 'rw' => 6, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 7, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 7, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 7, 'values' => ['Dataran', null]],
+                        ['rt' => 4, 'rw' => 7, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 8, 'values' => ['Puncak/Tebing', 'Ada']],
+                        ['rt' => 2, 'rw' => 8, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 8, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 9, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 9, 'values' => ['Lereng', 'Ada']],
+                        ['rt' => 3, 'rw' => 9, 'values' => ['Lereng', 'Ada']],
+                    ],
+                ],
+                'Wale' => [
+                    'source' => 'Pokelcan 2026 – Wale',
+                    'rows' => [
+                        ['rt' => 1, 'rw' => 1, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 1, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 1, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 2, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 2, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 2, 'values' => ['Dataran', null]],
+                    ],
+                ],
+                'Batulo' => [
+                    'source' => 'Pokelcan 2026 – Batulo',
+                    'rows' => [
+                        ['rt' => 1, 'rw' => 1, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 1, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 1, 'values' => ['Dataran', null]],
+                        ['rt' => 4, 'rw' => 1, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 2, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 2, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 2, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 3, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 3, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 3, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 4, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 4, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 4, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 5, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 5, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 5, 'values' => ['Dataran', null]],
+                        ['rt' => 1, 'rw' => 6, 'values' => ['Dataran', null]],
+                        ['rt' => 2, 'rw' => 6, 'values' => ['Dataran', null]],
+                        ['rt' => 3, 'rw' => 6, 'values' => ['Dataran', null]],
+                    ],
+                ],
+            ]
+        );
     }
 
     /**

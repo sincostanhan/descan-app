@@ -67,7 +67,7 @@
 @endphp
 
 <div class="overflow-x-auto rounded-box border-base-200 border">
-    <table class="table table-zebra table-pin-rows w-full">
+    <table class="table table-pin-rows w-full">
         <thead>
             @for ($d = 0; $d < $maxColDepth; $d++)
                 <tr>

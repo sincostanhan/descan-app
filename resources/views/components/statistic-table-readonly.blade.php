@@ -5,6 +5,12 @@
     // Admin Kelurahan — bedanya di sini read-only, tanpa <input>.
     $values = $values ?? [];
 
+    // Opsional: sembunyikan kolom yang 100% kosong untuk kelurahan ini (mis. kolom "Keberadaan
+    // Permukiman..." yang cuma relevan kalau topografinya Puncak/Tebing/Lereng). Default false
+    // supaya pemakaian lain (mis. preview data tabel di halaman Grafik Admin BPS) tidak berubah —
+    // di sana Admin justru perlu lihat semua kolom apa adanya.
+    $hideEmptyColumns = $hideEmptyColumns ?? false;
+
     $treeHeight = function ($nodes) use (&$treeHeight) {
         if ($nodes->isEmpty()) return 0;
         return $nodes->max(fn ($node) => $node->is_leaf ? 1 : 1 + $treeHeight($node->children));
@@ -22,10 +28,10 @@
     $collectColumnLevels($template->columnHeaders, 0);
     for ($d = 0; $d < $maxColDepth; $d++) { $columnLevels[$d] = $columnLevels[$d] ?? []; }
 
-    $columnLeaves = collect();
-    $collectColumnLeaves = function ($nodes) use (&$collectColumnLeaves, &$columnLeaves) {
+    $allColumnLeaves = collect();
+    $collectColumnLeaves = function ($nodes) use (&$collectColumnLeaves, &$allColumnLeaves) {
         foreach ($nodes as $node) {
-            $node->is_leaf ? $columnLeaves->push($node) : $collectColumnLeaves($node->children);
+            $node->is_leaf ? $allColumnLeaves->push($node) : $collectColumnLeaves($node->children);
         }
     };
     $collectColumnLeaves($template->columnHeaders);
@@ -50,8 +56,35 @@
         $cellsByRowCol[$cell->row_header_id][$cell->column_header_id] = $cell;
     }
 
+    // ===== Kolom yang 100% kosong (tidak ada satupun baris RT terisi) — dikumpulkan di sini, =====
+    // dipakai untuk MENYARING $columnLeaves (tbody) DAN menghitung ulang colspan header (thead).
+    $visibleLeafIds = $allColumnLeaves->filter(function ($colLeaf) use ($rowLeaves, $cellsByRowCol, $values) {
+        foreach ($rowLeaves as $rowLeaf) {
+            $cell = $cellsByRowCol[$rowLeaf->id][$colLeaf->id] ?? null;
+            if ($cell && isset($values[$cell->id]) && $values[$cell->id] !== '' && $values[$cell->id] !== null) {
+                return true;
+            }
+        }
+        return false;
+    })->pluck('id')->all();
+
+    $columnLeaves = $hideEmptyColumns
+        ? $allColumnLeaves->whereIn('id', $visibleLeafIds)->values()
+        : $allColumnLeaves;
+
+    // Colspan header parent dihitung ulang dari leaf yang VISIBLE saja (bukan $node->leaf_span
+    // bawaan, yang selalu menghitung SEMUA leaf) — supaya header kolom bertingkat tetap presisi
+    // walau sebagian leaf di bawahnya disembunyikan.
+    $visibleLeafSpan = function ($node) use (&$visibleLeafSpan, $visibleLeafIds) {
+        if ($node->is_leaf) {
+            return in_array($node->id, $visibleLeafIds, true) ? 1 : 0;
+        }
+        return $node->children->sum(fn ($child) => $visibleLeafSpan($child));
+    };
+
     // ===== Total per RW / Total Kelurahan — dihitung on-the-fly, TIDAK PERNAH disimpan. =====
-    // Hanya jalan untuk template mode rt_rw yang togglenya diaktifkan BPS.
+    // Pakai $columnLeaves yang SUDAH disaring, supaya kolom yang disembunyikan otomatis
+    // tidak ikut nongol di baris Total juga.
     $rtRwTotals = null;
     if ($template->isRtRwMode() && ($template->show_rw_subtotal || $template->show_kelurahan_total)) {
         $rtRwTotals = app(\App\Actions\ComputeRtRwSubtotals::class)
@@ -68,7 +101,7 @@
 @endphp
 
 <div class="overflow-x-auto rounded-box border-base-200 border">
-    <table class="table table-zebra table-pin-rows w-full">
+    <table class="table table-pin-rows w-full">
         <thead>
             @for ($d = 0; $d < $maxColDepth; $d++)
                 <tr>
@@ -76,7 +109,9 @@
                         <th rowspan="{{ $maxColDepth }}" colspan="{{ $maxRowDepth }}" class="bg-base-200"></th>
                     @endif
                     @foreach ($columnLevels[$d] as $node)
-                        <th colspan="{{ $node->leaf_span }}"
+                        @php $span = $hideEmptyColumns ? $visibleLeafSpan($node) : $node->leaf_span; @endphp
+                        @continue($hideEmptyColumns && $span === 0)
+                        <th colspan="{{ $span }}"
                             rowspan="{{ $node->is_leaf ? ($maxColDepth - $d) : 1 }}"
                             class="bg-base-200 text-center whitespace-nowrap">
                             {{ $node->label }}

@@ -19,18 +19,20 @@ class StatisticChartController extends Controller
      */
     public function create(StatisticTableEntry $statistic_table_entry)
     {
-        // // KARENA data Excel sudah tersimpan rapi di DB saat tabel dibuat,
-        // // kita cukup memanggil field 'columns' untuk dijadikan pilihan Dropdown!
-        // $headers = $statistical_table->columns;
-        // $headers diambil dari accessor legacy-shape (getColumnsAttribute) di StatisticTableEntry,
-        // sehingga elemen pertamanya tetap label kolom "kunci" (dulu dari Excel), diikuti kolom data.
         $headers = $statistic_table_entry->columns;
 
+        // Peta label kolom -> data_type, dari header asli template (bukan accessor legacy)
+        $columnTypes = $statistic_table_entry->template->headers()
+            ->where('axis', 'column')->where('is_leaf', true)
+            ->pluck('data_type', 'label');
+
         return view('admin.statistic-chart.create', [
-            // 'statisticalTable' => $statistical_table,
             'statisticalTableEntry' => $statistic_table_entry,
-            'headers' => $headers,
-            'chartTypes' => $this->getChartTypes()
+            // Sumbu X & Sumbu Y (numerik): keluarkan kolom bertipe 'text' — itu sekarang
+            // dikelola lewat section "Grafik Kategori" terpisah, bukan di sini lagi.
+            'headers' => collect($headers)->reject(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values()->all(),
+            'textColumns' => collect($headers)->filter(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values(),
+            'chartTypes' => $this->getChartTypes(),
         ]);
     }
 

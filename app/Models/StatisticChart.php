@@ -23,6 +23,7 @@ class StatisticChart extends Model
         // 'has_total_row',
         'included_rows',
         'is_active',
+        'category_columns',
     ];
 
     protected $casts = [
@@ -31,6 +32,7 @@ class StatisticChart extends Model
         // 'has_total_row' => 'boolean',
         'included_rows' => 'array',
         'is_active' => 'boolean',
+        'category_columns' => 'array',
     ];
 
     /**

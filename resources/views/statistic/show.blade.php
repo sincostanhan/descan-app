@@ -48,7 +48,8 @@
                             </table>
                         </div> --}}
                         @php $existingValues = $statistic->values->pluck('value', 'statistic_template_cell_id')->all(); @endphp
-                        <x-statistic-table-readonly :template="$statistic->template" :values="$existingValues" />
+                        {{-- <x-statistic-table-readonly :template="$statistic->template" :values="$existingValues" /> --}}
+                        <x-statistic-table-readonly :template="$statistic->template" :values="$existingValues" :hide-empty-columns="true" />
                         
                         @if($statistic->source)
                             <p class="mt-4 text-base-content text-sm">
@@ -109,7 +110,8 @@
                 // }
                 // Fallback ke "semua baris" untuk grafik lama yang dibuat sebelum fitur ini ada (included_rows masih null).
                 const includedRows = (chartConfig.included_rows && chartConfig.included_rows.length)
-                    ? chartConfig.included_rows
+                    // ? chartConfig.included_rows
+                    ? chartConfig.included_rows.map(Number)
                     : rawTableData.map((_, i) => i);
                 const dataToRender = rawTableData.filter((_, i) => includedRows.includes(i));
 

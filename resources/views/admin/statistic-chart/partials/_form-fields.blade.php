@@ -1,3 +1,10 @@
+@php
+    // Saat create (belum ada grafik), $chart tidak pernah dikirim dari controller — partial ini
+    // dipakai bersama create & edit (lihat include tanpa parameter eksplisit di kedua blade),
+    // jadi harus toleran terhadap kondisi "belum ada chart sama sekali".
+    $chart = $chart ?? null;
+@endphp
+
 <div class="space-y-4">
     <div class="alert alert-info shadow-sm mb-4">
         <x-lucide-info class="w-5 h-5" />

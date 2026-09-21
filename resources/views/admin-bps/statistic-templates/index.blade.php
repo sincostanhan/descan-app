@@ -6,6 +6,12 @@
 
     <div class="max-w-6xl mx-auto px-4 lg:px-0 mb-12">
         <x-flash-message />
+        @error('template')
+            <div class="alert alert-error shadow-sm mb-4">
+                <x-lucide-triangle-alert class="w-5 h-5" />
+                <span>{{ $message }}</span>
+            </div>
+        @enderror
 
         <div class="flex flex-col gap-4 mb-6 pl-0 md:pl-6">
 
