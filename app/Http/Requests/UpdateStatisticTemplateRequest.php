@@ -22,6 +22,8 @@ class UpdateStatisticTemplateRequest extends FormRequest
             // 'row_headers' => ['required', 'json'],
             'row_headers' => ['required_if:row_source,manual', 'nullable', 'json'],
             'column_headers' => ['required', 'json'],
+            'show_rw_subtotal' => ['nullable', 'boolean'],
+            'show_kelurahan_total' => ['nullable', 'boolean'],
         ];
     }
 
@@ -30,6 +32,8 @@ class UpdateStatisticTemplateRequest extends FormRequest
         $this->merge([
             'is_active' => filter_var($this->is_active, FILTER_VALIDATE_BOOLEAN),
             'is_mapped' => filter_var($this->is_mapped, FILTER_VALIDATE_BOOLEAN),
+            'show_rw_subtotal' => filter_var($this->show_rw_subtotal, FILTER_VALIDATE_BOOLEAN),
+            'show_kelurahan_total' => filter_var($this->show_kelurahan_total, FILTER_VALIDATE_BOOLEAN),
         ]);
     }
 

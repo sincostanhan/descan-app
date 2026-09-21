@@ -19,6 +19,8 @@ class StatisticTemplate extends Model
         'is_active',
         'created_by',
         'row_source',
+        'show_rw_subtotal',
+        'show_kelurahan_total',
     ];
 
     public function isRtRwMode(): bool
@@ -31,6 +33,8 @@ class StatisticTemplate extends Model
         return [
             'is_mapped' => 'boolean',
             'is_active' => 'boolean',
+            'show_rw_subtotal' => 'boolean',
+            'show_kelurahan_total' => 'boolean',
         ];
     }
 

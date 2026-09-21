@@ -20,6 +20,8 @@ class CreateStatisticTemplate
                 // Toggle ini hanya boleh dinyalakan lewat Update, setelah struktur tervalidasi ValidateMappableStructure.
                 'is_mapped' => false,
                 'row_source' => $attributes['row_source'],
+                'show_rw_subtotal' => $attributes['show_rw_subtotal'] ?? false,
+                'show_kelurahan_total' => $attributes['show_kelurahan_total'] ?? false,
                 'created_by' => auth()->id(),
             ]);
 

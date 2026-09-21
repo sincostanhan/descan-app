@@ -90,6 +90,7 @@ Route::middleware(['site.published'])->group(function () {
     Route::get('/peta-statistik/rt-rw', [PublicMapDashboardController::class, 'rtRwOptions'])->name('public.map.rt-rw-options');
     Route::get('/peta-statistik/data', [PublicMapDashboardController::class, 'data'])->name('public.map.data');
     Route::get('/peta-statistik/data-semua', [PublicMapDashboardController::class, 'dataAll'])->name('public.map.data-all');
+       Route::get('/peta-statistik/wilayah-geojson', [PublicMapDashboardController::class, 'baseGeometries'])->name('public.map.base-geometries');
 });
 // Route::middleware('guest')->group(function () {
 //     Route::get('/login', [AuthController::class, 'login'])->name('login');

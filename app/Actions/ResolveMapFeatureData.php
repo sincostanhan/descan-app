@@ -39,7 +39,11 @@ class ResolveMapFeatureData
 
         // RegionGeometry pakai trait BelongsToVillage → query ini otomatis ter-scope
         // ke kelurahan aktif (dari subdomain), tidak perlu filter village_id manual.
-        $geometry = RegionGeometry::where('rt', $rt)->where('rw', $rw)->first();
+        // $geometry = RegionGeometry::where('rt', $rt)->where('rw', $rw)->first();
+        // SESUDAH (normalisasi angka dulu):
+        $geometry = RegionGeometry::all()->first(
+            fn ($g) => (int) $g->rt === (int) $rt && (int) $g->rw === (int) $rw
+        );
 
         if (!$geometry) {
             return null;

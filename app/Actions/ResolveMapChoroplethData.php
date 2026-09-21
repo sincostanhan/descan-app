@@ -31,9 +31,13 @@ class ResolveMapChoroplethData
             ->whereNotNull('rw_value')
             ->get(['id', 'rt_value', 'rw_value']);
 
+        // Normalisasi "001" -> "1" supaya format apa pun dari BPS (import GeoJSON) maupun
+        // dari GenerateRtRowsForVillage (zero-padded) tetap match sebagai wilayah yang sama.
+        $normalize = fn (string $rt, string $rw) => ((int) $rt) . '|' . ((int) $rw);
+
         // RegionGeometry & StatisticTableEntry pakai BelongsToVillage → otomatis ter-scope
         // ke kelurahan aktif dari subdomain, tidak perlu filter village_id manual.
-        $geometries = RegionGeometry::all()->keyBy(fn ($g) => "{$g->rt}|{$g->rw}");
+        $geometries = RegionGeometry::all()->keyBy(fn ($g) => $normalize($g->rt, $g->rw));
         $entry = StatisticTableEntry::where('statistic_template_id', $template->id)->first();
 
         $cellsByRowHeader = StatisticTemplateCell::where('statistic_template_id', $template->id)
@@ -53,7 +57,7 @@ class ResolveMapChoroplethData
         $features = [];
 
         foreach ($rowHeaders as $rowHeader) {
-            $geometry = $geometries->get("{$rowHeader->rt_value}|{$rowHeader->rw_value}");
+            $geometry = $geometries->get($normalize($rowHeader->rt_value, $rowHeader->rw_value));
             if (!$geometry) {
                 continue;
             }
@@ -69,8 +73,8 @@ class ResolveMapChoroplethData
                     'kecamatan' => $setting?->kecamatan,
                     'rt' => $rowHeader->rt_value,
                     'rw' => $rowHeader->rw_value,
-                    'rt_label' => 'RT ' . str_pad($rowHeader->rt_value, 3, '0', STR_PAD_LEFT),
-                    'rw_label' => 'RW ' . str_pad($rowHeader->rw_value, 3, '0', STR_PAD_LEFT),
+                    'rt_label' => 'RT ' . str_pad((string) (int) $rowHeader->rt_value, 3, '0', STR_PAD_LEFT),
+                    'rw_label' => 'RW ' . str_pad((string) (int) $rowHeader->rw_value, 3, '0', STR_PAD_LEFT),
                     'column_label' => $columnHeader->label,
                     'value' => $value,
                 ],

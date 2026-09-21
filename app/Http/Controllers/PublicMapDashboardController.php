@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Actions\ResolveMapBaseGeometries;
 use App\Actions\ResolveMapChoroplethData;
 use App\Actions\ResolveMapFeatureData;
 use App\Models\RegionGeometry;
@@ -54,7 +55,17 @@ class PublicMapDashboardController extends Controller
     }
 
     /**
+     * AJAX: SELURUH poligon RT/RW TANPA data statistik — lapisan dasar (warna netral)
+     * yang tampil sejak halaman dibuka, sebelum Tabel/Kolom dipilih.
+     */
+    public function baseGeometries(ResolveMapBaseGeometries $action): JsonResponse
+    {
+        return response()->json($action->handle());
+    }
+
+    /**
      * AJAX: data GeoJSON + properti popup untuk 1 kombinasi template + kolom + RT/RW.
+     * Dipertahankan untuk kompatibilitas, meski frontend sekarang memakai dataAll().
      */
     public function data(Request $request, ResolveMapFeatureData $action): JsonResponse
     {
@@ -85,7 +96,7 @@ class PublicMapDashboardController extends Controller
 
     /**
      * AJAX: SELURUH RT/RW (FeatureCollection) untuk 1 kombinasi template + kolom —
-     * dipakai render choropleth penuh.
+     * dipakai render choropleth (semua poligon tampil sekaligus, warna beda sesuai nilai).
      */
     public function dataAll(Request $request, ResolveMapChoroplethData $action): JsonResponse
     {

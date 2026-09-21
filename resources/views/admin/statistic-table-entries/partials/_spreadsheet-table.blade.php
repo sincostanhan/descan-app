@@ -1,8 +1,6 @@
 @php
     $existingValues = $existingValues ?? [];
 
-    // Tinggi tree (jumlah level) per axis — dihitung dari collection yang SUDAH di-eager-load
-    // (bukan query ulang ke DB), supaya konsisten dengan filter village_id yang diterapkan controller.
     $treeHeight = function ($nodes) use (&$treeHeight) {
         if ($nodes->isEmpty()) return 0;
         return $nodes->max(fn ($node) => $node->is_leaf ? 1 : 1 + $treeHeight($node->children));
@@ -10,7 +8,6 @@
     $maxColDepth = max($treeHeight($template->columnHeaders), 1);
     $maxRowDepth = max($treeHeight($template->rowHeaders), 1);
 
-    // Kelompokkan node kolom per level, untuk <thead> bertingkat
     $columnLevels = [];
     $collectColumnLevels = function ($nodes, $depth) use (&$collectColumnLevels, &$columnLevels) {
         foreach ($nodes as $node) {
@@ -51,6 +48,22 @@
     foreach ($template->cells as $cell) {
         $cellsByRowCol[$cell->row_header_id][$cell->column_header_id] = $cell;
     }
+
+    // ===== Total per RW / Total Kelurahan — dihitung on-the-fly dari $existingValues yang =====
+    // SUDAH TERSIMPAN (baru ter-update setelah submit & reload, TIDAK live saat mengetik).
+    // Cukup untuk kebutuhan "lihat total sambil isi", tanpa kompleksitas JS recalculation.
+    $rtRwTotals = null;
+    if ($template->isRtRwMode() && ($template->show_rw_subtotal || $template->show_kelurahan_total)) {
+        $rtRwTotals = app(\App\Actions\ComputeRtRwSubtotals::class)
+            ->handle($rowLeaves, $columnLeaves, $cellsByRowCol, $existingValues);
+    }
+
+    $formatTotal = function ($value) {
+        if ($value === null) return '-';
+        return floor($value) == $value
+            ? number_format($value, 0, ',', '.')
+            : rtrim(rtrim(number_format($value, 2, ',', '.'), '0'), ',');
+    };
 @endphp
 
 <div class="overflow-x-auto rounded-box border-base-200 border">
@@ -105,11 +118,39 @@
                         </td>
                     @endforeach
                 </tr>
+
+                {{-- Baris "Total RW xxx" — read-only (bukan <input>), cuma muncul tepat setelah
+                     RT TERAKHIR di RW itu, supaya Admin Kelurahan tidak salah kira bisa diedit. --}}
+                @if ($rtRwTotals && $template->show_rw_subtotal)
+                    @php
+                        $nextLeaf = $rowLeaves[$i + 1] ?? null;
+                        $isLastOfRw = !$nextLeaf || $nextLeaf->rw_value !== $leaf->rw_value;
+                        $rwTotal = $rtRwTotals['rw'][$leaf->rw_value] ?? null;
+                    @endphp
+                    @if ($isLastOfRw && $rwTotal)
+                        <tr class="font-semibold bg-base-200/70">
+                            <th colspan="{{ $maxRowDepth }}" class="text-left whitespace-nowrap">{{ $rwTotal['label'] }}</th>
+                            @foreach ($columnLeaves as $colLeaf)
+                                <td class="whitespace-nowrap text-center">{{ $formatTotal($rwTotal['sums'][$colLeaf->id] ?? null) }}</td>
+                            @endforeach
+                        </tr>
+                    @endif
+                @endif
             @empty
                 <tr><td colspan="{{ $maxRowDepth + $columnLeaves->count() }}" class="text-center italic text-base-content/50 py-6">
                     Tabel ini belum memiliki data RT/RW. Pastikan modul Organisasi Anda sudah diisi.
                 </td></tr>
             @endforelse
+
+            {{-- Baris "Total Kelurahan" — read-only, selalu di paling bawah --}}
+            @if ($rtRwTotals && $template->show_kelurahan_total && $rtRwTotals['kelurahan'])
+                <tr class="font-bold bg-base-300/70">
+                    <th colspan="{{ $maxRowDepth }}" class="text-left whitespace-nowrap">{{ $rtRwTotals['kelurahan']['label'] }}</th>
+                    @foreach ($columnLeaves as $colLeaf)
+                        <td class="whitespace-nowrap text-center">{{ $formatTotal($rtRwTotals['kelurahan']['sums'][$colLeaf->id] ?? null) }}</td>
+                    @endforeach
+                </tr>
+            @endif
         </tbody>
     </table>
 </div>

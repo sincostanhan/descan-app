@@ -29,6 +29,8 @@ class UpdateStatisticTemplate
                 'description' => $attributes['description'] ?? null,
                 'is_active' => $attributes['is_active'] ?? $template->is_active,
                 'row_source' => $attributes['row_source'],
+                'show_rw_subtotal' => $attributes['show_rw_subtotal'] ?? false,
+                'show_kelurahan_total' => $attributes['show_kelurahan_total'] ?? false,
             ]);
 
             $keptHeaderIds = [];

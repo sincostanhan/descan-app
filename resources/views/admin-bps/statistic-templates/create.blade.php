@@ -48,6 +48,17 @@
                                 {{ old('row_source', $statistic_template->row_source ?? 'manual') === 'rt_rw' ? 'checked' : '' }}
                                 onchange="toggleRowSourceMode(this.value)">
                             <span class="label-text">Otomatis dari RT/RW — baris "RT 00X RW 00X" digenerate otomatis per Kelurahan</span>
+                            <div id="rt-rw-totals-panel" class="ml-9 mt-2 flex flex-col gap-2 {{ old('row_source', 'manual') !== 'rt_rw' ? 'hidden' : '' }}"> 
+                                <label class="label cursor-pointer justify-start gap-3 w-fit"> 
+                                    <input type="checkbox" name="show_rw_subtotal" value="1" class="checkbox checkbox-sm" {{ old('show_rw_subtotal', false) ? 'checked' : '' }}> 
+                                    <span class="label-text">Tampilkan baris "Total per RW" (dihitung otomatis)</span> 
+                                </label> 
+                                <label class="label cursor-pointer justify-start gap-3 w-fit"> 
+                                    <input type="checkbox" name="show_kelurahan_total" value="1" class="checkbox checkbox-sm" {{ old('show_kelurahan_total', false) ? 'checked' : '' }}> 
+                                    <span class="label-text">Tampilkan baris "Total Kelurahan" (dihitung otomatis)</span> 
+                                </label> 
+                                <p class="text-xs text-base-content/60">Hanya menjumlahkan kolom bertipe Angka — kolom Teks dilewati.</p> 
+                            </div>
                         </label>
                     </div>
                 {{-- </div>

@@ -49,6 +49,22 @@
     foreach ($template->cells as $cell) {
         $cellsByRowCol[$cell->row_header_id][$cell->column_header_id] = $cell;
     }
+
+    // ===== Total per RW / Total Kelurahan — dihitung on-the-fly, TIDAK PERNAH disimpan. =====
+    // Hanya jalan untuk template mode rt_rw yang togglenya diaktifkan BPS.
+    $rtRwTotals = null;
+    if ($template->isRtRwMode() && ($template->show_rw_subtotal || $template->show_kelurahan_total)) {
+        $rtRwTotals = app(\App\Actions\ComputeRtRwSubtotals::class)
+            ->handle($rowLeaves, $columnLeaves, $cellsByRowCol, $values);
+    }
+
+    $formatTotal = function ($value) {
+        if ($value === null) return '-';
+        // Bulat tampil tanpa desimal ("128"), pecahan tampil rapi ("7,35") — bukan "128.00"
+        return floor($value) == $value
+            ? number_format($value, 0, ',', '.')
+            : rtrim(rtrim(number_format($value, 2, ',', '.'), '0'), ',');
+    };
 @endphp
 
 <div class="overflow-x-auto rounded-box border-base-200 border">
@@ -98,6 +114,23 @@
                         </td>
                     @endforeach
                 </tr>
+
+                {{-- Baris "Total RW xxx" — cuma muncul tepat setelah RT TERAKHIR di RW itu --}}
+                @if ($rtRwTotals && $template->show_rw_subtotal)
+                    @php
+                        $nextLeaf = $rowLeaves[$i + 1] ?? null;
+                        $isLastOfRw = !$nextLeaf || $nextLeaf->rw_value !== $leaf->rw_value;
+                        $rwTotal = $rtRwTotals['rw'][$leaf->rw_value] ?? null;
+                    @endphp
+                    @if ($isLastOfRw && $rwTotal)
+                        <tr class="font-semibold bg-base-200/70">
+                            <th colspan="{{ $maxRowDepth }}" class="text-left whitespace-nowrap">{{ $rwTotal['label'] }}</th>
+                            @foreach ($columnLeaves as $colLeaf)
+                                <td class="whitespace-nowrap">{{ $formatTotal($rwTotal['sums'][$colLeaf->id] ?? null) }}</td>
+                            @endforeach
+                        </tr>
+                    @endif
+                @endif
             @empty
                 <tr>
                     <td colspan="{{ $maxRowDepth + $columnLeaves->count() }}" class="text-center italic text-base-content/50 py-6">
@@ -105,6 +138,16 @@
                     </td>
                 </tr>
             @endforelse
+
+            {{-- Baris "Total Kelurahan" — selalu di paling bawah --}}
+            @if ($rtRwTotals && $template->show_kelurahan_total && $rtRwTotals['kelurahan'])
+                <tr class="font-bold bg-base-300/70">
+                    <th colspan="{{ $maxRowDepth }}" class="text-left whitespace-nowrap">{{ $rtRwTotals['kelurahan']['label'] }}</th>
+                    @foreach ($columnLeaves as $colLeaf)
+                        <td class="whitespace-nowrap">{{ $formatTotal($rtRwTotals['kelurahan']['sums'][$colLeaf->id] ?? null) }}</td>
+                    @endforeach
+                </tr>
+            @endif
         </tbody>
     </table>
 </div>
