@@ -11,7 +11,7 @@ use App\Models\Publication;
 use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Pest\Support\Str;
+use Illuminate\Support\Str;
 
 class PublicationController extends Controller
 {

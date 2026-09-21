@@ -11,6 +11,7 @@ use App\Models\Infographic;
 use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class InfographicController extends Controller
 {
