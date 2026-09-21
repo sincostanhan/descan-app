@@ -33,39 +33,62 @@ class StatisticChartController extends Controller
             'headers' => collect($headers)->reject(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values()->all(),
             'textColumns' => collect($headers)->filter(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values(),
             'chartTypes' => $this->getChartTypes(),
+            // Karena $headers[0] selalu row label (bukan kolom asli), count > 1 berarti
+            // ada minimal 1 kolom numerik/both yang beneran.
+            'hasNumericColumns' => count($headers) > 1,
         ]);
     }
 
     /**
      * Store a newly created chart in storage.
      */
+    // public function store(
+    //     StoreStatisticChartRequest $request, 
+    //     // StatisticalTable $statistical_table, 
+    //     StatisticTableEntry $statistic_table_entry, 
+    //     CreateStatisticChart $createAction
+    // ) {
+    //     // Panggil Action Class dan kirim data yang sudah tervalidasi
+    //     // $createAction->handle($statistical_table, $request->validated());
+    //     $createAction->handle($statistic_table_entry, $request->validated());
+
+    //     // // Arahkan kembali ke halaman index tabel statistik (atau halaman detail tabel jika ada)
+    //     // return redirect()->route('statistical-tables.index')
+    //     //                  ->with('success', 'Visualisasi grafik berhasil ditambahkan!');
+    //     // TODO(step Controller Kelurahan): ganti ke route('admin.statistic-table-entries.index')
+    //     // setelah controller pengganti StatisticalTableController dibuat di step berikutnya.
+    //     // return back()->with('success', 'Visualisasi grafik berhasil ditambahkan!');
+    //     redirect()->route('admin.statistic-table-entries.index')
+    //         ->with('success', 'Visualisasi grafik berhasil ditambahkan!');
+    // }
     public function store(
         StoreStatisticChartRequest $request, 
-        // StatisticalTable $statistical_table, 
         StatisticTableEntry $statistic_table_entry, 
         CreateStatisticChart $createAction
     ) {
-        // Panggil Action Class dan kirim data yang sudah tervalidasi
-        // $createAction->handle($statistical_table, $request->validated());
         $createAction->handle($statistic_table_entry, $request->validated());
 
-        // // Arahkan kembali ke halaman index tabel statistik (atau halaman detail tabel jika ada)
-        // return redirect()->route('statistical-tables.index')
-        //                  ->with('success', 'Visualisasi grafik berhasil ditambahkan!');
-        // TODO(step Controller Kelurahan): ganti ke route('admin.statistic-table-entries.index')
-        // setelah controller pengganti StatisticalTableController dibuat di step berikutnya.
-        // return back()->with('success', 'Visualisasi grafik berhasil ditambahkan!');
-        redirect()->route('admin.statistic-table-entries.index')
+        return redirect()->route('admin.statistic-table-entries.index')
             ->with('success', 'Visualisasi grafik berhasil ditambahkan!');
     }
 
     public function edit(StatisticTableEntry $statistic_table_entry, StatisticChart $statistic_chart)
     {
+        $headers = $statistic_table_entry->columns;
+
+        $columnTypes = $statistic_table_entry->template->headers()
+            ->where('axis', 'column')->where('is_leaf', true)
+            ->pluck('data_type', 'label');
+
         return view('admin.statistic-chart.edit', [
             'statisticalTableEntry' => $statistic_table_entry,
             'chart' => $statistic_chart,
-            'headers' => $statistic_table_entry->columns,
+            'headers' => collect($headers)->reject(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values()->all(),
+            'textColumns' => collect($headers)->filter(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values(),
             'chartTypes' => $this->getChartTypes(),
+            // Karena $headers[0] selalu row label (bukan kolom asli), count > 1 berarti
+            // ada minimal 1 kolom numerik/both yang beneran.
+            'hasNumericColumns' => count($headers) > 1,
         ]);
     }
 

@@ -3,18 +3,28 @@
     // dipakai bersama create & edit (lihat include tanpa parameter eksplisit di kedua blade),
     // jadi harus toleran terhadap kondisi "belum ada chart sama sekali".
     $chart = $chart ?? null;
-@endphp
 
+    // $headers[0] selalu row label (mis. "Wilayah (RT/RW)"), bukan kolom asli — jadi count > 1
+    // berarti ada minimal 1 kolom numerik/both yang beneran bisa dipakai Sumbu Y.
+    $hasNumericColumns = $hasNumericColumns ?? (count($headers) > 1);
+@endphp
 <div class="space-y-4">
     <div class="alert alert-info shadow-sm mb-4">
         <x-lucide-info class="w-5 h-5" />
         <span><strong>Opsional</strong><br>Atur visualisasi grafik untuk tabel ini.</span>
     </div>
 
-    <fieldset class="fieldset w-full">
-        <legend class="fieldset-legend text-base">Tipe Grafik</legend>
+    @unless($hasNumericColumns)
+        <div class="alert alert-warning shadow-sm mb-2">
+            <x-lucide-info class="w-5 h-5" />
+            <span>Tabel ini tidak punya kolom numerik — bagian di bawah dinonaktifkan. Gunakan <strong>Grafik Kategori</strong> untuk memvisualisasikan kolom teks di tabel ini.</span>
+        </div>
+    @endunless
+
+    <fieldset class="fieldset w-full" {{ !$hasNumericColumns ? 'disabled' : '' }}>
+        <legend class="fieldset-legend text-base">Tipe Grafik (Numerik)</legend>
         <select name="chart_type" id="chartTypeSelect" class="select w-full">
-            <option value="">-- {{ $chart ? 'Kosongkan Jika Ingin Menghapus Grafik' : 'Pilih Tipe Grafik (Abaikan jika tidak ingin membuat)' }} --</option>
+            <option value="">-- {{ $chart ? 'Kosongkan Jika Ingin Menghapus Grafik Numerik' : 'Pilih Tipe Grafik (Abaikan jika tidak ingin membuat)' }} --</option>
             @foreach($chartTypes as $value => $label)
                 <option value="{{ $value }}" {{ old('chart_type', $chart?->chart_type) == $value ? 'selected' : '' }}>{{ $label }}</option>
             @endforeach
@@ -28,7 +38,7 @@
         <x-forms.error name="title" />
     </fieldset>
 
-    <fieldset class="fieldset w-full">
+    <fieldset class="fieldset w-full" {{ !$hasNumericColumns ? 'disabled' : '' }}>
         <legend class="fieldset-legend text-base">Sumbu X (Kategori Utama)</legend>
         <select name="x_axis_column" id="xAxisSelect" class="select w-full">
             <option value="">-- Pilih Kolom Sumbu X --</option>
@@ -39,7 +49,7 @@
         <x-forms.error name="x_axis_column" />
     </fieldset>
 
-    <fieldset class="fieldset w-full mt-4">
+    <fieldset class="fieldset w-full mt-4" {{ !$hasNumericColumns ? 'disabled' : '' }}>
         <legend class="fieldset-legend text-base">Sumbu Y (Kolom Nilai/Angka) & Warna</legend>
         <div class="grid grid-cols-1 gap-3 border p-4 rounded-lg bg-base-200/30">
             @php
@@ -50,11 +60,6 @@
 
             @foreach($headers as $index => $header)
                 <div class="flex items-center gap-2 p-1 y-axis-wrapper">
-                    {{-- <label class="cursor-pointer label justify-start gap-2 flex-grow">
-                        <input type="checkbox" name="y_axis_columns[]" value="{{ $header }}" class="checkbox checkbox-primary checkbox-sm y-axis-checkbox"
-                            {{ in_array($header, old('y_axis_columns', $savedYColumns)) ? 'checked' : '' }} />
-                        <span class="label-text truncate">{{ $header }}</span>
-                    </label> --}}
                     <label class="cursor-pointer label justify-start gap-2 flex-grow">
                         <input type="checkbox" name="y_axis_columns[]" value="{{ $header }}" class="peer sr-only y-axis-checkbox"
                             {{ in_array($header, old('y_axis_columns', $savedYColumns)) ? 'checked' : '' }} />
@@ -72,15 +77,43 @@
         <x-forms.error name="y_axis_columns" />
     </fieldset>
 
-    {{-- <fieldset class="fieldset w-full mt-2">
-        <label class="cursor-pointer label justify-start gap-3">
-            <input type="checkbox" name="has_total_row" id="hasTotalRowToggle" value="1" class="toggle toggle-warning"
-                {{ old('has_total_row', $chart?->has_total_row) ? 'checked' : '' }} />
-            <span class="label-text font-semibold">Kecualikan Baris Terakhir (Baris Total) dari Grafik</span>
-        </label>
-    </fieldset> --}}
+    {{-- Grafik Kategori — hitung frekuensi kolom teks, independen dari Sumbu Y di atas.
+         SELALU aktif, tidak ikut di-disable, karena ini justru fitur utama tabel tanpa kolom numerik. --}}
     <fieldset class="fieldset w-full mt-4">
+        <legend class="fieldset-legend text-base">Grafik Kategori (Kolom Teks) — Opsional</legend>
+        <p class="text-xs text-base-content/60 mb-2">
+            Pilih kolom teks untuk dibuatkan grafik distribusi (jumlah tiap nilai unik, mis. "Ada": 3, "Tidak ada": 16).
+            Bisa pilih lebih dari satu — tiap kolom jadi 1 grafik terpisah.
+        </p>
+        @if($textColumns->isEmpty())
+            <p class="text-sm text-base-content/40 italic">Tabel ini tidak punya kolom bertipe teks.</p>
+        @else
+            @php $savedCategoryColumns = collect($chart?->category_columns ?? [])->keyBy('column'); @endphp
+            <div class="grid grid-cols-1 gap-3 border p-4 rounded-lg bg-base-200/30">
+                @foreach($textColumns as $col)
+                    @php $saved = $savedCategoryColumns->get($col); @endphp
+                    <div class="flex items-center gap-3 p-1">
+                        <label class="cursor-pointer label justify-start gap-2 flex-grow">
+                            <input type="checkbox" name="category_columns[]" value="{{ $col }}" class="peer sr-only category-column-checkbox"
+                                {{ in_array($col, old('category_columns', $savedCategoryColumns->keys()->all())) ? 'checked' : '' }} />
+                            <x-lucide-square class="w-5 h-5 text-base-content/40 peer-checked:hidden" />
+                            <x-lucide-square-check class="w-5 h-5 text-primary hidden peer-checked:block" />
+                            <span class="label-text truncate">{{ $col }}</span>
+                        </label>
+                        <select name="category_chart_types[{{ $col }}]" class="select select-sm w-28 category-chart-type-select">
+                            <option value="pie" {{ old("category_chart_types.$col", $saved['chart_type'] ?? 'pie') === 'pie' ? 'selected' : '' }}>Pie</option>
+                            <option value="bar" {{ old("category_chart_types.$col", $saved['chart_type'] ?? 'pie') === 'bar' ? 'selected' : '' }}>Bar</option>
+                        </select>
+                    </div>
+                @endforeach
+            </div>
+        @endif
+        <x-forms.error name="category_columns" />
+    </fieldset>
+
+    <fieldset class="fieldset w-full mt-4" {{ !$hasNumericColumns ? 'disabled' : '' }}>
         <legend class="fieldset-legend text-base">Pilih Baris yang Ditampilkan</legend>
+        <p class="text-xs text-base-content/60 mb-2">Hanya berlaku untuk grafik numerik (Sumbu Y) di atas — grafik kategori selalu menghitung semua baris.</p>
         @php
             $rowLabelKey = $headers[0] ?? null;
             $savedIncludedRows = old('included_rows', $chart?->included_rows ?? range(0, count($statisticalTableEntry->content) - 1));
@@ -108,8 +141,6 @@
     </fieldset>
 </div>
 
-{{-- <div id="chartPreviewContainer" class="hidden mt-8 mb-4 border rounded-xl p-4 bg-white shadow-sm w-full">
-    <h3 class="text-center font-bold text-gray-700 mb-4">Live Preview Grafik</h3> --}}
 <div id="chartPreviewContainer" class="hidden mt-8 mb-4 border rounded-xl p-4 bg-base-100 shadow-sm w-full">
     <h3 class="text-center font-bold text-base-content/80 mb-4">Live Preview Grafik</h3>
     <div id="chartsGrid" class="grid grid-cols-1 md:grid-cols-2 gap-8 w-full"></div>

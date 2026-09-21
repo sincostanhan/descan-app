@@ -185,6 +185,91 @@ class StatisticTablesSeeder extends Seeder
                 ],
             ]
         );
+
+        $this->seedSharedRtRwTemplate(
+            'Tabel 2.3 Lokasi Wilayah RT Terhadap Kawasan Hutan',
+            null,
+            [
+                ['label' => 'Lokasi Wilayah Terhadap Kawasan Hutan/Hutan', 'data_type' => 'text'],
+            ],
+            [
+                'Bataraguru' => [
+                    'source' => 'Pokelcan 2026 – Bataraguru',
+                    'rows' => [
+                        ['rt' => 1, 'rw' => 1, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 2, 'rw' => 1, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 3, 'rw' => 1, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 1, 'rw' => 2, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 2, 'rw' => 2, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 3, 'rw' => 2, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 1, 'rw' => 3, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 2, 'rw' => 3, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 3, 'rw' => 3, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 4, 'rw' => 3, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 1, 'rw' => 4, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 2, 'rw' => 4, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 3, 'rw' => 4, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 1, 'rw' => 5, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 2, 'rw' => 5, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 3, 'rw' => 5, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 1, 'rw' => 6, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 2, 'rw' => 6, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 3, 'rw' => 6, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 4, 'rw' => 6, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 1, 'rw' => 7, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 2, 'rw' => 7, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 3, 'rw' => 7, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 4, 'rw' => 7, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 1, 'rw' => 8, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 2, 'rw' => 8, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 3, 'rw' => 8, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 1, 'rw' => 9, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 2, 'rw' => 9, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 3, 'rw' => 9, 'values' => ['Di tepi/sekitar Kawasan hutan']],
+                    ],
+                ],
+                'Wale' => [
+                    'source' => 'Pokelcan 2026 – Wale',
+                    'rows' => [
+                        ['rt' => 1, 'rw' => 1, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 2, 'rw' => 1, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 3, 'rw' => 1, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 1, 'rw' => 2, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 2, 'rw' => 2, 'values' => ['Di luar kawasan hutan']],
+                        ['rt' => 3, 'rw' => 2, 'values' => ['Di luar kawasan hutan']],
+                    ],
+                ],
+                'Batulo' => [
+                    'source' => 'Pokelcan 2026 – Batulo',
+                    'rows' => [
+                        ['rt' => 1, 'rw' => 1, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 2, 'rw' => 1, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 3, 'rw' => 1, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 4, 'rw' => 1, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 1, 'rw' => 2, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 2, 'rw' => 2, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 3, 'rw' => 2, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 1, 'rw' => 3, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 2, 'rw' => 3, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 3, 'rw' => 3, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 1, 'rw' => 4, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 2, 'rw' => 4, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 3, 'rw' => 4, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 1, 'rw' => 5, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 2, 'rw' => 5, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 3, 'rw' => 5, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 1, 'rw' => 6, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 2, 'rw' => 6, 'values' => ['Diluar Kawasan Hutan']],
+                        ['rt' => 3, 'rw' => 6, 'values' => ['Diluar Kawasan Hutan']],
+                    ],
+                ],
+            ]
+        );
+
+        
+
+
+
     }
 
     /**

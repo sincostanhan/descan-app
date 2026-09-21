@@ -1,62 +1,34 @@
-{{-- <x-layout title="{{ $statistic->title }}"> --}}
 <x-layout title="Tabel {{ $statistic->title }}">
-    {{-- <x-hero title="Bab {{ $statistic->chapter }}" subtitle="Publikasi {{ $statistic->publication }}" /> --}}
-    <x-hero title="{{ $statistic->title ?? $statistic->template->title }}" :subtitle="$statistic->template->description" />
+    {{-- <x-hero title="{{ $statistic->title ?? $statistic->template->title }}" :subtitle="$statistic->template->description" /> --}}
 
     <div class="max-w-6xl mx-auto px-4 lg:px-0 mb-12">
-        
+
         <a href="{{ route('public.statistic.index') }}" class="btn btn-ghost mb-2">
             <x-lucide-arrow-left class="w-5 h-5 mr-1" /> Kembali</a>
 
         <div class="card bg-base-100 border shadow-lg border-base-200">
             <div class="card-body p-6 md:p-8">
-                
-                <div class="tabs tabs-border">
-                    <input 
-                        type="radio" 
-                        name="public_tabs" 
-                        class="tab font-semibold" 
-                        aria-label="Tabel Data" 
-                        checked="checked" />
-                    <div class="tab-content border-base-300 
-                    bg-base-50 p-6">
-                        <h2 class="text-xl md:text-2xl font-bold text-secondary mb-4 text-center">{{ $statistic->title }}</h2>
 
-                        {{-- <div class="overflow-x-auto 
-                        rounded border border-base-200 
-                        shadow-sm">
-                            <table class="table table-zebra 
-                            table-sm md:table-md 
-                            w-full">
-                                <thead class="bg-base-200/60 text-base-content
-                                text-sm">
-                                    <tr>
-                                        @foreach($statistic->columns as $col)
-                                            <th class="whitespace-nowrap">{{ $col }}</th>
-                                        @endforeach
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach($statistic->content as $row)
-                                        <tr>
-                                            @foreach($statistic->columns as $col)
-                                                <td class="whitespace-nowrap">{{ $row[$col] ?? '-' }}</td>
-                                            @endforeach
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div> --}}
+                <div class="tabs tabs-border">
+                    <input
+                        type="radio"
+                        name="public_tabs"
+                        class="tab font-semibold"
+                        aria-label="Tabel Data"
+                        checked="checked" />
+                    <div class="tab-content border-base-300 bg-base-50 p-6">
+                        {{-- <h2 class="text-xl md:text-2xl font-bold text-secondary mb-4 text-center">{{ $statistic->title }}</h2> --}}
+                        <h2 class="text-xl md:text-2xl font-bold text-secondary mb-4 text-center">{{ $statistic->title ?? $statistic->template->title }}</h2>
+
                         @php $existingValues = $statistic->values->pluck('value', 'statistic_template_cell_id')->all(); @endphp
-                        {{-- <x-statistic-table-readonly :template="$statistic->template" :values="$existingValues" /> --}}
                         <x-statistic-table-readonly :template="$statistic->template" :values="$existingValues" :hide-empty-columns="true" />
-                        
+
                         @if($statistic->source)
                             <p class="mt-4 text-base-content text-sm">
                                 <strong>Sumber Data:</strong><br>{{ $statistic->source }}
                             </p>
                         @endif
-                        
+
                         @if($statistic->description)
                             <p class="mt-2 text-base-content text-sm leading-relaxed">
                                 <strong>Keterangan:</strong><br>{{ $statistic->description }}
@@ -65,23 +37,20 @@
                     </div>
 
                     @if($statistic->chart && $statistic->chart->is_active)
-                        <input 
-                            type="radio" 
-                            name="public_tabs" 
-                            class="tab font-semibold" 
+                        <input
+                            type="radio"
+                            name="public_tabs"
+                            class="tab font-semibold"
                             aria-label="Visualisasi Grafik" />
-                        <div class="tab-content border-base-300 
-                        bg-base-50 p-6">
-                            
+                        <div class="tab-content border-base-300 bg-base-50 p-6">
+
                             <h2 class="text-xl md:text-2xl font-bold text-secondary mb-4 text-center">
                                 {{ $statistic->chart->title }}
                             </h2>
 
-                            <div id="publicChartsGrid" class="w-full">
-                                </div>
-                            
+                            <div id="publicChartsGrid" class="w-full"></div>
+
                             @if($statistic->source)
-                                {{-- <div class="mt-8 text-center text-sm text-gray-500"> --}}
                                 <div class="mt-8 text-center text-sm text-base-content/60">
                                     Sumber Data: {{ $statistic->source }}
                                 </div>
@@ -103,14 +72,10 @@
                 const rawTableData = @json($statistic->content);
                 const chartsGrid = document.getElementById('publicChartsGrid');
 
-                // Potong data baris terakhir jika fitur "has_total_row" diaktifkan admin
-                // let dataToRender = rawTableData;
-                // if (chartConfig.has_total_row) {
-                //     dataToRender = rawTableData.slice(0, -1);
-                // }
-                // Fallback ke "semua baris" untuk grafik lama yang dibuat sebelum fitur ini ada (included_rows masih null).
+                // Fallback ke "semua baris" untuk grafik lama yang dibuat sebelum fitur ini ada.
+                // .map(Number) WAJIB — included_rows tersimpan sebagai string ("0","1",...) dari
+                // checkbox HTML, includes() di bawah pakai strict comparison jadi harus disamakan tipe.
                 const includedRows = (chartConfig.included_rows && chartConfig.included_rows.length)
-                    // ? chartConfig.included_rows
                     ? chartConfig.included_rows.map(Number)
                     : rawTableData.map((_, i) => i);
                 const dataToRender = rawTableData.filter((_, i) => includedRows.includes(i));
@@ -124,9 +89,8 @@
                 function createCanvasContainer(titleText = null) {
                     const wrapper = document.createElement('div');
                     wrapper.className = 'w-full flex flex-col items-center';
-                    if(titleText) {
+                    if (titleText) {
                         const title = document.createElement('h4');
-                        // title.className = 'text-md font-semibold mb-2 text-center text-gray-600';
                         title.className = 'text-md font-semibold mb-2 text-center text-base-content/70';
                         title.innerText = titleText;
                         wrapper.appendChild(title);
@@ -148,124 +112,168 @@
                     return result ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}` : "0, 0, 0";
                 }
 
-                // RENDERING LOGIC (Sama dengan pratinjau admin, tapi otomatis berjalan)
-                if (type === 'pie' || type === 'doughnut') {
-                    chartsGrid.className = checkedYAxes.length > 1 ? 'grid grid-cols-1 md:grid-cols-2 gap-10 w-full' : 'grid grid-cols-1 gap-10 w-full max-w-lg mx-auto';
-
-                    checkedYAxes.forEach((yCol) => {
-                        const ctx = createCanvasContainer(yCol); 
-                        const baseHexColor = chartConfig.y_axis_colors[yCol] || '#3b82f6';
-                        const rgbColor = hexToRgb(baseHexColor);
-
-                        // Logika Sorting & Gradasi Warna Cerdas
-                        let combinedData = labels.map((label, index) => {
-                            return { label: label, value: parseFloat(dataToRender[index][yCol]) || 0 };
-                        });
-                        combinedData.sort((a, b) => b.value - a.value);
-
-                        const sortedLabels = combinedData.map(item => item.label);
-                        const sortedData = combinedData.map(item => item.value);
-
-                        let pieColors = [];
-                        let currentOpacity = 1.0;
-                        const uniqueValuesCount = new Set(sortedData).size;
-                        const opacityStep = uniqueValuesCount > 1 ? ((1.0 - 0.25) / (uniqueValuesCount - 1)) : 0;
-
-                        for (let i = 0; i < sortedData.length; i++) {
-                            if (i > 0 && sortedData[i] < sortedData[i - 1]) currentOpacity -= opacityStep;
-                            pieColors.push(`rgba(${rgbColor}, ${currentOpacity.toFixed(2)})`);
-                        }
-
-                        new Chart(ctx, {
-                            type: type,
-                            data: {
-                                labels: sortedLabels,
-                                datasets: [{
-                                    label: yCol,
-                                    data: sortedData,
-                                    backgroundColor: pieColors,
-                                    borderColor: `#ffffff`,
-                                    borderWidth: 2
-                                }]
-                            },
-                            options: { responsive: true, maintainAspectRatio: false }
-                        });
+                // BARU: hitung frekuensi tiap nilai unik di 1 kolom teks, dari SEMUA baris
+                // (grafik kategori tidak dipengaruhi included_rows sama sekali).
+                function computeFrequency(column) {
+                    const counts = {};
+                    rawTableData.forEach(row => {
+                        const val = (row[column] ?? '').toString().trim();
+                        if (val === '') return;
+                        counts[val] = (counts[val] || 0) + 1;
                     });
+                    return { labels: Object.keys(counts), data: Object.values(counts) };
+                }
 
-                } else {
-                    chartsGrid.className = 'grid grid-cols-1 w-full';
-                    const ctx = createCanvasContainer();
-                    
-                    // const datasets = checkedYAxes.map((yCol) => {
-                    //     const hexColor = chartConfig.y_axis_colors[yCol] || '#3b82f6';
-                    //     return {
-                    //         label: yCol,
-                    //         data: dataToRender.map(row => parseFloat(row[yCol]) || 0),
-                    //         backgroundColor: hexColor, 
-                    //         borderColor: hexColor,
-                    //         borderWidth: 1
-                    //     };
-                    // });
+                // BARU: render 1 grafik kategori (pie atau bar)
+                function renderCategoryChart(column, catType) {
+                    const { labels: catLabels, data: catData } = computeFrequency(column);
+                    if (catLabels.length === 0) return;
 
-                    let actualType = 'bar';
-                    let indexAxis = 'x';
-                    let isStacked = false;
-                    let isPercent = false;
-                    let isFilled = false;
+                    const palette = ['#3b82f6', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6', '#06b6d4', '#ec4899', '#84cc16'];
+                    const colors = catLabels.map((_, i) => palette[i % palette.length]);
 
-                    switch(type) {
-                        case 'bar_clustered': actualType = 'bar'; indexAxis = 'y'; break;
-                        case 'bar_stacked': actualType = 'bar'; indexAxis = 'y'; isStacked = true; break;
-                        case 'bar_stacked_100': actualType = 'bar'; indexAxis = 'y'; isStacked = true; isPercent = true; break;
-                        case 'column_clustered': actualType = 'bar'; indexAxis = 'x'; break;
-                        case 'column_stacked': actualType = 'bar'; indexAxis = 'x'; isStacked = true; break;
-                        case 'column_stacked_100': actualType = 'bar'; indexAxis = 'x'; isStacked = true; isPercent = true; break;
-                        case 'line_markers': actualType = 'line'; break;
-                        case 'line_stacked': actualType = 'line'; isStacked = true; isFilled = true; break;
-                        case 'line_stacked_100': actualType = 'line'; isStacked = true; isFilled = true; isPercent = true; break;
-                    }
-
-                    const rowTotals = isPercent
-                        ? dataToRender.map(row => checkedYAxes.reduce((sum, col) => sum + (parseFloat(row[col]) || 0), 0))
-                        : null;
-
-                    const datasets = checkedYAxes.map((yCol) => {
-                        const hexColor = chartConfig.y_axis_colors[yCol] || '#3b82f6';
-                        const data = dataToRender.map((row, i) => {
-                            const raw = parseFloat(row[yCol]) || 0;
-                            if (!isPercent) return raw;
-                            const total = rowTotals[i];
-                            return total > 0 ? +(raw / total * 100).toFixed(2) : 0;
-                        });
-                        return {
-                            label: yCol,
-                            data: data,
-                            backgroundColor: hexColor,
-                            borderColor: hexColor,
-                            borderWidth: 1,
-                            fill: isFilled,
-                        };
-                    });
-
+                    const ctx = createCanvasContainer(column);
                     new Chart(ctx, {
-                        type: actualType,
-                        data: { labels: labels, datasets: datasets },
+                        type: catType === 'pie' ? 'pie' : 'bar',
+                        data: {
+                            labels: catLabels,
+                            datasets: [{
+                                label: column,
+                                data: catData,
+                                backgroundColor: colors,
+                                borderColor: catType === 'pie' ? '#ffffff' : colors,
+                                borderWidth: catType === 'pie' ? 2 : 1,
+                            }]
+                        },
                         options: {
                             responsive: true,
                             maintainAspectRatio: false,
-                            indexAxis: indexAxis,
-                            // scales: { x: { stacked: isStacked }, y: { stacked: isStacked } }
-                            scales: {
-                                x: { stacked: isStacked },
-                                y: {
-                                    stacked: isStacked,
-                                    max: isPercent ? 100 : undefined,
-                                    ticks: { callback: v => isPercent ? v + '%' : v },
-                                }
-                            }
+                            plugins: { legend: { display: catType === 'pie' } },
+                            scales: catType === 'pie' ? {} : { y: { beginAtZero: true, ticks: { precision: 0 } } }
                         }
                     });
                 }
+
+                // ===== RENDERING LOGIC (numerik) — Sama dengan pratinjau admin, tapi otomatis berjalan =====
+                // Dibungkus if(type) supaya tidak bikin grafik bar kosong saat chart HANYA berisi
+                // grafik kategori (chart_type numerik memang sengaja dikosongkan).
+                if (type) {
+                    if (type === 'pie' || type === 'doughnut') {
+                        chartsGrid.className = checkedYAxes.length > 1 ? 'grid grid-cols-1 md:grid-cols-2 gap-10 w-full' : 'grid grid-cols-1 gap-10 w-full max-w-lg mx-auto';
+
+                        checkedYAxes.forEach((yCol) => {
+                            const ctx = createCanvasContainer(yCol);
+                            const baseHexColor = chartConfig.y_axis_colors[yCol] || '#3b82f6';
+                            const rgbColor = hexToRgb(baseHexColor);
+
+                            let combinedData = labels.map((label, index) => {
+                                return { label: label, value: parseFloat(dataToRender[index][yCol]) || 0 };
+                            });
+                            combinedData.sort((a, b) => b.value - a.value);
+
+                            const sortedLabels = combinedData.map(item => item.label);
+                            const sortedData = combinedData.map(item => item.value);
+
+                            let pieColors = [];
+                            let currentOpacity = 1.0;
+                            const uniqueValuesCount = new Set(sortedData).size;
+                            const opacityStep = uniqueValuesCount > 1 ? ((1.0 - 0.25) / (uniqueValuesCount - 1)) : 0;
+
+                            for (let i = 0; i < sortedData.length; i++) {
+                                if (i > 0 && sortedData[i] < sortedData[i - 1]) currentOpacity -= opacityStep;
+                                pieColors.push(`rgba(${rgbColor}, ${currentOpacity.toFixed(2)})`);
+                            }
+
+                            new Chart(ctx, {
+                                type: type,
+                                data: {
+                                    labels: sortedLabels,
+                                    datasets: [{
+                                        label: yCol,
+                                        data: sortedData,
+                                        backgroundColor: pieColors,
+                                        borderColor: `#ffffff`,
+                                        borderWidth: 2
+                                    }]
+                                },
+                                options: { responsive: true, maintainAspectRatio: false }
+                            });
+                        });
+
+                    } else {
+                        chartsGrid.className = 'grid grid-cols-1 w-full';
+                        const ctx = createCanvasContainer();
+
+                        let actualType = 'bar';
+                        let indexAxis = 'x';
+                        let isStacked = false;
+                        let isPercent = false;
+                        let isFilled = false;
+
+                        switch (type) {
+                            case 'bar_clustered': actualType = 'bar'; indexAxis = 'y'; break;
+                            case 'bar_stacked': actualType = 'bar'; indexAxis = 'y'; isStacked = true; break;
+                            case 'bar_stacked_100': actualType = 'bar'; indexAxis = 'y'; isStacked = true; isPercent = true; break;
+                            case 'column_clustered': actualType = 'bar'; indexAxis = 'x'; break;
+                            case 'column_stacked': actualType = 'bar'; indexAxis = 'x'; isStacked = true; break;
+                            case 'column_stacked_100': actualType = 'bar'; indexAxis = 'x'; isStacked = true; isPercent = true; break;
+                            case 'line_markers': actualType = 'line'; break;
+                            case 'line_stacked': actualType = 'line'; isStacked = true; isFilled = true; break;
+                            case 'line_stacked_100': actualType = 'line'; isStacked = true; isFilled = true; isPercent = true; break;
+                        }
+
+                        const rowTotals = isPercent
+                            ? dataToRender.map(row => checkedYAxes.reduce((sum, col) => sum + (parseFloat(row[col]) || 0), 0))
+                            : null;
+
+                        const datasets = checkedYAxes.map((yCol) => {
+                            const hexColor = chartConfig.y_axis_colors[yCol] || '#3b82f6';
+                            const data = dataToRender.map((row, i) => {
+                                const raw = parseFloat(row[yCol]) || 0;
+                                if (!isPercent) return raw;
+                                const total = rowTotals[i];
+                                return total > 0 ? +(raw / total * 100).toFixed(2) : 0;
+                            });
+                            return {
+                                label: yCol,
+                                data: data,
+                                backgroundColor: hexColor,
+                                borderColor: hexColor,
+                                borderWidth: 1,
+                                fill: isFilled,
+                            };
+                        });
+
+                        new Chart(ctx, {
+                            type: actualType,
+                            data: { labels: labels, datasets: datasets },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                indexAxis: indexAxis,
+                                scales: {
+                                    x: { stacked: isStacked },
+                                    y: {
+                                        stacked: isStacked,
+                                        max: isPercent ? 100 : undefined,
+                                        ticks: { callback: v => isPercent ? v + '%' : v },
+                                    }
+                                }
+                            }
+                        });
+                    }
+                } else if ((chartConfig.category_columns || []).length > 0) {
+                    // Belum ada grafik numerik yang mengatur className grid, set default di sini.
+                    // chartsGrid.className = 'grid grid-cols-1 md:grid-cols-2 gap-10 w-full';
+                    chartsGrid.className = (chartConfig.category_columns || []).length > 1
+                        ? 'grid grid-cols-1 md:grid-cols-2 gap-10 w-full'
+                        : 'grid grid-cols-1 gap-10 w-full max-w-lg mx-auto';
+                }
+
+                // ===== BARU: RENDERING LOGIC (kategori/teks) — jalan independen dari grafik numerik =====
+                (chartConfig.category_columns || []).forEach((cat) => {
+                    renderCategoryChart(cat.column, cat.chart_type);
+                });
             });
         </script>
     @endif
