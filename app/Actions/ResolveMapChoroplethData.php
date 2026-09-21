@@ -24,11 +24,20 @@ class ResolveMapChoroplethData
      */
     public function handle(StatisticTemplate $template, StatisticTemplateHeader $columnHeader): array
     {
+        $village = app()->bound('current_village_id') ? Village::find(app('current_village_id')) : null;
+
+        // PENTING: sejak template rt_rw dibuat SHARED lintas kelurahan (bukan per-kelurahan lagi),
+        // 1 template bisa punya baris RT/RW dari BEBERAPA kelurahan sekaligus (village_id beda-beda).
+        // Tanpa filter ini, RT/RW dengan angka sama tapi beda kelurahan (mis. RT 001/RW 002 di
+        // Batulo DAN Bataraguru) bisa sama-sama tercocokkan ke poligon kelurahan aktif dan bikin
+        // 2 poligon bertumpuk di lokasi sama — salah satunya (biasanya milik kelurahan lain, yang
+        // datanya kosong untuk entry kelurahan aktif) bisa "menutupi" yang benar.
         $rowHeaders = $template->headers()
             ->where('axis', 'row')
             ->where('is_leaf', true)
             ->whereNotNull('rt_value')
             ->whereNotNull('rw_value')
+            ->when($village, fn ($q) => $q->where('village_id', $village->id))
             ->get(['id', 'rt_value', 'rw_value']);
 
         // Normalisasi "001" -> "1" supaya format apa pun dari BPS (import GeoJSON) maupun
@@ -51,7 +60,6 @@ class ResolveMapChoroplethData
                 ->pluck('value', 'statistic_template_cell_id')
             : collect();
 
-        $village = app()->bound('current_village_id') ? Village::find(app('current_village_id')) : null;
         $setting = Setting::first();
 
         $features = [];
