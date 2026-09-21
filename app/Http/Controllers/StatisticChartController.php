@@ -19,23 +19,20 @@ class StatisticChartController extends Controller
      */
     public function create(StatisticTableEntry $statistic_table_entry)
     {
-        $headers = $statistic_table_entry->columns;
+        $allColumns = $statistic_table_entry->columns; // ganti nama, biar jelas ini yang MENTAH
 
-        // Peta label kolom -> data_type, dari header asli template (bukan accessor legacy)
         $columnTypes = $statistic_table_entry->template->headers()
             ->where('axis', 'column')->where('is_leaf', true)
             ->pluck('data_type', 'label');
 
+        $numericHeaders = collect($allColumns)->reject(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values()->all();
+
         return view('admin.statistic-chart.create', [
             'statisticalTableEntry' => $statistic_table_entry,
-            // Sumbu X & Sumbu Y (numerik): keluarkan kolom bertipe 'text' — itu sekarang
-            // dikelola lewat section "Grafik Kategori" terpisah, bukan di sini lagi.
-            'headers' => collect($headers)->reject(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values()->all(),
-            'textColumns' => collect($headers)->filter(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values(),
+            'headers' => $numericHeaders,
+            'textColumns' => collect($allColumns)->filter(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values(),
             'chartTypes' => $this->getChartTypes(),
-            // Karena $headers[0] selalu row label (bukan kolom asli), count > 1 berarti
-            // ada minimal 1 kolom numerik/both yang beneran.
-            'hasNumericColumns' => count($headers) > 1,
+            'hasNumericColumns' => count($numericHeaders) > 1, // sekarang hitung yang SUDAH difilter
         ]);
     }
 
@@ -74,21 +71,21 @@ class StatisticChartController extends Controller
 
     public function edit(StatisticTableEntry $statistic_table_entry, StatisticChart $statistic_chart)
     {
-        $headers = $statistic_table_entry->columns;
+        $allColumns = $statistic_table_entry->columns;
 
         $columnTypes = $statistic_table_entry->template->headers()
             ->where('axis', 'column')->where('is_leaf', true)
             ->pluck('data_type', 'label');
 
+        $numericHeaders = collect($allColumns)->reject(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values()->all();
+
         return view('admin.statistic-chart.edit', [
             'statisticalTableEntry' => $statistic_table_entry,
             'chart' => $statistic_chart,
-            'headers' => collect($headers)->reject(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values()->all(),
-            'textColumns' => collect($headers)->filter(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values(),
+            'headers' => $numericHeaders,
+            'textColumns' => collect($allColumns)->filter(fn ($h) => ($columnTypes[$h] ?? null) === 'text')->values(),
             'chartTypes' => $this->getChartTypes(),
-            // Karena $headers[0] selalu row label (bukan kolom asli), count > 1 berarti
-            // ada minimal 1 kolom numerik/both yang beneran.
-            'hasNumericColumns' => count($headers) > 1,
+            'hasNumericColumns' => count($numericHeaders) > 1,
         ]);
     }
 
