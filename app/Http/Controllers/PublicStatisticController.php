@@ -2,10 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\StatisticTableExport;
 use App\Models\StatisticalTable;
 use App\Models\StatisticTableEntry;
 use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
+use Maatwebsite\Excel\Excel as ExcelFormat;
 
 class PublicStatisticController extends Controller
 {
@@ -112,5 +116,40 @@ class PublicStatisticController extends Controller
         ]);
 
         return view('statistic.show', compact('statistic'));
+    }
+
+    /**
+     * Download data tabel statistik publik dalam format xlsx, csv, atau json.
+     */
+    public function download(StatisticTableEntry $statistic, string $format)
+    {
+        abort_unless(in_array($format, ['xlsx', 'csv', 'json']), 404);
+
+        // Eager-load minimal yang dibutuhkan accessor columns/content (sama seperti show())
+        $statistic->load(['template.headers', 'values.templateCell.columnHeader']);
+
+        $title = $statistic->title ?: $statistic->template->title;
+        $filename = Str::slug($title) ?: 'tabel-statistik';
+        $columns = $statistic->columns;
+        $rows = $statistic->content;
+
+        if ($format === 'json') {
+            return response()->streamDownload(function () use ($title, $statistic, $columns, $rows) {
+                echo json_encode([
+                    'title' => $title,
+                    'source' => $statistic->source,
+                    'columns' => $columns,
+                    'data' => $rows,
+                ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
+            }, "{$filename}.json", ['Content-Type' => 'application/json']);
+        }
+
+        $exportFormat = $format === 'csv' ? ExcelFormat::CSV : ExcelFormat::XLSX;
+
+        return Excel::download(
+            new StatisticTableExport($columns, $rows, $title),
+            "{$filename}.{$format}",
+            $exportFormat
+        );
     }
 }

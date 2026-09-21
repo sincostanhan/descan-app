@@ -10,6 +10,7 @@ use App\Http\Requests\UpdateInfographicRequest;
 use App\Models\Infographic;
 use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class InfographicController extends Controller
 {
@@ -139,5 +140,18 @@ class InfographicController extends Controller
         $deleteInfographic->handle($infographic);
         
         return redirect()->route('admin.infographic.index');
+    }
+
+    public function download(Infographic $infographic)
+    {
+        abort_unless(
+            $infographic->file_path && Storage::disk('public')->exists($infographic->file_path),
+            404
+        );
+
+        $extension = pathinfo($infographic->file_path, PATHINFO_EXTENSION);
+        $filename = Str::slug($infographic->title) . '.' . $extension;
+
+        return Storage::disk('public')->download($infographic->file_path, $filename);
     }
 }

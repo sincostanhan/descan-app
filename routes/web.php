@@ -12,6 +12,7 @@ use App\Http\Controllers\GalleryController;
 use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\InfographicController;
+use App\Http\Controllers\MetadataStatistikController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PotensiWisataController;
 use App\Http\Controllers\PublicationController;
@@ -90,6 +91,10 @@ Route::middleware(['site.published'])->group(function () {
     Route::get('/infografis', [InfographicController::class, 'indexPublic'])->name('infographic.index');
     Route::get('/statistik', [PublicStatisticController::class, 'index'])->name('public.statistic.index');
     Route::get('/statistik/{statistic}', [PublicStatisticController::class, 'show'])->name('public.statistic.show');
+    Route::get('/statistik/{statistic}/unduh/{format}', [PublicStatisticController::class, 'download'])
+        ->where('format', 'xlsx|csv|json')
+        ->name('public.statistic.download');
+    Route::get('/metadata-statistik', [MetadataStatistikController::class, 'indexPublic'])->name('metadata-statistik.index'); // BARU
 
     // Dashboard Peta Publik: pencarian 3 dropdown (Template → Kolom → RT/RW) → render GeoJSON.
     Route::get('/peta-statistik', [PublicMapDashboardController::class, 'index'])->name('public.map.index');
@@ -98,6 +103,10 @@ Route::middleware(['site.published'])->group(function () {
     Route::get('/peta-statistik/data', [PublicMapDashboardController::class, 'data'])->name('public.map.data');
     Route::get('/peta-statistik/data-semua', [PublicMapDashboardController::class, 'dataAll'])->name('public.map.data-all');
        Route::get('/peta-statistik/wilayah-geojson', [PublicMapDashboardController::class, 'baseGeometries'])->name('public.map.base-geometries');
+
+    Route::get('/publikasi/{publication}/download', [PublicationController::class, 'download'])->name('publication.download');
+    Route::get('/infografis/{infographic}/download', [InfographicController::class, 'download'])->name('infographic.download');
+    Route::get('/metadata-statistik/{metadata_statistik}/download', [MetadataStatistikController::class, 'download'])->name('metadata-statistik.download');
 });
 // Route::middleware('guest')->group(function () {
 //     Route::get('/login', [AuthController::class, 'login'])->name('login');
@@ -170,10 +179,17 @@ Route::middleware(['auth'])->group(function () {
             ->names('publication')
             ->parameters(['publikasi' => 'publication'])
             ->except(['show']);
+        Route::get('/publikasi/{publication}/download', [PublicationController::class, 'download'])->name('publication.download');
         Route::resource('infografis', InfographicController::class)
             ->names('infographic')
             ->parameters(['infografis' => 'infographic'])
             ->except(['show']);
+        Route::get('/infografis/{infographic}/download', [InfographicController::class, 'download'])->name('infographic.download');
+        Route::resource('metadata-statistik', MetadataStatistikController::class)
+            ->names('metadata-statistik')
+            ->parameters(['metadata-statistik' => 'metadata_statistik'])
+            ->except(['show']);
+        Route::get('/metadata-statistik/{metadata_statistik}/download', [MetadataStatistikController::class, 'download'])->name('metadata-statistik.download');
 
         // // 1. custom route (pratinjau)
         // Route::post('/statistik/pratinjau', [StatisticalTableController::class, 'preview'])

@@ -203,6 +203,9 @@
                                                 {{-- Lihat PDF --}}
                                                 <x-lucide-external-link class="w-4 h-4 mr-1"/> Lihat File
                                             </a>
+                                            <a href="{{ route('admin.publication.download', $pub->id) }}" class="btn btn-soft btn-success btn-sm mt-1">
+                                               <x-lucide-download class="w-4 h-4 mr-1"/> Download
+                                            </a>
                                         </td>
                                         <td>{{ $pub->updated_at->format('d M Y') }}</td>
                                         <td class="text-center space-x-1 

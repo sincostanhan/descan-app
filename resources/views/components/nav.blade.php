@@ -38,7 +38,8 @@ sticky top-0 z-50">
                 <li><a href="{{ route('public.statistic.index') }}">Tabel dan Grafik</a></li>
                 <li><a href="{{ route('publication.index') }}">Publikasi</a></li>
                 <li><a href="{{ route('infographic.index') }}">Infografis</a></li>
-                <li><a href="#">Metadata</a></li>
+                {{-- <li><a href="#">Metadata</a></li> --}}
+                <li><a href="{{ route('metadata-statistik.index') }}">Metadata</a></li>
             </ul>
             </li>
             {{-- <li><a href="#">#</a></li> --}}
@@ -81,7 +82,8 @@ sticky top-0 z-50">
                 <li><a href="{{ route('public.statistic.index') }}">Tabel dan Grafik</a></li>
                 <li><a href="{{ route('publication.index') }}">Publikasi</a></li>
                 <li><a href="{{ route('infographic.index') }}">Infografis</a></li>
-                <li><a href="#">Metadata</a></li>
+                {{-- <li><a href="#">Metadata</a></li> --}}
+                <li><a href="{{ route('metadata-statistik.index') }}">Metadata</a></li>
             </ul>
             </details>
         </li>

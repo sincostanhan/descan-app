@@ -1,6 +1,8 @@
 {{-- resources\views\components\document-card.blade.php --}}
 
-@props(['title', 'description', 'date', 'coverUrl' => null, 'fileUrl', 'buttonText' => 'Lihat Dokumen'])
+{{-- @props(['title', 'description', 'date', 'coverUrl' => null, 'fileUrl', 'buttonText' => 'Lihat Dokumen']) --}}
+{{-- @props(['title', 'description' => null, 'date', 'coverUrl' => null, 'fileUrl', 'buttonText' => 'Lihat Dokumen']) --}}
+@props(['title', 'description' => null, 'date', 'coverUrl' => null, 'fileUrl', 'downloadUrl' => null, 'buttonText' => 'Lihat Dokumen'])
 
 <div class="card bg-base-100 
     card-border 
@@ -59,26 +61,38 @@
             card-title text-secondary 
             text-2xl border-b pb-2"
         >{{ $title }}</h2>
-        <p class="
+        {{-- <p class="
             text-base-content/80 text-sm md:text-base leading-relaxed 
             mt-2 mb-4"
-        >{{ $description }}</p>
+        >{{ $description }}</p> --}}
+        @if($description)
+           <p class="text-base-content/80 text-sm md:text-base leading-relaxed mt-2 mb-4">{{ $description }}</p>
+       @endif
                     
         {{-- mt-auto mendorong tombol ini selalu berada di paling bawah kartu --}}
-        <div class="
+        {{-- <div class="
             flex items-center justify-between 
             mt-auto pt-4"
-        >
+        > --}}
+        <div class="flex items-center justify-between mt-auto pt-4 gap-2 flex-wrap">
             <span class="text-xs text-base-content/60 flex items-center">
                 <x-lucide-calendar class="w-4 h-4 mr-1" />
                 Diunggah pada {{ $date }}
             </span>
-            <a 
+            {{-- <a 
                 href="{{ $fileUrl }}" 
                 target="_blank" 
-                {{-- class="btn btn-secondary btn-sm text-white" --}}
+                {{-- class="btn btn-secondary btn-sm text-white" --}
                 class="btn btn-secondary btn-sm"
-            >{{ $buttonText }}</a>
+            >{{ $buttonText }}</a> --}}
+            <div class="flex items-center gap-2">
+               @if($downloadUrl)
+                   <a href="{{ $downloadUrl }}" class="btn btn-outline btn-secondary btn-sm">
+                       <x-lucide-download class="w-4 h-4 mr-1" /> Download
+                   </a>
+               @endif
+               <a href="{{ $fileUrl }}" target="_blank" class="btn btn-secondary btn-sm">{{ $buttonText }}</a>
++           </div>
         </div>
     </div>
 </div>

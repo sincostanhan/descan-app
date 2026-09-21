@@ -95,6 +95,7 @@
                                     </th>
                                     <th>Sumber Data</th>
                                     <th class="text-center">Grafik</th>
+                                    <th class="text-center">Unduh</th>
                                     <th class="text-center w-48 transition-colors">
                                         <button type="button"
                                             class="w-full flex items-center justify-center gap-1 {{ $updatedProps->isDisabled ? 'cursor-not-allowed text-base-content/50' : 'cursor-pointer hover:bg-base-300' }}"
@@ -123,6 +124,9 @@
                                             @else
                                                 <div class="badge badge-outline whitespace-nowrap">Belum Ada</div>
                                             @endif
+                                        </td>
+                                        <td class="text-center">
+                                           <x-statistic-download-menu :statistic="$table" />
                                         </td>
                                         <td class="text-center">
                                             {{ $table->updated_at->translatedFormat('d M Y') }}

@@ -10,6 +10,8 @@ use App\Http\Requests\UpdatePublicationRequest;
 use App\Models\Publication;
 use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Pest\Support\Str;
 
 class PublicationController extends Controller
 {
@@ -136,5 +138,18 @@ class PublicationController extends Controller
     {
         $deletePublication->handle($publication);
         return redirect()->route('admin.publication.index');
+    }
+
+    public function download(Publication $publication)
+    {
+        abort_unless(
+            $publication->file_path && Storage::disk('public')->exists($publication->file_path),
+            404
+        );
+
+        $extension = pathinfo($publication->file_path, PATHINFO_EXTENSION);
+        $filename = Str::slug($publication->title) . '.' . $extension;
+
+        return Storage::disk('public')->download($publication->file_path, $filename);
     }
 }

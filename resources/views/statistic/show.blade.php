@@ -6,6 +6,10 @@
         <a href="{{ route('public.statistic.index') }}" class="btn btn-ghost mb-2">
             <x-lucide-arrow-left class="w-5 h-5 mr-1" /> Kembali</a>
 
+        <div class="flex justify-end mb-2">
+           <x-statistic-download-menu :statistic="$statistic" size="btn-md" />
+        </div>
+
         <div class="card bg-base-100 border shadow-lg border-base-200">
             <div class="card-body p-6 md:p-8">
 

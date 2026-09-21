@@ -55,6 +55,7 @@
                 :date="$info->created_at->translatedFormat('d F Y')"
                 :coverUrl="$coverSrc"
                 :fileUrl="asset('storage/' . $info->file_path)"
+                :downloadUrl="route('infographic.download', $info->id)"
                 buttonText="Lihat Infografis"
             />
         @empty

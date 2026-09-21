@@ -47,6 +47,7 @@
                 :date="$pub->created_at->translatedFormat('d F Y')"
                 :coverUrl="$pub->cover_path ? asset('storage/' . $pub->cover_path) : null"
                 :fileUrl="asset('storage/' . $pub->file_path)"
+                :downloadUrl="route('publication.download', $pub->id)"
                 buttonText="Lihat Publikasi"
             />
         @empty
