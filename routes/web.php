@@ -54,9 +54,16 @@ Route::domain(env('APP_URL_BASE', 'descan.scthan.tech'))->group(function () {
             Route::delete('/users/{user}', [UserController::class, 'destroy'])->name('users.destroy');
 
             // CRUD Template Tabel Statistik
+            Route::delete('statistic-templates/bulk-destroy', [StatisticTemplateController::class, 'bulkDestroy'])
+                ->name('statistic-templates.bulk-destroy');
+            Route::patch('statistic-templates/bulk-set-mapped', [StatisticTemplateController::class, 'bulkSetMapped'])
+                ->name('statistic-templates.bulk-set-mapped');
             Route::resource('statistic-templates', StatisticTemplateController::class)->except(['show']);
             Route::post('statistic-templates/{statistic_template}/logs/{log}/restore', [StatisticTemplateController::class, 'restoreLog'])
-            ->name('statistic-templates.logs.restore');
+                ->name('statistic-templates.logs.restore');
+            // Route::resource('statistic-templates', StatisticTemplateController::class)->except(['show']);
+            // Route::post('statistic-templates/{statistic_template}/logs/{log}/restore', [StatisticTemplateController::class, 'restoreLog'])
+            // ->name('statistic-templates.logs.restore');
 
             // Import massal poligon RT/RW (Dashboard Peta Publik) — lintas Kelurahan sekaligus,
             // dicocokkan otomatis via properties.NAMA_KELURAHAN pada GeoJSON yang ditempel.
