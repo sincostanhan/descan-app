@@ -24,15 +24,15 @@ class DatabaseSeeder extends Seeder
         // ]);
 
         $this->call([
+            RoleAndUserSeeder::class,
             // HomeSeeder::class,
+            VillageSeeder::class,
+            HomeSeeder::class,
             AboutSeeder::class,
             HistorySeeder::class,
-            HomeSeeder::class,
             OrganizationSeeder::class,
-            RoleAndUserSeeder::class,
             SettingSeeder::class,
             StatisticTablesSeeder::class,
-            VillageSeeder::class,
             ]);
     }
 }
