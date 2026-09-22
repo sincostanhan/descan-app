@@ -16,9 +16,12 @@ class VillageSeeder extends Seeder
     public function run(): void
     {
         $villages = [
-            'Bukit Wolio Indah',
-            'Ngkari-ngkari',
-            'Baadia',
+            // 'Bukit Wolio Indah',
+            // 'Ngkari-ngkari',
+            // 'Baadia',
+            'Batulo',
+            'Bataraguru',
+            'Wale',
         ];
 
         foreach ($villages as $name) {
