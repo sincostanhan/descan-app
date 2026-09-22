@@ -2,6 +2,7 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Village;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -20,7 +21,8 @@ class UpdateVillageRequest extends FormRequest
             'name' => ['required', 'string', 'max:255'],
             'subdomain' => [
                 'required', 'string', 'max:255', 'alpha_dash',
-                Rule::unique('villages', 'subdomain')->ignore($this->route('village')),
+                Rule::unique('villages', 'subdomain')->ignore($this->route('village')),   
+                Rule::notIn(Village::RESERVED_SUBDOMAINS),
             ],
         ];
     }
@@ -30,6 +32,7 @@ class UpdateVillageRequest extends FormRequest
         return [
             'subdomain.alpha_dash' => 'Subdomain hanya boleh berisi huruf, angka, strip, dan garis bawah.',
             'subdomain.unique' => 'Subdomain ini sudah dipakai Kelurahan lain.',
+            'subdomain.not_in' => 'Nama subdomain ini dipakai sistem dan tidak boleh digunakan.',
         ];
     }
 }

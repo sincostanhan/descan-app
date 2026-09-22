@@ -38,7 +38,8 @@
                             class="input w-full"
                             autocomplete="off" />
                         <p class="fieldset-label text-base-content/70">
-                            Kosongkan untuk generate otomatis dari Nama Kelurahan. Ini menentukan URL: <code>&#123;subdomain&#125;.descan.scthan.tech</code>
+                            {{-- Kosongkan untuk generate otomatis dari Nama Kelurahan. Ini menentukan URL: <code>&#123;subdomain&#125;.descan.scthan.tech</code> --}}
+                            Kosongkan untuk generate otomatis dari Nama Kelurahan. Ini menentukan URL: <code>descan.scthan.tech/&#123;subdomain&#125;</code>
                         </p>
                         <x-forms.error name="subdomain" />
                     </fieldset>

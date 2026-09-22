@@ -2,7 +2,9 @@
 
 namespace App\Http\Requests;
 
+use App\Models\Village;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreVillageRequest extends FormRequest
 {
@@ -16,7 +18,9 @@ class StoreVillageRequest extends FormRequest
         return [
             'name' => ['required', 'string', 'max:255'],
             // Nullable: kalau kosong, CreateVillage Action generate otomatis dari 'name' (Str::slug).
-            'subdomain' => ['nullable', 'string', 'max:255', 'alpha_dash', 'unique:villages,subdomain'],
+            'subdomain' => ['nullable', 'string', 'max:255', 'alpha_dash', 'unique:villages,subdomain' ,   
+            Rule::notIn(Village::RESERVED_SUBDOMAINS),
+            ],
         ];
     }
 
@@ -25,6 +29,7 @@ class StoreVillageRequest extends FormRequest
         return [
             'subdomain.alpha_dash' => 'Subdomain hanya boleh berisi huruf, angka, strip, dan garis bawah.',
             'subdomain.unique' => 'Subdomain ini sudah dipakai Kelurahan lain.',
+            'subdomain.not_in' => 'Nama subdomain ini dipakai sistem dan tidak boleh digunakan.',
         ];
     }
 }

@@ -75,7 +75,11 @@ Route::domain(env('APP_URL_BASE', 'descan.scthan.tech'))->group(function () {
 });
 
 // Rute untuk spesifik kelurahan (baadia.descan.scthan.tech)
-Route::domain('{subdomain}.' . env('APP_URL_BASE', 'descan.scthan.tech'))->group(function () {
+// Route::domain('{subdomain}.' . env('APP_URL_BASE', 'descan.scthan.tech'))->group(function () {
+
+// Rute untuk spesifik kelurahan — path-based (descan.scthan.tech/baadia)
+// Diubah dari domain-based: Hostinger shared hosting tidak mendukung subdomain level-2.
+Route::domain(env('APP_URL_BASE', 'descan.scthan.tech'))->prefix('{subdomain}')->group(function () {
 
 // Route::get('/', function () {
 //     return view('welcome');

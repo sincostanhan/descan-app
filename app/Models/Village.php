@@ -8,6 +8,12 @@ class Village extends Model
 {
     protected $fillable = ['name', 'subdomain'];
 
+    // Path level-1 yang sudah dipakai rute fixed (login, admin-bps, dsb) + reserved Laravel/hosting,
+    // supaya tidak bentrok dengan skema path-based tenancy: descan.scthan.tech/{subdomain}
+    public const RESERVED_SUBDOMAINS = [
+        'login', 'logout', 'admin-bps', 'admin', 'up',
+        'storage', 'build', 'vendor', 'api', 'assets',
+    ];
     public function users()
     {
         return $this->hasMany(User::class);
