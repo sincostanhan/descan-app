@@ -18,7 +18,7 @@ class VillageSeeder extends Seeder
         $villages = [
             // 'Bukit Wolio Indah',
             // 'Ngkari-ngkari',
-            // 'Baadia',
+            'Baadia',
             'Batulo',
             'Bataraguru',
             'Wale',
