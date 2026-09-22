@@ -8,6 +8,7 @@ use App\Actions\UpdateInfographic;
 use App\Http\Requests\StoreInfographicRequest;
 use App\Http\Requests\UpdateInfographicRequest;
 use App\Models\Infographic;
+use App\Support\FilenameSanitizer;
 use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -151,7 +152,8 @@ class InfographicController extends Controller
         );
 
         $extension = pathinfo($infographic->file_path, PATHINFO_EXTENSION);
-        $filename = Str::slug($infographic->title) . '.' . $extension;
+        // $filename = Str::slug($infographic->title) . '.' . $extension;
+        $filename = FilenameSanitizer::fromTitle($infographic->title) . '.' . $extension;
 
         return Storage::disk('public')->download($infographic->file_path, $filename);
     }

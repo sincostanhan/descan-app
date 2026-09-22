@@ -27,6 +27,7 @@ class DatabaseSeeder extends Seeder
             RoleAndUserSeeder::class,
             // HomeSeeder::class,
             VillageSeeder::class,
+            RegionGeometrySeeder::class,
             HomeSeeder::class,
             AboutSeeder::class,
             HistorySeeder::class,

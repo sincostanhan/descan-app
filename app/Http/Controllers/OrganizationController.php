@@ -12,11 +12,16 @@ class OrganizationController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     // $organization = Organization::first();
+    //     // return view('organization', compact('organization'));
+    //     $organization = Organization::first() ?? new Organization();
+    //     return view('organization', compact('organization'));
+    // }
     public function index()
     {
-        // $organization = Organization::first();
-        // return view('organization', compact('organization'));
-        $organization = Organization::first() ?? new Organization();
+        $organization = Organization::with('positions')->first() ?? new Organization();
         return view('organization', compact('organization'));
     }
 
@@ -51,10 +56,15 @@ class OrganizationController extends Controller
      * supaya Kelurahan yang BELUM PERNAH punya baris Organization sekalipun tetap bisa buka form ini.
      */
     // public function edit(Organization $organization)
+    // public function edit()
+    // {
+    //     $organization = Organization::first() ?? new Organization();
+
+    //     return view('admin.organization.edit', compact('organization'));
+    // }
     public function edit()
     {
-        $organization = Organization::first() ?? new Organization();
-
+        $organization = Organization::with('positions')->first() ?? new Organization();
         return view('admin.organization.edit', compact('organization'));
     }
 

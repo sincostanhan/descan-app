@@ -34,6 +34,36 @@ class StatisticTableExport implements FromArray, WithTitle, WithStyles, WithEven
         return substr($this->sheetTitle, 0, 31); // batas nama sheet Excel
     }
 
+    // public function array(): array
+    // {
+    //     $grid = [];
+
+    //     if ($this->richLayout) {
+    //         // Baris 1: Judul tabel
+    //         $grid[] = [$this->sheetTitle];
+    //         // Baris 2: pemisah kosong
+    //         $grid[] = [];
+    //     }
+
+    //     // Baris header kolom (otomatis jadi baris 3)
+    //     $this->headerRow = count($grid) + 1;
+    //     $grid[] = $this->columns;
+
+    //     // Baris-baris data
+    //     foreach ($this->rows as $row) {
+    //         $grid[] = collect($this->columns)->map(fn ($col) => $row[$col] ?? null)->all();
+    //     }
+    //     $this->lastDataRow = count($grid);
+
+    //     // Baris sumber data (di bawah tabel)
+    //     if ($this->richLayout && !empty($this->source)) {
+    //         $grid[] = []; // pemisah kosong
+    //         $this->sourceRow = count($grid) + 1;
+    //         $grid[] = ["Sumber Data: {$this->source}"];
+    //     }
+
+    //     return $grid;
+    // }
     public function array(): array
     {
         $grid = [];
@@ -41,8 +71,8 @@ class StatisticTableExport implements FromArray, WithTitle, WithStyles, WithEven
         if ($this->richLayout) {
             // Baris 1: Judul tabel
             $grid[] = [$this->sheetTitle];
-            // Baris 2: pemisah kosong
-            $grid[] = [];
+            // Baris 2: pemisah kosong — pakai [''] bukan [], agar baris tetap "tertulis" fisik
+            $grid[] = [''];
         }
 
         // Baris header kolom
@@ -57,7 +87,7 @@ class StatisticTableExport implements FromArray, WithTitle, WithStyles, WithEven
 
         // Baris sumber data (di bawah tabel)
         if ($this->richLayout && !empty($this->source)) {
-            $grid[] = []; // pemisah kosong
+            $grid[] = ['']; // pemisah kosong — sama, pakai [''] bukan []
             $this->sourceRow = count($grid) + 1;
             $grid[] = ["Sumber Data: {$this->source}"];
         }
@@ -129,4 +159,11 @@ class StatisticTableExport implements FromArray, WithTitle, WithStyles, WithEven
             },
         ];
     }
+
+    // public function getCsvSettings(): array
+    // {
+    //     return [
+    //         'use_bom' => true, // paksa Excel baca file CSV ini sebagai UTF-8
+    //     ];
+    // }
 }

@@ -45,8 +45,9 @@
                                 <x-forms.error name="sekretaris_lurah" />
                             </fieldset>
                         </div>
+                        </div>
 
-                        <fieldset class="fieldset w-full">
+                        {{-- <fieldset class="fieldset w-full">
                             <legend class="fieldset-legend">Kasi Pemerintahan</legend>
                             <input 
                                 type="text" 
@@ -135,6 +136,45 @@
                                 class="input w-full">
                             <x-forms.error name="pengelola_surat" />
                         </fieldset>
+                    </div> --}}
+                    {{-- ================= STRUKTUR JABATAN LAINNYA (DINAMIS) ================= --}}
+                    <div class="flex flex-col sm:flex-row justify-center sm:justify-between items-center sm:items-end mb-2 border-b pb-2">
+                        <h2 class="card-title text-secondary text-xl">Struktur Jabatan Lainnya</h2>
+                        <button type="button" onclick="addPositionRow()" class="btn btn-secondary btn-sm mt-2 sm:mt-0">+ Tambah Jabatan</button>
+                    </div>
+                    <p class="text-sm text-base-content/60 mb-4">
+                        Isi "Level" untuk mengelompokkan jabatan sesuai struktur kelurahan Anda sendiri (bebas jumlahnya).
+                    </p>
+
+                    @php $positions = old('positions', $organization->positions?->toArray() ?? []); @endphp
+
+                    <div id="position-container" class="mb-8 space-y-3">
+                        @forelse($positions as $index => $position)
+                            <div class="bg-base-200/60 rounded-box flex flex-col md:flex-row gap-4 p-4 items-start position-row">
+                                <fieldset class="fieldset w-full md:w-24">
+                                    <legend class="fieldset-legend">Level</legend>
+                                    <input type="number" name="positions[{{ $index }}][level]" min="1" value="{{ $position['level'] ?? '' }}" class="input w-full">
+                                    <x-forms.error name="positions.{{ $index }}.level" />
+                                </fieldset>
+                                <fieldset class="fieldset w-full md:flex-1">
+                                    <legend class="fieldset-legend">Nama Jabatan</legend>
+                                    <input type="text" name="positions[{{ $index }}][label]" placeholder="Contoh: Kasi Pemerintahan" value="{{ $position['label'] ?? '' }}" class="input w-full">
+                                    <x-forms.error name="positions.{{ $index }}.label" />
+                                </fieldset>
+                                <fieldset class="fieldset w-full md:flex-1">
+                                    <legend class="fieldset-legend">Nama Pejabat</legend>
+                                    <input type="text" name="positions[{{ $index }}][name]" placeholder="Masukkan nama ..." value="{{ $position['name'] ?? '' }}" class="input w-full">
+                                    <x-forms.error name="positions.{{ $index }}.name" />
+                                </fieldset>
+                                <button type="button" onclick="this.closest('.position-row').remove()" class="btn btn-square btn-ghost text-error mt-6">
+                                    <x-lucide-trash-2 class="w-5 h-5" />
+                                </button>
+                            </div>
+                        @empty
+                            <div class="text-center p-4 border-2 border-dashed rounded-box opacity-60">
+                                Belum ada jabatan. Klik "+ Tambah Jabatan" untuk mulai menyusun struktur.
+                            </div>
+                        @endforelse
                     </div>
 
                     {{-- ================= DAFTAR RW ================= --}}
@@ -521,6 +561,42 @@
             } else {
                 doGenerate();
             }
+        }
+
+                function getNextPositionIndex() {
+            const inputs = document.querySelectorAll('#position-container input[name^="positions["]');
+            let max = -1;
+            inputs.forEach(input => {
+                const match = input.name.match(/positions\[(\d+)\]/);
+                if (match) max = Math.max(max, parseInt(match[1]));
+            });
+            return max + 1;
+        }
+
+        function addPositionRow() {
+            const container = document.getElementById('position-container');
+            if (!container.querySelector('.position-row')) container.innerHTML = '';
+
+            const i = getNextPositionIndex();
+            const row = document.createElement('div');
+            row.className = 'bg-base-200/60 rounded-box flex flex-col md:flex-row gap-4 p-4 items-start position-row';
+            row.innerHTML = `
+                <fieldset class="fieldset w-full md:w-24">
+                    <legend class="fieldset-legend">Level</legend>
+                    <input type="number" name="positions[${i}][level]" min="1" class="input w-full">
+                </fieldset>
+                <fieldset class="fieldset w-full md:flex-1">
+                    <legend class="fieldset-legend">Nama Jabatan</legend>
+                    <input type="text" name="positions[${i}][label]" placeholder="Contoh: Kasi Pemerintahan" class="input w-full">
+                </fieldset>
+                <fieldset class="fieldset w-full md:flex-1">
+                    <legend class="fieldset-legend">Nama Pejabat</legend>
+                    <input type="text" name="positions[${i}][name]" placeholder="Masukkan nama ..." class="input w-full">
+                </fieldset>
+                <button type="button" onclick="this.closest('.position-row').remove()" class="btn btn-square btn-ghost text-error mt-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14Z"/></svg>
+                </button>`;
+            container.appendChild(row);
         }
     </script>
     @endpush

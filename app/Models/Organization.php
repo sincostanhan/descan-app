@@ -15,5 +15,6 @@ class Organization extends Model
     protected $casts = [
         'daftar_rw' => 'array',
         'daftar_rt' => 'array',
+        'staf_tambahan' => 'array',
     ];
 }

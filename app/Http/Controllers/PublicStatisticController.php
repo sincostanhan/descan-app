@@ -128,8 +128,17 @@ class PublicStatisticController extends Controller
         // Eager-load minimal yang dibutuhkan accessor columns/content (sama seperti show())
         $statistic->load(['template.headers', 'values.templateCell.columnHeader']);
 
+        // $title = $statistic->title ?: $statistic->template->title;
+        // $filename = Str::slug($title) ?: 'tabel-statistik';
         $title = $statistic->title ?: $statistic->template->title;
-        $filename = Str::slug($title) ?: 'tabel-statistik';
+        // Pertahankan judul asli (spasi, kapitalisasi, titik) untuk nama file yang dibaca manusia.
+        // Hanya buang karakter yang memang ilegal di nama file Windows/Unix: \ / : * ? " < > |
+        $filename = Str::of($title)
+            ->replaceMatches('/[\\\\\/:*?"<>|]/', '')
+            ->trim()
+            ->trim('.') // hindari nama file diakhiri titik (bermasalah khusus di Windows)
+            ->value();
+        $filename = $filename !== '' ? $filename : 'tabel-statistik';
         $columns = $statistic->columns;
         $rows = $statistic->content;
 
@@ -146,8 +155,13 @@ class PublicStatisticController extends Controller
 
         $exportFormat = $format === 'csv' ? ExcelFormat::CSV : ExcelFormat::XLSX;
 
+        // return Excel::download(
+        //     new StatisticTableExport($columns, $rows, $title),
+        //     "{$filename}.{$format}",
+        //     $exportFormat
+        // );
         return Excel::download(
-            new StatisticTableExport($columns, $rows, $title),
+            new StatisticTableExport($columns, $rows, $title, $statistic->source),
             "{$filename}.{$format}",
             $exportFormat
         );

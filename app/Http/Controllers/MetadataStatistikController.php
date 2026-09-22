@@ -8,6 +8,7 @@ use App\Actions\UpdateMetadataStatistik;
 use App\Http\Requests\StoreMetadataStatistikRequest;
 use App\Http\Requests\UpdateMetadataStatistikRequest;
 use App\Models\MetadataStatistik;
+use App\Support\FilenameSanitizer;
 use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -107,7 +108,8 @@ class MetadataStatistikController extends Controller
         );
 
         $extension = pathinfo($metadata_statistik->file_path, PATHINFO_EXTENSION);
-        $filename = Str::slug($metadata_statistik->title) . '.' . $extension;
+        // $filename = Str::slug($metadata_statistik->title) . '.' . $extension;
+        $filename = FilenameSanitizer::fromTitle($metadata_statistik->title) . '.' . $extension;
 
         return Storage::disk('public')->download($metadata_statistik->file_path, $filename);
     }

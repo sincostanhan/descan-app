@@ -36,7 +36,7 @@
                         </div>
                     </div>
 
-                    <div class="p-4 bg-base-200 rounded-lg">
+                    {{-- <div class="p-4 bg-base-200 rounded-lg">
                         <h4 class="text-base-content/70 
                         text-sm font-medium">Kasi Pemerintahan</h4>
                         <p class="text-base font-bold">{{ $organization->kasi_pemerintahan ?: '-' }}</p>
@@ -80,7 +80,23 @@
                         <h4 class="text-base-content/70 
                         text-sm font-medium">Pengelola Surat</h4>
                         <p class="text-base font-bold">{{ $organization->pengelola_surat ?: '-' }}</p>
-                    </div>
+                    </div> --}}
+                    {{-- @foreach($organization->positions as $position)
+                        <div class="p-4 bg-base-200 rounded-lg">
+                            <h4 class="text-base-content/70 text-sm font-medium">{{ $position->label }}</h4>
+                            <p class="text-base font-bold">{{ $position->name ?: '-' }}</p>
+                        </div>
+                    @endforeach --}}
+                    @forelse($organization->positions ?? [] as $position)
+                        <div class="p-4 bg-base-200 rounded-lg">
+                            <h4 class="text-base-content/70 text-sm font-medium">{{ $position->label }}</h4>
+                            <p class="text-base font-bold">{{ $position->name ?: '-' }}</p>
+                        </div>
+                    @empty
+                        <div class="col-span-full text-center text-base-content/60 italic py-2">
+                            Struktur jabatan lainnya belum diisi.
+                        </div>
+                    @endforelse
                 </div>
             {{-- </div> --}}
         {{-- </div> --}}

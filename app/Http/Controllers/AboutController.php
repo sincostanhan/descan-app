@@ -12,18 +12,29 @@ class AboutController extends Controller
     /**
      * Display a listing of the resource.
      */
+    // public function index()
+    // {
+    //     $about = About::first();
+
+    //     // Pastikan $about tidak null sebelum di-explode untuk menghindari error
+    //     $misiRaw = $about->misi ?? ''; 
+    //     // Pecah jadi array, lalu hapus angka/titik di awal baris menggunakan Regex
+    //     $daftarMisi = array_map(function($item) {
+    //         return preg_replace('/^\d+[\.\s]*/', '', trim($item));
+    //     }, array_filter(explode("\n", $misiRaw)));
+    //     // $daftarMisi = array_filter(explode("\n", $misiRaw));
+        
+    //     return view('about', compact('about', 'daftarMisi'));
+    // }
     public function index()
     {
-        $about = About::first();
+        $about = About::first() ?? new About();
 
-        // Pastikan $about tidak null sebelum di-explode untuk menghindari error
-        $misiRaw = $about->misi ?? ''; 
-        // Pecah jadi array, lalu hapus angka/titik di awal baris menggunakan Regex
+        $misiRaw = $about->misi ?? '';
         $daftarMisi = array_map(function($item) {
             return preg_replace('/^\d+[\.\s]*/', '', trim($item));
         }, array_filter(explode("\n", $misiRaw)));
-        // $daftarMisi = array_filter(explode("\n", $misiRaw));
-        
+
         return view('about', compact('about', 'daftarMisi'));
     }
 

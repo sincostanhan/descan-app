@@ -8,6 +8,7 @@ use App\Actions\UpdatePublication;
 use App\Http\Requests\StorePublicationRequest;
 use App\Http\Requests\UpdatePublicationRequest;
 use App\Models\Publication;
+use App\Support\FilenameSanitizer;
 use App\Traits\HasPaginationLimit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -140,6 +141,18 @@ class PublicationController extends Controller
         return redirect()->route('admin.publication.index');
     }
 
+    // public function download(Publication $publication)
+    // {
+    //     abort_unless(
+    //         $publication->file_path && Storage::disk('public')->exists($publication->file_path),
+    //         404
+    //     );
+
+    //     $extension = pathinfo($publication->file_path, PATHINFO_EXTENSION);
+    //     $filename = Str::slug($publication->title) . '.' . $extension;
+
+    //     return Storage::disk('public')->download($publication->file_path, $filename);
+    // }
     public function download(Publication $publication)
     {
         abort_unless(
@@ -148,7 +161,7 @@ class PublicationController extends Controller
         );
 
         $extension = pathinfo($publication->file_path, PATHINFO_EXTENSION);
-        $filename = Str::slug($publication->title) . '.' . $extension;
+        $filename = FilenameSanitizer::fromTitle($publication->title) . '.' . $extension;
 
         return Storage::disk('public')->download($publication->file_path, $filename);
     }

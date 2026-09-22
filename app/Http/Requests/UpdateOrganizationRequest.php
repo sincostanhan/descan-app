@@ -20,27 +20,47 @@ class UpdateOrganizationRequest extends FormRequest
      *
      * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array<mixed>|string>
      */
+    // public function rules(): array
+    // {
+    //     return [
+    //         'lurah' => ['required', 'string', 'max:255'],
+    //         'sekretaris_lurah' => ['nullable', 'string', 'max:255'],
+    //         'kasi_pemerintahan' => ['nullable', 'string', 'max:255'],
+    //         'kasi_ekonomi' => ['nullable', 'string', 'max:255'],
+    //         'kasi_ketentraman' => ['nullable', 'string', 'max:255'],
+    //         'analis_pembangunan' => ['nullable', 'string', 'max:255'],
+    //         'pranata_barang' => ['nullable', 'string', 'max:255'],
+    //         'pengelola_keamanan' => ['nullable', 'string', 'max:255'],
+    //         'pengadministrasian_umum' => ['nullable', 'string', 'max:255'],
+    //         'pengadministrasian_pemerintahan' => ['nullable', 'string', 'max:255'],
+    //         'pengelola_surat' => ['nullable', 'string', 'max:255'],
+    //         // Validasi bahwa ini adalah array (jika diisi)
+    //         'daftar_rw' => ['nullable', 'array'],
+    //         'daftar_rt' => ['nullable', 'array'],
+    //         // Validasi isi di dalam array RW
+    //         'daftar_rw.*.rw'   => ['required_with:daftar_rw', 'string', 'max:10'],
+    //         'daftar_rw.*.nama' => ['required_with:daftar_rw', 'string', 'max:255'],
+    //         // Validasi isi di dalam array RT
+    //         'daftar_rt.*.rt'   => ['required_with:daftar_rt', 'string', 'max:10'],
+    //         'daftar_rt.*.rw'   => ['required_with:daftar_rt', 'string', 'max:10'],
+    //         'daftar_rt.*.nama' => ['required_with:daftar_rt', 'string', 'max:255'],
+    //     ];
+    // }
     public function rules(): array
     {
         return [
             'lurah' => ['required', 'string', 'max:255'],
             'sekretaris_lurah' => ['nullable', 'string', 'max:255'],
-            'kasi_pemerintahan' => ['nullable', 'string', 'max:255'],
-            'kasi_ekonomi' => ['nullable', 'string', 'max:255'],
-            'kasi_ketentraman' => ['nullable', 'string', 'max:255'],
-            'analis_pembangunan' => ['nullable', 'string', 'max:255'],
-            'pranata_barang' => ['nullable', 'string', 'max:255'],
-            'pengelola_keamanan' => ['nullable', 'string', 'max:255'],
-            'pengadministrasian_umum' => ['nullable', 'string', 'max:255'],
-            'pengadministrasian_pemerintahan' => ['nullable', 'string', 'max:255'],
-            'pengelola_surat' => ['nullable', 'string', 'max:255'],
-            // Validasi bahwa ini adalah array (jika diisi)
+
+            'positions' => ['nullable', 'array'],
+            'positions.*.level' => ['required_with:positions', 'integer', 'min:1', 'max:20'],
+            'positions.*.label' => ['required_with:positions', 'string', 'max:255'],
+            'positions.*.name'  => ['nullable', 'string', 'max:255'],
+
             'daftar_rw' => ['nullable', 'array'],
             'daftar_rt' => ['nullable', 'array'],
-            // Validasi isi di dalam array RW
             'daftar_rw.*.rw'   => ['required_with:daftar_rw', 'string', 'max:10'],
             'daftar_rw.*.nama' => ['required_with:daftar_rw', 'string', 'max:255'],
-            // Validasi isi di dalam array RT
             'daftar_rt.*.rt'   => ['required_with:daftar_rt', 'string', 'max:10'],
             'daftar_rt.*.rw'   => ['required_with:daftar_rt', 'string', 'max:10'],
             'daftar_rt.*.nama' => ['required_with:daftar_rt', 'string', 'max:255'],
@@ -55,15 +75,18 @@ class UpdateOrganizationRequest extends FormRequest
         return [
             'lurah'                           => 'Lurah',
             'sekretaris_lurah'                => 'Sekretaris Lurah',
-            'kasi_pemerintahan'               => 'Kasi Pemerintahan',
-            'kasi_ekonomi'                    => 'Kasi Ekonomi',
-            'kasi_ketentraman'                => 'Kasi Ketentraman',
-            'analis_pembangunan'              => 'Analis Pembangunan',
-            'pranata_barang'                  => 'Pranata Barang',
-            'pengelola_keamanan'              => 'Pengelola Keamanan',
-            'pengadministrasian_umum'         => 'Pengadministrasian Umum',
-            'pengadministrasian_pemerintahan' => 'Pengadministrasian Pemerintahan',
-            'pengelola_surat'                 => 'Pengelola Surat',
+            // 'kasi_pemerintahan'               => 'Kasi Pemerintahan',
+            // 'kasi_ekonomi'                    => 'Kasi Ekonomi',
+            // 'kasi_ketentraman'                => 'Kasi Ketentraman',
+            // 'analis_pembangunan'              => 'Analis Pembangunan',
+            // 'pranata_barang'                  => 'Pranata Barang',
+            // 'pengelola_keamanan'              => 'Pengelola Keamanan',
+            // 'pengadministrasian_umum'         => 'Pengadministrasian Umum',
+            // 'pengadministrasian_pemerintahan' => 'Pengadministrasian Pemerintahan',
+            // 'pengelola_surat'                 => 'Pengelola Surat',
+            'positions.*.level' => 'Level', 
+            'positions.*.label' => 'Nama Jabatan', 
+            'positions.*.name' => 'Nama Pejabat'.
             
             // Terjemahan array RT/RW
             'daftar_rw'        => 'Daftar RW',
