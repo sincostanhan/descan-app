@@ -93,7 +93,7 @@
                @endif
                <a href="{{ $fileUrl }}" target="_blank" class="btn btn-secondary btn-sm">{{ $buttonText }}</a>
                </div>
-+           </div>
+           </div>
         </div>
     </div>
 </div>
