@@ -42,7 +42,7 @@ sticky top-0 z-50">
                 <li><a href="{{ route('metadata-statistik.index') }}">Metadata</a></li>
             </ul>
             </li>
-            {{-- <li><a href="#">#</a></li> --}}
+            <li><a href="{{ route('public.map.index') }}">Peta Statistik</a></li>
         </ul>
         </div>
         {{-- <a class="btn btn-ghost text-xl">Kelurahan Baadia</a> --}}
@@ -87,7 +87,7 @@ sticky top-0 z-50">
             </ul>
             </details>
         </li>
-        {{-- <li><a href="#">#</a></li> --}}
+        <li><a href="{{ route('public.map.index') }}">Peta Statistik</a></li>
         </ul>
     </div>
     <div class="navbar-end">
