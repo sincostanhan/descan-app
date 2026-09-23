@@ -15,6 +15,11 @@ class Organization extends Model
     protected $casts = [
         'daftar_rw' => 'array',
         'daftar_rt' => 'array',
-        'staf_tambahan' => 'array',
+        // 'staf_tambahan' => 'array',
     ];
+
+    public function positions()
+    {
+        return $this->hasMany(OrganizationPosition::class)->orderBy('level')->orderBy('order');
+    }
 }

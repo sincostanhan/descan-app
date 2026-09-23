@@ -4,17 +4,24 @@ namespace Database\Seeders;
 
 use App\Models\Organization;
 use App\Models\Village;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class OrganizationSeeder extends Seeder
 {
     /**
      * Run the database seeds.
+     *
+     * Skema per 2026-09-22: kolom kasi_pemerintahan/analis_pembangunan/dst SUDAH di-drop
+     * dari tabel `organizations` (lihat drop_jabatan_columns_from_organizations_table).
+     * Hanya `lurah` & `sekretaris_lurah` yang tetap kolom fix (selalu ada di semua Kelurahan).
+     * Semua jabatan lain (Kasi, Bendahara, PPPK, dst) disimpan via relasi
+     * Organization::positions() ke tabel `organization_positions`. Semua disamakan di
+     * level=3 (Lurah=1, Sekretaris=2 tetap kolom fix di atas) — "jabatan lainnya" cuma
+     * 1 tingkat, tidak dipecah lagi jadi beberapa level. `order` yang menentukan urutan tampil.
      */
     public function run(): void
     {
-        foreach ($this->data() as $villageName => $attributes) {
+        foreach ($this->data() as $villageName => $entry) {
             $village = Village::where('name', $villageName)->first();
 
             if (!$village) {
@@ -22,31 +29,29 @@ class OrganizationSeeder extends Seeder
                 continue;
             }
 
-            Organization::create([
+            $positions = $entry['positions'] ?? [];
+            unset($entry['positions']);
+
+            $organization = Organization::create([
                 'village_id' => $village->id,
-                ...$attributes,
+                ...$entry,
             ]);
+
+            foreach ($positions as $order => $position) {
+                $organization->positions()->create([
+                    'level' => $position['level'],
+                    'label' => $position['label'],
+                    'name'  => $position['name'] ?? null,
+                    'order' => $order,
+                ]);
+            }
         }
     }
 
     /**
      * Data struktur organisasi per Kelurahan.
-     *
-     * Kolom staf TETAP (lurah, sekretaris_lurah, kasi_pemerintahan, kasi_ekonomi,
-     * kasi_ketentraman, analis_pembangunan, pranata_barang, pengelola_keamanan,
-     * pengadministrasian_umum, pengadministrasian_pemerintahan, pengelola_surat) awalnya
-     * dibentuk mengikuti struktur staf Kelurahan Baadia, jadi kelurahan lain wajar kalau
-     * banyak yang null di kolom-kolom itu (memang tidak punya jabatan tsb).
-     *
-     * Jabatan yang TIDAK mengikuti struktur tetap Baadia (Bendahara Barang, Bendahara
-     * Pembantu Pengeluaran, Pengurus Barang, Analis Pengawasan Masyarakat, PPPK Paruh Waktu,
-     * dst) masuk ke `staf_tambahan` (kolom JSON, lihat migration
-     * 2026_09_10_000000_add_staf_tambahan_to_organizations_table) — SENGAJA tidak dipetakan
-     * ke kolom staf tetap yang labelnya beda arti (mis. "Bendahara Barang" ke pranata_barang),
-     * karena itu akan salah tampil di form admin/organization/edit.blade.php.
-     *
-     * rt/rw disimpan sebagai angka polos ("1", bukan "001") — konsisten dengan format yang sudah
-     * dipakai region_geometries & Organization::daftar_rt yang ada.
+     * rt/rw disimpan sebagai angka polos ("1", bukan "001") — konsisten dengan format yang
+     * sudah dipakai region_geometries & Organization::daftar_rt yang ada.
      */
     private function data(): array
     {
@@ -54,16 +59,18 @@ class OrganizationSeeder extends Seeder
             'Baadia' => [
                 'lurah' => 'La Ode Muhamad Baharudin, S.Pd.',
                 'sekretaris_lurah' => 'Murifa, S.IP.',
-                'kasi_pemerintahan' => 'La Ode Husni, S.Sos.',
-                'kasi_ekonomi' => 'Nasrun, S.H.',
-                'kasi_ketentraman' => 'La Saidu',
 
-                'analis_pembangunan' => 'Rusyati',
-                'pranata_barang' => 'Samida',
-                'pengelola_keamanan' => 'Idris Ardi',
-                'pengadministrasian_umum' => 'Marlin',
-                'pengadministrasian_pemerintahan' => 'Sarni',
-                'pengelola_surat' => 'Safarina Isram',
+                'positions' => [
+                    ['level' => 3, 'label' => 'Kasi Pemerintahan', 'name' => 'La Ode Husni, S.Sos.'],
+                    ['level' => 3, 'label' => 'Kasi Ekonomi, Pembangunan, dan Kesejahteraan Rakyat', 'name' => 'Nasrun, S.H.'],
+                    ['level' => 3, 'label' => 'Kasi Ketentraman dan Ketertiban', 'name' => 'La Saidu'],
+                    ['level' => 3, 'label' => 'Analis Pembangunan', 'name' => 'Rusyati'],
+                    ['level' => 3, 'label' => 'Pranata Barang dan Jasa', 'name' => 'Samida'],
+                    ['level' => 3, 'label' => 'Pengelola Keamanan dan Ketertiban', 'name' => 'Idris Ardi'],
+                    ['level' => 3, 'label' => 'Pengadministrasian Umum', 'name' => 'Marlin'],
+                    ['level' => 3, 'label' => 'Pengadministrasian Pemerintahan', 'name' => 'Sarni'],
+                    ['level' => 3, 'label' => 'Pengelola Surat', 'name' => 'Safarina Isram'],
+                ],
 
                 'daftar_rw' => [
                     ['rw' => '1', 'nama' => 'M. Nur Intan Ode, S.Pd., M.Pd.'],
@@ -88,21 +95,18 @@ class OrganizationSeeder extends Seeder
             'Bataraguru' => [
                 'lurah' => 'Jenny, S.IP.',
                 'sekretaris_lurah' => 'Hj. Nuraini',
-                'kasi_pemerintahan' => 'Wa Ode Syafriah, A.Md.',
-                'kasi_ekonomi' => 'Usman Jafar, S.IP',
-                'kasi_ketentraman' => 'Edy Marwan Djamil, S.IP',
 
-                // Bataraguru tidak punya jabatan Analis Pembangunan / Pranata Barang /
-                // Pengelola Keamanan / Pengadministrasian Umum / Pengadministrasian
-                // Pemerintahan / Pengelola Surat seperti Baadia — dibiarkan null (default kolom).
+                'positions' => [
+                    ['level' => 3, 'label' => 'Bendahara Barang', 'name' => 'Ika Wildayani'],
+                    ['level' => 3, 'label' => 'Bendahara Pembantu Pengeluaran', 'name' => 'Wa Rani, S.IP'],
 
-                'staf_tambahan' => [
-                    ['jabatan' => 'Bendahara Barang', 'nama' => 'Ika Wildayani'],
-                    ['jabatan' => 'Bendahara Pembantu Pengeluaran', 'nama' => 'Wa Rani, S.IP'],
-                    ['jabatan' => 'PPPK Paruh Waktu - Staf Kasi Pemerintahan', 'nama' => 'Meilani Bakri'],
-                    ['jabatan' => 'PPPK Paruh Waktu - Staf Kasi Kesra', 'nama' => 'Rasfia Usi, S.Kom'],
-                    ['jabatan' => 'PPPK Paruh Waktu - Staf Kasi Trantib', 'nama' => 'Bari Saputra'],
-                    ['jabatan' => 'PPPK Paruh Waktu - Staf Kasi Kesra', 'nama' => 'Fadilal Hayya Iza'],
+                    ['level' => 3, 'label' => 'Kasi Pemerintahan', 'name' => 'Wa Ode Syafriah, A.Md.'],
+                    ['level' => 3, 'label' => 'Kasi Ekonomi, Pembangunan, dan Kesejahteraan Rakyat', 'name' => 'Usman Jafar, S.IP'],
+                    ['level' => 3, 'label' => 'Kasi Ketentraman dan Ketertiban', 'name' => 'Edy Marwan Djamil, S.IP'],
+                    ['level' => 3, 'label' => 'PPPK Paruh Waktu - Staf Kasi Pemerintahan', 'name' => 'Meilani Bakri'],
+                    ['level' => 3, 'label' => 'PPPK Paruh Waktu - Staf Kasi Kesra', 'name' => 'Rasfia Usi, S.Kom'],
+                    ['level' => 3, 'label' => 'PPPK Paruh Waktu - Staf Kasi Trantib', 'name' => 'Bari Saputra'],
+                    ['level' => 3, 'label' => 'PPPK Paruh Waktu - Staf Kasi Kesra', 'name' => 'Fadilal Hayya Iza'],
                 ],
 
                 'daftar_rw' => [
@@ -162,21 +166,18 @@ class OrganizationSeeder extends Seeder
             'Batulo' => [
                 'lurah' => 'Yunizal Nisaid, S.IP.',
                 'sekretaris_lurah' => 'Verawati, S.Pi.',
-                'kasi_pemerintahan' => 'Moh. Hamim Sahiddin, S.E.',
-                'kasi_ekonomi' => 'Mirawati Yaka, S.IP.',
-                'kasi_ketentraman' => 'Adi Mardiya, S.S.',
 
-                // Batulo tidak punya jabatan Analis Pembangunan / Pranata Barang / Pengelola
-                // Keamanan / Pengadministrasian Umum / Pengadministrasian Pemerintahan /
-                // Pengelola Surat seperti Baadia — dibiarkan null (default kolom).
+                'positions' => [
+                    ['level' => 3, 'label' => 'Bendahara Barang', 'name' => 'Rahmiar Patu'],
 
-                'staf_tambahan' => [
-                    ['jabatan' => 'Bendahara Barang', 'nama' => 'Rahmiar Patu'],
-                    ['jabatan' => 'Analis Pengawasan Masyarakat', 'nama' => 'Ona Rosana'],
-                    ['jabatan' => 'PPPK Paruh Waktu', 'nama' => 'Sitti Safianah'],
-                    ['jabatan' => 'PPPK Paruh Waktu', 'nama' => 'Suriani'],
-                    ['jabatan' => 'PPPK Paruh Waktu', 'nama' => 'Saniati'],
-                    ['jabatan' => 'PPPK Paruh Waktu', 'nama' => 'Idrus, S.H.'],
+                    ['level' => 3, 'label' => 'Kasi Pemerintahan', 'name' => 'Moh. Hamim Sahiddin, S.E.'],
+                    ['level' => 3, 'label' => 'Kasi Ekonomi, Pembangunan, dan Kesejahteraan Rakyat', 'name' => 'Mirawati Yaka, S.IP.'],
+                    ['level' => 3, 'label' => 'Kasi Ketentraman dan Ketertiban', 'name' => 'Adi Mardiya, S.S.'],
+                    ['level' => 3, 'label' => 'Analis Pengawasan Masyarakat', 'name' => 'Ona Rosana'],
+                    ['level' => 3, 'label' => 'PPPK Paruh Waktu', 'name' => 'Sitti Safianah'],
+                    ['level' => 3, 'label' => 'PPPK Paruh Waktu', 'name' => 'Suriani'],
+                    ['level' => 3, 'label' => 'PPPK Paruh Waktu', 'name' => 'Saniati'],
+                    ['level' => 3, 'label' => 'PPPK Paruh Waktu', 'name' => 'Idrus, S.H.'],
                 ],
 
                 'daftar_rw' => [
@@ -219,18 +220,19 @@ class OrganizationSeeder extends Seeder
             'Wale' => [
                 'lurah' => 'Laode Sudarna, S.H.',
                 'sekretaris_lurah' => 'Hatta Subhan, S.IP.',
-                // Kasi Pemerintahan: belum ada pejabatnya (dinyatakan eksplisit di sumber) -> null.
-                'kasi_ekonomi' => 'Fitria, S.E.',
-                'kasi_ketentraman' => 'Jamaliah, S.M.',
 
-                // Satu-satunya kecocokan langsung ke skema Baadia untuk Wale:
-                'pengadministrasian_pemerintahan' => 'Deavy Arsy Anwar, A.Md.',
+                'positions' => [
+                    ['level' => 3, 'label' => 'Pengurus Barang', 'name' => 'Islamiah'],
 
-                'staf_tambahan' => [
-                    ['jabatan' => 'Pengurus Barang', 'nama' => 'Islamiah'],
-                    ['jabatan' => 'PPPK Paruh Waktu', 'nama' => 'Indra'],
-                    ['jabatan' => 'PPPK Paruh Waktu', 'nama' => 'Mulyadi'],
-                    ['jabatan' => 'PPPK Paruh Waktu', 'nama' => 'Muliana'],
+                    // Kasi Pemerintahan: belum ada pejabatnya (dinyatakan eksplisit di sumber)
+                    // -> tetap dicatat jabatannya, nama dikosongkan (tampil "-" di halaman publik).
+                    ['level' => 3, 'label' => 'Kasi Pemerintahan', 'name' => null],
+                    ['level' => 3, 'label' => 'Kasi Ekonomi, Pembangunan, dan Kesejahteraan Rakyat', 'name' => 'Fitria, S.E.'],
+                    ['level' => 3, 'label' => 'Kasi Ketentraman dan Ketertiban', 'name' => 'Jamaliah, S.M.'],
+                    ['level' => 3, 'label' => 'Pengadministrasian Pemerintahan', 'name' => 'Deavy Arsy Anwar, A.Md.'],
+                    ['level' => 3, 'label' => 'PPPK Paruh Waktu', 'name' => 'Indra'],
+                    ['level' => 3, 'label' => 'PPPK Paruh Waktu', 'name' => 'Mulyadi'],
+                    ['level' => 3, 'label' => 'PPPK Paruh Waktu', 'name' => 'Muliana'],
                 ],
 
                 'daftar_rw' => [

@@ -4,10 +4,17 @@
 {{-- @props(['title', 'description' => null, 'date', 'coverUrl' => null, 'fileUrl', 'buttonText' => 'Lihat Dokumen']) --}}
 @props(['title', 'description' => null, 'date', 'coverUrl' => null, 'fileUrl', 'downloadUrl' => null, 'buttonText' => 'Lihat Dokumen'])
 
-<div class="card bg-base-100 
+{{-- <div class="card bg-base-100 
     card-border 
     shadow-lg
     md:card-side"
+> --}}
+<div class="card bg-base-100 
+    card-border
+{{-- border-10 
+bg-black --}}
+    shadow-lg
+    md:card-side md:items-start"
 >
     {{-- Bagian Cover (Kiri pada Desktop, Atas pada Mobile) --}}
     <figure class="md:w-1/4 shrink-0 
@@ -15,6 +22,11 @@
         border-b md:border-b-0 md:border-r 
         flex items-center justify-center p-6"
     >
+    {{-- <figure class="md:w-1/4 shrink-0 md:self-start
+        bg-base-200/20 border-base-200 
+        border-b md:border-b-0 md:border-r 
+        flex items-center justify-center p-6"
+    > --}}
         @if($coverUrl)
             {{-- Tampilkan gambar (hasil ekstrak PDF atau file gambar asli) --}}
             {{-- <img src="{{ $coverUrl }}" 

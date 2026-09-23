@@ -87,7 +87,8 @@
                             <p class="text-base font-bold">{{ $position->name ?: '-' }}</p>
                         </div>
                     @endforeach --}}
-                    @forelse($organization->positions ?? [] as $position)
+
+                    {{-- @forelse($organization->positions ?? [] as $position)
                         <div class="p-4 bg-base-200 rounded-lg">
                             <h4 class="text-base-content/70 text-sm font-medium">{{ $position->label }}</h4>
                             <p class="text-base font-bold">{{ $position->name ?: '-' }}</p>
@@ -96,8 +97,26 @@
                         <div class="col-span-full text-center text-base-content/60 italic py-2">
                             Struktur jabatan lainnya belum diisi.
                         </div>
-                    @endforelse
+                    @endforelse --}}
                 </div>
+                @php
+                    $groupedPositions = ($organization->positions ?? collect())->groupBy('level');
+                @endphp
+
+                @if($groupedPositions->isEmpty())
+                    <p class="text-base-content/70 italic text-center py-2">Struktur jabatan lainnya belum diisi.</p>
+                @else
+                    @foreach($groupedPositions as $level => $positionsInLevel)
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 last:mb-0">
+                            @foreach($positionsInLevel as $position)
+                                <div class="p-4 bg-base-200 rounded-lg">
+                                    <h4 class="text-base-content/70 text-sm font-medium">{{ $position->label }}</h4>
+                                    <p class="text-base font-bold">{{ $position->name ?: '-' }}</p>
+                                </div>
+                            @endforeach
+                        </div>
+                    @endforeach
+                @endif
             {{-- </div> --}}
         {{-- </div> --}}
         </x-section-card>

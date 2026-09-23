@@ -12,6 +12,7 @@ class MetadataStatistik extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
+        'village_id',
         'title',
         'file_path',
         // cover

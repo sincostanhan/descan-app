@@ -13,9 +13,4 @@ class OrganizationPosition extends Model
     {
         return $this->belongsTo(Organization::class);
     }
-
-    public function positions()
-    {
-        return $this->hasMany(OrganizationPosition::class)->orderBy('level')->orderBy('order');
-    }
 }

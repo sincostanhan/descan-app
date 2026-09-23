@@ -12,6 +12,7 @@ class History extends Model
     // protected $guarded = ['id'];
 
     protected $fillable = [
+        'village_id',
         'penulis',
         'konten',
         'is_active',

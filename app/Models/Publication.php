@@ -12,6 +12,7 @@ class Publication extends Model
     protected $guarded = ['id'];
 
     protected $fillable = [
+        'village_id',
         'title', 
         'description', 
         'file_path',

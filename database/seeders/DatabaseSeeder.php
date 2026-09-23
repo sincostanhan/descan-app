@@ -32,6 +32,7 @@ class DatabaseSeeder extends Seeder
             AboutSeeder::class,
             HistorySeeder::class,
             OrganizationSeeder::class,
+            MetadataStatistikSeeder::class,
             SettingSeeder::class,
             StatisticTablesSeeder::class,
             ]);

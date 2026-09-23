@@ -52,6 +52,11 @@ class UpdateOrganizationRequest extends FormRequest
             'lurah' => ['required', 'string', 'max:255'],
             'sekretaris_lurah' => ['nullable', 'string', 'max:255'],
 
+            // 'positions' => ['nullable', 'array'],
+            // 'positions.*.level' => ['required_with:positions', 'integer', 'min:1', 'max:20'],
+            // 'positions.*.label' => ['required_with:positions', 'string', 'max:255'],
+            // 'positions.*.name'  => ['nullable', 'string', 'max:255'],
+            // Struktur Jabatan Lainnya (dinamis) — menggantikan kolom kasi_pemerintahan dst.
             'positions' => ['nullable', 'array'],
             'positions.*.level' => ['required_with:positions', 'integer', 'min:1', 'max:20'],
             'positions.*.label' => ['required_with:positions', 'string', 'max:255'],
@@ -84,9 +89,12 @@ class UpdateOrganizationRequest extends FormRequest
             // 'pengadministrasian_umum'         => 'Pengadministrasian Umum',
             // 'pengadministrasian_pemerintahan' => 'Pengadministrasian Pemerintahan',
             // 'pengelola_surat'                 => 'Pengelola Surat',
-            'positions.*.level' => 'Level', 
-            'positions.*.label' => 'Nama Jabatan', 
-            'positions.*.name' => 'Nama Pejabat'.
+            // 'positions.*.level' => 'Level', 
+            // 'positions.*.label' => 'Nama Jabatan', 
+            // 'positions.*.name' => 'Nama Pejabat'.
+            'positions.*.level' => 'Level',
+            'positions.*.label' => 'Nama Jabatan',
+            'positions.*.name'  => 'Nama Pejabat',
             
             // Terjemahan array RT/RW
             'daftar_rw'        => 'Daftar RW',
