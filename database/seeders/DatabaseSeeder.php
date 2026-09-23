@@ -31,10 +31,12 @@ class DatabaseSeeder extends Seeder
             HomeSeeder::class,
             AboutSeeder::class,
             HistorySeeder::class,
-            OrganizationSeeder::class,
             MetadataStatistikSeeder::class,
+            OrganizationSeeder::class,
             SettingSeeder::class,
             StatisticTablesSeeder::class,
+            InfographicSeeder::class,
+            PublicationSeeder::class,
             ]);
     }
 }

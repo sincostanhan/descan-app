@@ -44,7 +44,7 @@ class VillageSeeder extends Seeder
             $user = User::create([
                 'name' => "Admin " . $name,
                 'username' => $username, // Menggunakan kolom username sesuai skema Anda
-                'password' => bcrypt('q1212121'),
+                'password' => bcrypt('password123'),
                 'village_id' => $village->id,
             ]);
 
