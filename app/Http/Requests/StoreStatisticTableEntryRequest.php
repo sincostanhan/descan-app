@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreStatisticTableEntryRequest extends FormRequest
 {
@@ -21,6 +22,10 @@ class StoreStatisticTableEntryRequest extends FormRequest
         $villageId = $this->user()->village_id;
 
         $rules = [
+            'publication_id' => [
+                'nullable', 'integer',
+                Rule::exists('publications', 'id')->where('village_id', $villageId),
+            ],
             'source' => ['nullable', 'string', 'max:255'],
             'description' => ['nullable', 'string'],
             'values' => ['nullable', 'array'],
@@ -49,6 +54,7 @@ class StoreStatisticTableEntryRequest extends FormRequest
     public function messages(): array
     {
         return [
+            'publication_id.exists' => 'Publikasi yang dipilih tidak valid.',
             'values.*.numeric' => 'Kolom ini hanya boleh diisi angka.',
             'values.*.string' => 'Kolom ini hanya boleh diisi teks.',
         ];

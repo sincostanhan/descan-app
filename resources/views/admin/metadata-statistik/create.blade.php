@@ -25,6 +25,20 @@
                         <x-forms.error name="title" />
                     </fieldset>
 
+                    <fieldset class="fieldset w-full mb-6">
+                        <legend class="fieldset-legend text-base">Tahun</legend>
+                        <input type="number"
+                            id="tahun"
+                            name="tahun"
+                            value="{{ old('tahun', now()->year) }}"
+                            min="1900"
+                            max="{{ now()->year + 1 }}"
+                            required
+                            placeholder="Contoh: 2025"
+                            class="input w-full sm:w-48"/>
+                        <x-forms.error name="tahun" />
+                    </fieldset>
+
                     <fieldset class="fieldset w-full mb-8">
                         <legend class="fieldset-legend text-base">File Metadata (PDF / Foto)</legend>
                         <input

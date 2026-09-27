@@ -11,6 +11,7 @@ class UpdateStatisticTableEntry
     {
         return DB::transaction(function () use ($entry, $attributes) {
             $entry->update([
+                'publication_id' => $attributes['publication_id'] ?? null,
                 'source' => $attributes['source'] ?? null,
                 'description' => $attributes['description'] ?? null,
             ]);

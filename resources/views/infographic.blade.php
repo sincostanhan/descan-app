@@ -37,7 +37,11 @@
                 </button>
             </form>
 
-            <div class="flex justify-end">
+            {{-- <div class="flex justify-end">
+                <x-pagination-dropdown :perPage="$perPage" />
+            </div> --}}
+            <div class="flex flex-col items-end gap-3 md:flex-row md:items-center">
+                <x-sort-dropdown />
                 <x-pagination-dropdown :perPage="$perPage" />
             </div>
         </div>
@@ -52,7 +56,8 @@
             <x-document-card 
                 :title="$info->title"
                 :description="$info->description"
-                :date="$info->created_at->translatedFormat('d F Y')"
+                {{-- :date="$info->created_at->translatedFormat('d F Y')" --}}
+                :date="$info->updated_at->translatedFormat('d F Y')"
                 :coverUrl="$coverSrc"
                 :fileUrl="asset('storage/' . $info->file_path)"
                 :downloadUrl="route('infographic.download', $info->id)"

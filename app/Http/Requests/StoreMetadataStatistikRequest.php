@@ -15,6 +15,7 @@ class StoreMetadataStatistikRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
+            'tahun' => ['required', 'integer', 'digits:4', 'between:1900,' . (now()->year + 1)],
             'file' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'], // PDF atau Foto
             'cover_base64' => ['nullable', 'string'],
         ];
@@ -24,6 +25,7 @@ class StoreMetadataStatistikRequest extends FormRequest
     {
         return [
             'title'        => 'Judul Metadata',
+            'tahun'        => 'Tahun',
             'file'         => 'File Metadata',
             'cover_base64' => 'Sampul (Cover)',
         ];
@@ -34,6 +36,10 @@ class StoreMetadataStatistikRequest extends FormRequest
         return [
             'required' => ':attribute wajib diisi.',
             'string'   => ':attribute harus berupa teks.',
+
+            'tahun.integer' => ':attribute harus berupa angka.',
+            'tahun.digits'  => ':attribute harus 4 digit, contoh: 2025.',
+            'tahun.between' => ':attribute harus antara :min dan :max.',
 
             'file.required' => ':attribute wajib diunggah.',
             'file'          => ':attribute harus berupa file yang valid.',

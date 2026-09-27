@@ -34,9 +34,9 @@ class DatabaseSeeder extends Seeder
             MetadataStatistikSeeder::class,
             OrganizationSeeder::class,
             SettingSeeder::class,
+            PublicationSeeder::class,
             StatisticTablesSeeder::class,
             InfographicSeeder::class,
-            PublicationSeeder::class,
             ]);
     }
 }

@@ -28,6 +28,7 @@ class CreateMetadataStatistik
 
         return MetadataStatistik::create([
             'title' => $attributes['title'],
+            'tahun' => $attributes['tahun'],
             'file_path' => $attributes['file_path'] ?? null,
             'cover_path' => $coverPath,
         ]);

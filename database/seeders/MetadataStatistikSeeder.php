@@ -52,6 +52,7 @@ class MetadataStatistikSeeder extends Seeder
             MetadataStatistik::create([
                 'village_id' => $village->id,
                 'title' => $entry['title'],
+                'tahun' => $entry['tahun'] ?? null, // null = belum diketahui, admin bisa isi lewat form edit
                 'file_path' => $destPath,
                 'cover_path' => null, // Cover PDF opsional, di-generate manual lewat form edit kalau perlu.
             ]);
@@ -61,21 +62,21 @@ class MetadataStatistikSeeder extends Seeder
     private function data(): array
     {
         return [
-            ['village' => 'Baadia', 'title' => 'MS-Kegiatan Pokelcan Baadia 2025'],
-            ['village' => 'Baadia', 'title' => 'MS-Variabel Pokelcan Baadia 2025'],
-            ['village' => 'Baadia', 'title' => 'MS-Indikator Pokelcan Baadia 2025'],
+            ['village' => 'Baadia', 'title' => 'MS-Kegiatan Pokelcan Baadia 2025', 'tahun' => 2025],
+            ['village' => 'Baadia', 'title' => 'MS-Variabel Pokelcan Baadia 2025', 'tahun' => 2025],
+            ['village' => 'Baadia', 'title' => 'MS-Indikator Pokelcan Baadia 2025', 'tahun' => 2025],
+ 
+            ['village' => 'Bataraguru', 'title' => 'Bataraguru MS-Kegiatan', 'tahun' => 2026],
+            ['village' => 'Bataraguru', 'title' => 'Bataraguru MS-Variabel', 'tahun' => 2026],
+            ['village' => 'Bataraguru', 'title' => 'Bataraguru MS-Indikator', 'tahun' => 2026],
 
-            ['village' => 'Bataraguru', 'title' => 'Bataraguru MS-Kegiatan'],
-            ['village' => 'Bataraguru', 'title' => 'Bataraguru MS-Variabel'],
-            ['village' => 'Bataraguru', 'title' => 'Bataraguru MS-Indikator'],
+            ['village' => 'Batulo', 'title' => 'Batulo MS-Kegiatan', 'tahun' => 2026],
+            ['village' => 'Batulo', 'title' => 'Batulo MS-Variabel', 'tahun' => 2026],
+            ['village' => 'Batulo', 'title' => 'Batulo MS-Indikator', 'tahun' => 2026],
 
-            ['village' => 'Batulo', 'title' => 'Batulo MS-Kegiatan'],
-            ['village' => 'Batulo', 'title' => 'Batulo MS-Variabel'],
-            ['village' => 'Batulo', 'title' => 'Batulo MS-Indikator'],
-
-            ['village' => 'Wale', 'title' => 'Wale MS-Kegiatan'],
-            ['village' => 'Wale', 'title' => 'Wale MS-Variabel'],
-            ['village' => 'Wale', 'title' => 'Wale MS-Indikator'],
+            ['village' => 'Wale', 'title' => 'Wale MS-Kegiatan', 'tahun' => 2026],
+            ['village' => 'Wale', 'title' => 'Wale MS-Variabel', 'tahun' => 2026],
+            ['village' => 'Wale', 'title' => 'Wale MS-Indikator', 'tahun' => 2026],
         ];
     }
 }

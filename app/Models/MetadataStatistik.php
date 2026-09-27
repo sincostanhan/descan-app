@@ -14,8 +14,16 @@ class MetadataStatistik extends Model
     protected $fillable = [
         'village_id',
         'title',
+        'tahun',
         'file_path',
         // cover
         'cover_path',
     ];
+
+    protected function casts(): array
+    {
+        return [
+            'tahun' => 'integer',
+        ];
+    }
 }

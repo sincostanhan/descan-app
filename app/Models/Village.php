@@ -38,4 +38,13 @@ class Village extends Model
     {
         return $this->hasMany(RegionGeometry::class);
     }
+
+    public function getDisplayNameAttribute(): string
+    {
+        $nama = trim($this->name);
+
+        return str_contains(strtolower($nama), 'kelurahan')
+            ? ucwords($nama)
+            : 'Kelurahan ' . ucwords($nama);
+    }
 }

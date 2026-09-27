@@ -23,7 +23,21 @@
                 </button>
             </form>
 
-            <div class="flex justify-end">
+            {{-- <div class="flex justify-end"> --}}
+            <div class="flex justify-end gap-2">
+                <form action="{{ url()->current() }}" method="GET">
+                    @foreach(request()->except(['tahun', 'page']) as $key => $value)
+                        <input type="hidden" name="{{ $key }}" value="{{ $value }}">
+                    @endforeach
+
+                    <select name="tahun" class="select select-sm md:select-md w-36" onchange="this.form.submit()">
+                        <option value="">Semua Tahun</option>
+                        @foreach($tahunOptions as $tahun)
+                            <option value="{{ $tahun }}" @selected((string) request('tahun') === (string) $tahun)>{{ $tahun }}</option>
+                        @endforeach
+                    </select>
+                </form>
+
                 <x-pagination-dropdown :perPage="$perPage" />
             </div>
         </div>
@@ -44,8 +58,13 @@
                 buttonText="Lihat Metadata"
             />
         @empty
-            @if(request('search'))
+            {{-- @if(request('search')) --}}
+            @if(request('search') && request('tahun'))
+                <x-empty-alert message="Data dengan judul '{{ request('search') }}' pada tahun {{ request('tahun') }} tidak ditemukan." />
+            @elseif(request('search'))
                 <x-empty-alert message="Data dengan judul '{{ request('search') }}' tidak ditemukan." />
+            @elseif(request('tahun'))
+                <x-empty-alert message="Belum ada metadata statistik untuk tahun {{ request('tahun') }}." />
             @else
                 <x-empty-alert message="Belum ada data metadata statistik." />
             @endif

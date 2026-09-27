@@ -15,6 +15,19 @@
             <div class="card bg-base-100 card-border shadow-lg mb-6">
                 <div class="card-body">
                     <fieldset class="fieldset w-full mb-4">
+                        <legend class="fieldset-legend text-base">Publikasi</legend>
+                        <select name="publication_id" class="select w-full">
+                            <option value="">-- Tidak termasuk publikasi mana pun --</option>
+                            @foreach($publications as $publication)
+                                <option value="{{ $publication->id }}" @selected((string) old('publication_id', $entry->publication_id) === (string) $publication->id)>
+                                    {{ $publication->title }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <p class="label">Opsional. Satu tabel hanya bisa masuk ke satu publikasi.</p>
+                        <x-forms.error name="publication_id" />
+                    </fieldset>
+                    <fieldset class="fieldset w-full mb-4">
                         <legend class="fieldset-legend text-base">Sumber Data</legend>
                         <input type="text" name="source" value="{{ old('source', $entry->source) }}" class="input w-full">
                         <x-forms.error name="source" />

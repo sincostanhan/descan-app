@@ -31,6 +31,7 @@ class StatisticTablesSeeder extends Seeder
             [
                 'Bataraguru' => [
                     'source' => 'Pokelcan 2026 – Bataraguru',
+                    'publication' => '',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [1.65]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0.88]],
@@ -80,6 +81,7 @@ class StatisticTablesSeeder extends Seeder
                     // Total RW 05) — nilai bersih diambil dari sheet "Grafik Luas Bataraguru" yang
                     // memuat semua 19 RT tanpa korupsi (sudah divalidasi sesi sebelumnya).
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [6.39]],
                         ['rt' => 2, 'rw' => 1, 'values' => [1.37]],
@@ -161,6 +163,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Dataran', null]],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Dataran', null]],
@@ -241,6 +244,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Diluar Kawasan Hutan']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Diluar Kawasan Hutan']],
@@ -287,6 +291,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada']],
@@ -383,6 +388,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Ada', 'Tidak ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Ada', 'Tidak ada']],
@@ -692,6 +698,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [70, 58, 128, 3.6, 6.39, 20.03]],
                         ['rt' => 2, 'rw' => 1, 'values' => [84, 97, 181, 5.1, 1.37, 132.12]],
@@ -774,6 +781,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [38, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [56, 4]],
@@ -856,6 +864,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [1, 1]],
                         ['rt' => 2, 'rw' => 1, 'values' => [1, 1]],
@@ -939,6 +948,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [1, 1, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [2, 2, 0]],
@@ -1022,6 +1032,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada', 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada', 0, 0]],
@@ -1114,6 +1125,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada']],
@@ -1195,6 +1207,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Jasa']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Jasa']],
@@ -1334,6 +1347,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada', 'Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada', 'Ada']],
@@ -1414,6 +1428,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada, Sebagian Besar', 'Listrik diusahakan oleh pemerintah']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ada, Sebagian Kecil', 'Listrik diusahakan oleh pemerintah']],
@@ -1503,6 +1518,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ya', 'Ya', 'Ya', 'Ya', 'Tidak', 'Tidak', 'Ya', 'Tidak', 'Tidak', 'Ya', 'Ya']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak', 'Tidak', 'Tidak', 'Ya', 'Tidak', 'Tidak', 'Ya', 'Tidak', 'Tidak', 'Tidak', 'Tidak']],
@@ -1582,6 +1598,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Minyak Tanah']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Minyak Tanah']],
@@ -1667,6 +1684,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ya', '4 kali atau lebih', 'Tidak', 'Tidak', 'Tidak', 'Tidak', 'Tidak']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ya', '4 kali atau lebih', 'Tidak', 'Tidak', 'Tidak', 'Tidak', 'Tidak']],
@@ -1746,6 +1764,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tempat Sampah, Kemudian Diangkut']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tempat Sampah, Kemudian Diangkut']],
@@ -1825,6 +1844,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada, Digunakan']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ada, Digunakan']],
@@ -1904,6 +1924,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada']],
@@ -1983,6 +2004,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada']],
@@ -2062,6 +2084,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Jamban Sendiri']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Jamban Sendiri']],
@@ -2141,6 +2164,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tangki Septik']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tangki Septik']],
@@ -2220,6 +2244,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Lubang Resapan']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Lubang Resapan']],
@@ -2301,6 +2326,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Air Isi Ulang', 'Ledeng Dengan Meteran (PAM/PDAM)', 'Ledeng dengan Meteran (PAM/PDAM)']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Air Isi Ulang', 'Ledeng Dengan Meteran (PAM/PDAM)', 'Ledeng dengan Meteran (PAM/PDAM)']],
@@ -2381,6 +2407,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ya', '2 hari tiap minggu mengalir']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ya', 'Tiap hari mengalir']],
@@ -2464,6 +2491,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada']],
@@ -2543,6 +2571,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada']],
@@ -2625,6 +2654,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada, sebagian kecil', 'Ada, sebagian kecil', 'Tidak ada', 'Tidak ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ada, sebagian kecil', 'Tidak ada', 'Tidak ada', 'Tidak ada']],
@@ -2764,6 +2794,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada', 'Tidak ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada', 'Tidak ada']],
@@ -2850,6 +2881,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada Kegiatan', 'Tidak Ada Kegiatan', 'Tidak Ada Kegiatan', 'Tidak Ada Kegiatan', 'Ada, Warga Tidak Terlibat', 'Tidak Ada Kegiatan', 'Tidak Ada Kegiatan', 'Tidak Ada Kegiatan']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada Kegiatan', 'Tidak Ada Kegiatan', 'Tidak Ada Kegiatan', 'Tidak Ada Kegiatan', 'Ada, Warga Tidak Terlibat', 'Tidak Ada Kegiatan', 'Tidak Ada Kegiatan', 'Tidak Ada Kegiatan']],
@@ -2929,6 +2961,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada']],
@@ -3020,6 +3053,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada']],
@@ -3104,6 +3138,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [null, 0, null, 0, null]],
                         ['rt' => 2, 'rw' => 1, 'values' => [null, 0, null, 0, null]],
@@ -3188,6 +3223,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Ada', 'Tidak Ada', 'Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada']],
@@ -3271,6 +3307,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak', 'Tidak', 'Tidak', 'Tidak', 'Tidak']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak', 'Tidak', 'Tidak', 'Tidak', 'Tidak']],
@@ -3355,6 +3392,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Ada, Sebagian Kecil', 'Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Ada, Sebagian Kecil', 'Tidak Ada', 'Tidak Ada']],
@@ -3441,6 +3479,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0]],
@@ -3523,6 +3562,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0]],
@@ -3605,6 +3645,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0]],
@@ -3687,6 +3728,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0]],
@@ -3769,6 +3811,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0]],
@@ -3853,6 +3896,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0]],
@@ -3935,6 +3979,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0]],
@@ -4016,6 +4061,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada', 'Ada', 'Tidak ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada', 'Tidak ada']],
@@ -4096,6 +4142,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada']],
@@ -4176,6 +4223,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0]],
@@ -4259,6 +4307,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0]],
@@ -4341,6 +4390,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0]],
@@ -4423,6 +4473,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0]],
@@ -4504,6 +4555,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0]],
@@ -4587,6 +4639,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Ada', 'Ada', 'Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Ada', 'Ada', 'Ada']],
@@ -4666,6 +4719,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada, Sebagian Besar']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ada, Sebagian Kecil']],
@@ -4745,6 +4799,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ada']],
@@ -4826,6 +4881,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada', 'Tidak ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada', 'Tidak ada']],
@@ -4905,6 +4961,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada, Sebagian Kecil']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada']],
@@ -4992,6 +5049,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [120, 8, 0, 0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [181, 0, 0, 0, 0, 0, 0]],
@@ -5080,6 +5138,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]],
@@ -5161,6 +5220,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Buton', 'Muna', 'Bugis']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Buton', 'Wakatobi', 'Muna']],
@@ -5241,6 +5301,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ya', 'Indonesia']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ya', 'Indonesia']],
@@ -5328,6 +5389,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 1, 0, 1, 1, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 1, 1, 1, 0, 0, 0]],
@@ -5409,6 +5471,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada, tidak dikelola', 'Tidak ada', 'Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada', null, null]],
@@ -5489,6 +5552,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada', 'Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada']],
@@ -5569,6 +5633,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada']],
@@ -5649,6 +5714,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada kebiasaan', 'Ada, sebagian besar warga terlibat']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ada, sebagian kecil warga terlibat', 'Ada, sebagian besar warga terlibat']],
@@ -5733,6 +5799,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0]],
@@ -5814,6 +5881,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada', 'Kantor Kesbangpol Peninggalan Belanda', 'Pemerintah']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ada', 'Kantor Kominfo Peninggalan Belanda', 'Pemerintah']],
@@ -5896,6 +5964,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Darat', 'Aspal/Beton']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Darat', 'Aspal/Beton']],
@@ -5975,6 +6044,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ada']],
@@ -6055,6 +6125,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Setiap Hari', 'Siang dan Malam Hari']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Setiap Hari', 'Siang dan Malam Hari']],
@@ -6135,6 +6206,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 'Sebagian Besar Warga']],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 'Sebagian Besar Warga']],
@@ -6216,6 +6288,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 3]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 3]],
@@ -6296,6 +6369,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Sinyal Kuat', '5G/4G/LTE']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Sinyal Kuat', '5G/4G/LTE']],
@@ -6377,6 +6451,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada']],
@@ -6460,6 +6535,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada']],
@@ -6555,6 +6631,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 4]],
@@ -6635,6 +6712,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, null]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, null]],
@@ -6715,6 +6793,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada', null]],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada', null]],
@@ -6794,6 +6873,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada']],
@@ -6875,6 +6955,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada', 'Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ada', 'Tidak Ada']],
@@ -6958,6 +7039,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 1, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0, 0]],
@@ -7039,6 +7121,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada']],
@@ -7090,6 +7173,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak ada']],
@@ -7177,6 +7261,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0, 0, 0, 0]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0, 0, 1, 1]],
@@ -7268,6 +7353,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 2, 0, 3]],
@@ -7349,6 +7435,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada']],
@@ -7394,6 +7481,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [1, 'Tidak Ada', 'Tidak Ada', 'Lainnya: Kenakalan Remaja']],
                         ['rt' => 3, 'rw' => 1, 'values' => [2, 'Ada', 'Tidak Ada', 'Keramaian (Olah Raga, Hiburan, dll.); Lainnya: Kenakalan Remaja']],
@@ -7422,6 +7510,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ya, Semuanya', 'Aparat Keamanan; Aparat Pemerintah; Tokoh Masyarakat']],
                         ['rt' => 3, 'rw' => 1, 'values' => ['Ya, Sebagian', 'Aparat Keamanan; Aparat Pemerintah; Tokoh Masyarakat']],
@@ -7493,6 +7582,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak Ada', 'Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada', 'Tidak Ada', 'Tidak Ada', 'Tidak ada', 'Tidak ada', 'Tidak ada', 'Tidak Ada', 'Tidak Ada']],
@@ -7698,6 +7788,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Ada', 'Laki-laki', 'SMU/Sederajat', 2026]],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Ada', 'Perempuan', 'Diploma IV/S1', 2023]],
@@ -7777,6 +7868,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Dewasa']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Dewasa']],
@@ -7856,6 +7948,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [1]],
                         ['rt' => 2, 'rw' => 1, 'values' => [0]],
@@ -7936,6 +8029,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => [1, 100]],
                         ['rt' => 2, 'rw' => 1, 'values' => [2, 70]],
@@ -8015,6 +8109,7 @@ class StatisticTablesSeeder extends Seeder
                 ],
                 'Batulo' => [
                     'source' => 'Pokelcan 2026 – Batulo',
+                    'publication' => 'HASIL PENDATAAN POKELCAN 2026 KELURAHAN BATULO',
                     'rows' => [
                         ['rt' => 1, 'rw' => 1, 'values' => ['Tidak Ada']],
                         ['rt' => 2, 'rw' => 1, 'values' => ['Tidak Ada']],
@@ -8054,7 +8149,7 @@ class StatisticTablesSeeder extends Seeder
      * - Per Kelurahan: kalau Kelurahan itu sudah pernah punya entry di template ini, dilewati.
      *
      * @param  array<int, array{label: string, data_type: string}>  $columns
-     * @param  array<string, array{source: ?string, rows: array<int, array{rt: int, rw: int, values: array}>}>  $entriesByVillageName
+     * @param  array<string, array{source: ?string, publication?: ?string, rows: array<int, array{rt: int, rw: int, values: array}>}>  $entriesByVillageName
      */
     private function seedSharedRtRwTemplate(string $title, ?string $description, array $columns, array $entriesByVillageName): void
     {
@@ -8141,13 +8236,39 @@ class StatisticTablesSeeder extends Seeder
                 }
             }
 
+            // Harus SETELAH app()->instance('current_village_id', ...) di atas,
+            // supaya pencarian Publication otomatis ter-scope ke kelurahan ini.
+            $publicationId = $this->resolvePublicationId($entryData['publication'] ?? null, $villageName, $title);
+
             app(CreateStatisticTableEntry::class)->handle($template, [
                 'source' => $entryData['source'] ?? null,
+                'publication_id' => $publicationId,
                 'description' => null,
                 'values' => $values,
             ]);
 
             $this->command?->info("  \xe2\x9c\x93 {$villageName}: " . count($entryData['rows']) . ' baris RT/RW terisi.');
         }
+    }
+
+        /**
+     * Cari ID publikasi berdasarkan JUDUL, di kelurahan yang sedang aktif.
+     * Kosong/null = tabel tanpa publikasi. Judul tidak ditemukan = warning, bukan error,
+     * supaya satu salah ketik tidak menggagalkan seluruh seeder.
+     */
+    private function resolvePublicationId(?string $publicationTitle, string $villageName, string $tableTitle): ?int
+    {
+        if (blank($publicationTitle)) {
+            return null;
+        }
+
+        // Publication pakai BelongsToVillage → sudah ter-scope ke current_village_id.
+        $publicationId = Publication::where('title', $publicationTitle)->value('id');
+
+        if (!$publicationId) {
+            $this->command?->warn("  ! {$villageName}: publikasi \"{$publicationTitle}\" tidak ditemukan untuk \"{$tableTitle}\", tabel disimpan tanpa publikasi.");
+        }
+
+        return $publicationId;
     }
 }

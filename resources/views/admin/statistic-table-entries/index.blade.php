@@ -9,13 +9,16 @@
 
         <div class="flex flex-col gap-4 mb-6 pl-0 md:pl-6">
 
+            <x-publication-filter :publications="$publications" />
+
             <div class="w-full">
                 <form action="{{ url()->current() }}" method="GET" class="relative w-full sm:max-w-md">
                     @foreach(request()->except(['search', 'page']) as $key => $value)
                         <input type="hidden" name="{{ $key }}" value="{{ $value }}">
                     @endforeach
 
-                    <inputmit="return confirm('Apakah Anda yakin ingin menghapus tabel ini beserta grafiknya (jika ada)? Aksi ini tidak bisa dibatalkan
+                    {{-- <inputmit="return confirm('Apakah Anda yakin ingin menghapus tabel ini beserta grafiknya (jika ada)? Aksi ini tidak bisa dibatalkan --}}
+                    <input
                         type="text"
                         name="search"
                         value="{{ request('search') }}"
@@ -53,6 +56,8 @@
                 @if($entries->isEmpty())
                     @if(request('search'))
                         <x-empty-alert message="Tabel dengan judul '{{ request('search') }}' tidak ditemukan." />
+                    @elseif(request()->filled('publikasi'))
+                        <x-empty-alert message="Belum ada tabel statistik pada pilihan publikasi ini." />
                     @else
                         <x-empty-alert message="Anda belum mengisi tabel statistik apa pun. Klik &quot;Tambah Tabel Baru&quot; untuk memulai." />
                     @endif
@@ -62,13 +67,69 @@
                     border">
                         <table class="table table-zebra
                         w-full">
+                            {{-- <thead class="bg-base-200/50 text-base-content
+                            text-sm"> --}}
                             <thead class="bg-base-200/50 text-base-content
-                            text-sm">
+                            text-sm select-none">
+                                @php
+                                    $currentSortBy = request('sort_by');
+                                    $currentSortDir = request('sort_dir', 'asc');
+                                    $isAnyActive = !empty($currentSortBy);
+
+                                    $getSortProps = function($column) use ($currentSortBy, $currentSortDir, $isAnyActive) {
+                                        $isActive = $currentSortBy === $column;
+                                        $isDisabled = $isAnyActive && !$isActive;
+                                        $icon = 'arrow-up-down';
+                                        $url = '#';
+
+                                        if ($isActive) {
+                                            if ($currentSortDir === 'asc') {
+                                                $icon = 'arrow-up';
+                                                $url = request()->fullUrlWithQuery(['sort_by' => $column, 'sort_dir' => 'desc', 'page' => 1]);
+                                            } else {
+                                                $icon = 'arrow-down';
+                                                $url = request()->fullUrlWithQuery(['sort_by' => null, 'sort_dir' => null, 'page' => 1]);
+                                            }
+                                        } elseif (!$isAnyActive) {
+                                            $url = request()->fullUrlWithQuery(['sort_by' => $column, 'sort_dir' => 'asc', 'page' => 1]);
+                                        }
+
+                                        return (object) compact('isActive', 'isDisabled', 'icon', 'url');
+                                    };
+
+                                    $titleProps = $getSortProps('title');
+                                    $updatedProps = $getSortProps('updated_at');
+                                @endphp
                                 <tr>
-                                    <th>Judul Template</th>
+                                    {{-- <th>Judul Template</th> --}}
+                                    <th class="transition-colors">
+                                        <button type="button"
+                                            class="w-full flex items-center gap-1 text-left {{ $titleProps->isDisabled ? 'cursor-not-allowed text-base-content/50' : 'cursor-pointer hover:bg-base-300' }}"
+                                            @if($titleProps->isDisabled) disabled @endif
+                                            @if(!$titleProps->isDisabled) onclick="window.location='{{ $titleProps->url }}'" @endif>
+                                            Judul Template
+                                            @if($titleProps->icon === 'arrow-up-down') <x-lucide-arrow-up-down class="w-4 h-4 text-base-content/40" />
+                                            @elseif($titleProps->icon === 'arrow-up') <x-lucide-arrow-up class="w-4 h-4" />
+                                            @else <x-lucide-arrow-down class="w-4 h-4" /> @endif
+                                        </button>
+                                    </th>
+                                    @if($showPublicationColumn)
+                                        <th>Publikasi</th>
+                                    @endif
                                     <th>Sumber Data</th>
                                     <th class="text-center">Grafik</th>
-                                    <th class="text-center">Terakhir Diperbarui</th>
+                                    {{-- <th class="text-center">Terakhir Diperbarui</th> --}}
+                                    <th class="transition-colors">
+                                        <button type="button"
+                                            class="w-full flex items-center justify-center gap-1 {{ $updatedProps->isDisabled ? 'cursor-not-allowed text-base-content/50' : 'cursor-pointer hover:bg-base-300' }}"
+                                            @if($updatedProps->isDisabled) disabled @endif
+                                            @if(!$updatedProps->isDisabled) onclick="window.location='{{ $updatedProps->url }}'" @endif>
+                                            Terakhir Diperbarui
+                                            @if($updatedProps->icon === 'arrow-up-down') <x-lucide-arrow-up-down class="w-4 h-4 text-base-content/40" />
+                                            @elseif($updatedProps->icon === 'arrow-up') <x-lucide-arrow-up class="w-4 h-4" />
+                                            @else <x-lucide-arrow-down class="w-4 h-4" /> @endif
+                                        </button>
+                                    </th>
                                     <th class="text-center">Aksi</th>
                                 </tr>
                             </thead>
@@ -78,6 +139,11 @@
                                         <td class="font-medium max-w-50 md:max-w-xs text-wrap wrap-break-words">
                                             {{ $entry->title ?? $entry->template->title }}
                                         </td>
+                                        @if($showPublicationColumn)
+                                            <td class="text-sm text-base-content/70 max-w-50 md:max-w-xs text-wrap wrap-break-words">
+                                                {{ $entry->publication?->title ?? '-' }}
+                                            </td>
+                                        @endif
                                         <td class="text-sm text-base-content/70">
                                             {{ $entry->source ?: '-' }}
                                         </td>

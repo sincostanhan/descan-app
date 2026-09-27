@@ -10,13 +10,15 @@ use App\Http\Requests\UpdatePublicationRequest;
 use App\Models\Publication;
 use App\Support\FilenameSanitizer;
 use App\Traits\HasPaginationLimit;
+use App\Traits\HasPublicSorting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class PublicationController extends Controller
 {
-    use HasPaginationLimit;
+    // use HasPaginationLimit;
+    use HasPaginationLimit, HasPublicSorting;
 
     // Halaman Publik
     public function indexPublic(Request $request)
@@ -36,8 +38,10 @@ class PublicationController extends Controller
             });
 
         // $publications = Publication::latest()
-        $publications = $query
-            ->orderBy('id', 'desc')
+        // $publications = $query
+        //     ->orderBy('id', 'desc')
+        //     ->paginate($perPage);
+        $publications = $this->applyPublicSort($query, $request)
             ->paginate($perPage);
             
         return view('publication', compact('publications', 'perPage'));

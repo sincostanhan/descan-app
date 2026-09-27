@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\StatisticTableExport;
+use App\Models\Publication;
 use App\Models\StatisticalTable;
 use App\Models\StatisticTableEntry;
 use App\Traits\HasPaginationLimit;
@@ -57,14 +58,39 @@ class PublicStatisticController extends Controller
         //     });
         $query = StatisticTableEntry::query()
             ->whereHas('template', fn ($q) => $q->where('is_active', true))
-            ->with(['template', 'chart'])   // tambah 'chart', dipakai badge status Grafik
+            // ->with(['template', 'chart'])   // tambah 'chart', dipakai badge status Grafik
+                // ->when($request->get('search'), function ($q, $search) {
+                //     $q->where('title', 'like', "%{$search}%")
+                //     ->orWhereHas('template', fn ($t) => $t->where('title', 'like', "%{$search}%"));
+                // });
+            // ->when($request->get('search'), fn ($q, $search) => $q->searchDisplayTitle($search));
+            ->with(['template', 'chart', 'publication'])   // 'publication' untuk kolom Publikasi
             ->when($request->get('search'), function ($q, $search) {
-                $q->where('title', 'like', "%{$search}%")
-                ->orWhereHas('template', fn ($t) => $t->where('title', 'like', "%{$search}%"));
+                // Dibungkus grup: tanpa ini orWhereHas "membocorkan" filter is_active & publikasi
+                $q->where(function ($qq) use ($search) {
+                    $qq->where('statistic_table_entries.title', 'like', "%{$search}%")
+                       ->orWhereHas('template', fn ($t) => $t->where('title', 'like', "%{$search}%"));
+                });
             });
+        
+        // // Filter publikasi: '' = semua, 'tanpa' = tabel tanpa publikasi, angka = ID publikasi
+        // $publicationFilter = (string) $request->get('publikasi', '');
 
-        if ($sortBy && in_array($sortBy, ['title', 'updated_at'])) {
-            $query->orderBy($sortBy, $sortDir);
+        // if ($publicationFilter === 'tanpa') {
+        //     $query->whereNull('publication_id');
+        // } elseif (ctype_digit($publicationFilter)) {
+        //     $query->where('publication_id', (int) $publicationFilter);
+        // }
+        $query->filterByPublication($request->get('publikasi'));
+
+        // if ($sortBy && in_array($sortBy, ['title', 'updated_at'])) {
+        //     $query->orderBy($sortBy, $sortDir);
+        if ($sortBy === 'title') {
+            // Kolom entry.title selalu NULL (tidak diisi CreateStatisticTableEntry),
+            // jadi urutkan berdasarkan judul yang tampil (fallback judul template).
+            $query->orderByDisplayTitle($sortDir);
+        } elseif ($sortBy === 'updated_at') {
+            $query->orderBy('updated_at', $sortDir);
         } else {
             $query->orderBy('created_at', 'desc');
         }
@@ -86,7 +112,17 @@ class PublicStatisticController extends Controller
 
         $tables = $query->paginate($perPage);
 
-        return view('statistic.index', compact('tables', 'perPage'));
+        // return view('statistic.index', compact('tables', 'perPage'));
+        // Hanya publikasi yang benar-benar punya tabel tampil (template aktif), supaya dropdown tidak berisi opsi kosong
+        $publications = Publication::whereHas('statisticTableEntries.template', fn ($q) => $q->where('is_active', true))
+            ->orderBy('title')
+            ->get(['id', 'title']);
+
+        // Kolom Publikasi hanya relevan saat "Semua Publikasi"; saat difilter isinya pasti seragam
+        // $showPublicationColumn = $publicationFilter === '';
+        $showPublicationColumn = !$request->filled('publikasi');
+
+        return view('statistic.index', compact('tables', 'perPage', 'publications', 'showPublicationColumn'));
     }
 
     // public function show(StatisticTableEntry $statistic)

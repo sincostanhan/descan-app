@@ -13,6 +13,7 @@ class CreateStatisticTableEntry
         return DB::transaction(function () use ($template, $attributes) {
             // village_id otomatis terisi oleh BelongsToVillage trait pada model StatisticTableEntry
             $entry = $template->entries()->create([
+                'publication_id' => $attributes['publication_id'] ?? null,
                 'source' => $attributes['source'] ?? null,
                 'description' => $attributes['description'] ?? null,
             ]);

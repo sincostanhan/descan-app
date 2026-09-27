@@ -26,13 +26,20 @@ class MetadataStatistikController extends Controller
         $query = MetadataStatistik::query()
             ->when($request->get('search'), function ($query, $search) {
                 $query->where('title', 'like', '%' . $search . '%');
-            });
+            // });
+            })
+            ->when($request->filled('tahun'), fn ($query) => $query->where('tahun', $request->integer('tahun')));
+
+        // Opsi dropdown diambil dari data yang ada saja (otomatis ter-scope ke kelurahan aktif via BelongsToVillage),
+        // supaya tidak ada pilihan tahun yang hasilnya pasti kosong.
+        $tahunOptions = MetadataStatistik::whereNotNull('tahun')->distinct()->orderByDesc('tahun')->pluck('tahun');
 
         $metadataStatistiks = $query
             ->orderBy('id', 'desc')
             ->paginate($perPage);
 
-        return view('metadata-statistik', compact('metadataStatistiks', 'perPage'));
+        // return view('metadata-statistik', compact('metadataStatistiks', 'perPage'));
+        return view('metadata-statistik', compact('metadataStatistiks', 'perPage', 'tahunOptions'));
     }
 
     /**

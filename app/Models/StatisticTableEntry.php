@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Traits\BelongsToVillage;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -16,6 +17,7 @@ class StatisticTableEntry extends Model
     protected $fillable = [
         'village_id',
         'statistic_template_id',
+        'publication_id',
         'title',
         'source',
         'description',
@@ -24,6 +26,14 @@ class StatisticTableEntry extends Model
     public function template(): BelongsTo
     {
         return $this->belongsTo(StatisticTemplate::class, 'statistic_template_id');
+    }
+
+    /**
+     * Publikasi induk tabel ini (opsional). Satu tabel hanya milik satu publikasi.
+     */
+    public function publication(): BelongsTo
+    {
+        return $this->belongsTo(Publication::class);
     }
 
     public function values(): HasMany
@@ -37,6 +47,51 @@ class StatisticTableEntry extends Model
     public function chart(): HasOne
     {
         return $this->hasOne(StatisticChart::class, 'statistic_table_entry_id');
+    }
+
+    /**
+     * Urut berdasarkan judul yang TAMPIL di layar: override entry.title (jika ada),
+     * fallback ke judul template. Dipakai PublicStatisticController & StatisticTableEntryController.
+     * $direction di-whitelist asc/desc sehingga aman dipakai di orderByRaw.
+     */
+    public function scopeOrderByDisplayTitle(Builder $query, string $direction = 'asc'): Builder
+    {
+        $direction = strtolower($direction) === 'desc' ? 'desc' : 'asc';
+
+        return $query->orderByRaw(
+            "COALESCE(statistic_table_entries.title, (SELECT st.title FROM statistic_templates st WHERE st.id = statistic_table_entries.statistic_template_id)) {$direction}"
+        );
+    }
+
+    /**
+     * Pencarian judul (entry.title ATAU judul template), dibungkus dalam satu grup where
+     * agar orWhereHas tidak "membocorkan" kondisi lain seperti filter is_active.
+     */
+    public function scopeSearchDisplayTitle(Builder $query, string $search): Builder
+    {
+        return $query->where(function ($q) use ($search) {
+            $q->where('statistic_table_entries.title', 'like', "%{$search}%")
+              ->orWhereHas('template', fn ($t) => $t->where('title', 'like', "%{$search}%"));
+        });
+    }
+
+    /**
+     * Filter publikasi, dipakai index publik & admin.
+     * '' / null = semua, 'tanpa' = tabel tanpa publikasi, angka = ID publikasi.
+     */
+    public function scopeFilterByPublication(Builder $query, ?string $filter): Builder
+    {
+        $filter = (string) $filter;
+
+        if ($filter === 'tanpa') {
+            return $query->whereNull('publication_id');
+        }
+
+        if (ctype_digit($filter)) {
+            return $query->where('publication_id', (int) $filter);
+        }
+
+        return $query;
     }
 
     /**

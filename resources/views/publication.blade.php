@@ -35,7 +35,11 @@
                 </button>
             </form>
 
-            <div class="flex justify-end">
+            {{-- <div class="flex justify-end">
+                <x-pagination-dropdown :perPage="$perPage" />
+            </div> --}}
+            <div class="flex flex-col items-end gap-3 md:flex-row md:items-center">
+                <x-sort-dropdown />
                 <x-pagination-dropdown :perPage="$perPage" />
             </div>
         </div>
@@ -44,7 +48,8 @@
             <x-document-card 
                 :title="$pub->title"
                 :description="$pub->description"
-                :date="$pub->created_at->translatedFormat('d F Y')"
+                {{-- :date="$pub->created_at->translatedFormat('d F Y')" --}}
+                :date="$pub->updated_at->translatedFormat('d F Y')"
                 :coverUrl="$pub->cover_path ? asset('storage/' . $pub->cover_path) : null"
                 :fileUrl="asset('storage/' . $pub->file_path)"
                 :downloadUrl="route('publication.download', $pub->id)"

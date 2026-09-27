@@ -42,7 +42,11 @@ class UpdateMetadataStatistik
             }
         }
 
-        $updateData = ['title' => $attributes['title']];
+        // $updateData = ['title' => $attributes['title']];
+        $updateData = [
+            'title' => $attributes['title'],
+            'tahun' => $attributes['tahun'],
+        ];
 
         if (array_key_exists('file_path', $attributes)) {
             $updateData['file_path'] = $attributes['file_path'];

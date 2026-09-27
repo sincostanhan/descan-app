@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Traits\BelongsToVillage;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Publication extends Model
 {
@@ -19,4 +20,12 @@ class Publication extends Model
         // cover
         'cover_path'
     ];
+
+    /**
+     * Tabel statistik yang termasuk dalam publikasi ini.
+     */
+    public function statisticTableEntries(): HasMany
+    {
+        return $this->hasMany(StatisticTableEntry::class);
+    }
 }

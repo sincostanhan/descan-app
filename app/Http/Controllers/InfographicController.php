@@ -10,13 +10,15 @@ use App\Http\Requests\UpdateInfographicRequest;
 use App\Models\Infographic;
 use App\Support\FilenameSanitizer;
 use App\Traits\HasPaginationLimit;
+use App\Traits\HasPublicSorting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 class InfographicController extends Controller
 {
-    use HasPaginationLimit;
+    // use HasPaginationLimit;
+    use HasPaginationLimit, HasPublicSorting;
 
     // Halaman Publik
     public function indexPublic(Request $request)
@@ -36,8 +38,10 @@ class InfographicController extends Controller
             });        
 
         // $infographics = Infographic::latest()
-        $infographics = $query
-            ->orderBy('id', 'desc')
+        // $infographics = $query
+        //     ->orderBy('id', 'desc')
+        //     ->paginate($perPage);
+        $infographics = $this->applyPublicSort($query, $request)
             ->paginate($perPage);
         
         return view('infographic', compact('infographics', 'perPage'));

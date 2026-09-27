@@ -8,6 +8,7 @@ use App\Actions\MarkTemplateLogsAsRead;
 use App\Actions\UpdateStatisticTableEntry;
 use App\Http\Requests\StoreStatisticTableEntryRequest;
 use App\Http\Requests\UpdateStatisticTableEntryRequest;
+use App\Models\Publication;
 use App\Models\StatisticTableEntry;
 use App\Models\StatisticTemplate;
 use App\Traits\HasPaginationLimit;
@@ -17,23 +18,78 @@ class StatisticTableEntryController extends Controller
 {
     use HasPaginationLimit;
 
-    /**
-     * Daftar tabel statistik yang SUDAH diisi Kelurahan ini.
-     */
+    // /**
+    //  * Daftar tabel statistik yang SUDAH diisi Kelurahan ini.
+    //  */
+    // // public function index(Request $request)
+    // // public function index(Request $request, MarkTemplateLogsAsRead $markLogsAsRead)
     // public function index(Request $request)
-    // public function index(Request $request, MarkTemplateLogsAsRead $markLogsAsRead)
+    // {
+    //     $perPage = $this->getPaginationLimit($request);
+    //     $villageId = auth()->user()->village_id;
+
+    //     // $entries = StatisticTableEntry::with('template')
+    //     //     ->with('chart')
+    //     $sortBy = $request->get('sort_by');
+    //     $sortDir = strtolower($request->get('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+    //     $query = StatisticTableEntry::with(['template', 'chart'])
+    //         // ->with(['template.logs' => fn ($q) => $q->latest()->with('changer')])        
+    //         ->with(['template.logs' => fn ($q) => $q->latest()->with(['changer', 'reads'])])
+    //         // ->when($request->get('search'), fn ($q, $s) => $q->whereHas('template', fn ($t) => $t->where('title', 'like', "%{$s}%")))
+    //         // ->latest()
+    //         // ->paginate($perPage);
+    //         ->when($request->get('search'), fn ($q, $s) => $q->searchDisplayTitle($s));
+
+    //     if ($sortBy === 'title') {
+    //         $query->orderByDisplayTitle($sortDir);
+    //     } elseif ($sortBy === 'updated_at') {
+    //         $query->orderBy('updated_at', $sortDir);
+    //     } else {
+    //         $query->latest();
+    //     }
+
+    //     $entries = $query->paginate($perPage);
+
+    //     $unreadCounts = [];
+    //     foreach ($entries as $entry) {
+    //         $unreadCounts[$entry->template->id] = $entry->template->logs
+    //             ->filter(fn ($log) => $log->reads->where('village_id', $villageId)->isEmpty())
+    //             ->count();
+    //     }
+
+    //     // foreach ($entries->getCollection()->pluck('template')->unique('id') as $template) {
+    //     //     $markLogsAsRead->handle($template, $villageId);
+    //     // }
+
+    //     // return view('admin.statistic-table-entries.index', compact('entries', 'perPage'));
+    //     // return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts'));
+    //     // (villageId juga perlu dikirim, sudah ada sebagai variabel $villageId dari langkah sebelumnya)
+    //     // return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts', 'villageId'));
+    //     return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts', 'villageId'));
+    // }
     public function index(Request $request)
     {
         $perPage = $this->getPaginationLimit($request);
         $villageId = auth()->user()->village_id;
 
-        $entries = StatisticTableEntry::with('template')
-            ->with('chart')
-            // ->with(['template.logs' => fn ($q) => $q->latest()->with('changer')])        
+        $sortBy = $request->get('sort_by');
+        $sortDir = strtolower($request->get('sort_dir', 'asc')) === 'desc' ? 'desc' : 'asc';
+
+        $query = StatisticTableEntry::with(['template', 'chart', 'publication'])
             ->with(['template.logs' => fn ($q) => $q->latest()->with(['changer', 'reads'])])
             ->when($request->get('search'), fn ($q, $s) => $q->whereHas('template', fn ($t) => $t->where('title', 'like', "%{$s}%")))
-            ->latest()
-            ->paginate($perPage);
+            ->filterByPublication($request->get('publikasi'));
+
+        if ($sortBy === 'title') {
+            $query->orderByDisplayTitle($sortDir);
+        } elseif ($sortBy === 'updated_at') {
+            $query->orderBy('updated_at', $sortDir);
+        } else {
+            $query->latest();
+        }
+
+        $entries = $query->paginate($perPage);
 
         $unreadCounts = [];
         foreach ($entries as $entry) {
@@ -42,15 +98,16 @@ class StatisticTableEntryController extends Controller
                 ->count();
         }
 
-        // foreach ($entries->getCollection()->pluck('template')->unique('id') as $template) {
-        //     $markLogsAsRead->handle($template, $villageId);
-        // }
+        // Admin melihat semua tabelnya (termasuk template nonaktif), jadi tanpa filter is_active
+        $publications = Publication::whereHas('statisticTableEntries')
+            ->orderBy('title')
+            ->get(['id', 'title']);
 
-        // return view('admin.statistic-table-entries.index', compact('entries', 'perPage'));
-        // return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts'));
-        // (villageId juga perlu dikirim, sudah ada sebagai variabel $villageId dari langkah sebelumnya)
-        // return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts', 'villageId'));
-        return view('admin.statistic-table-entries.index', compact('entries', 'perPage', 'unreadCounts', 'villageId'));
+        $showPublicationColumn = !$request->filled('publikasi');
+
+        return view('admin.statistic-table-entries.index', compact(
+            'entries', 'perPage', 'unreadCounts', 'villageId', 'publications', 'showPublicationColumn'
+        ));
     }
 
 
@@ -110,6 +167,8 @@ class StatisticTableEntryController extends Controller
 
         return view('admin.statistic-table-entries.create', [
             'template' => $statistic_template,
+            // Otomatis ter-scope ke kelurahan aktif via BelongsToVillage
+            'publications' => Publication::orderBy('title')->get(['id', 'title']),
         ]);
     }
 
@@ -143,6 +202,7 @@ class StatisticTableEntryController extends Controller
 
         return view('admin.statistic-table-entries.edit', [
             'entry' => $statistic_table_entry,
+            'publications' => Publication::orderBy('title')->get(['id', 'title']),
         ]);
     }
 

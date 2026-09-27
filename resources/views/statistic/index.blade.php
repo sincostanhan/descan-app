@@ -4,6 +4,8 @@
     />
 
     <div class="max-w-6xl mx-auto px-4 lg:px-0 mb-12">
+        <x-publication-filter :publications="$publications" class="mb-4" />
+
         {{-- <div class="flex justify-end mb-4">
             <x-pagination-dropdown :perPage="$perPage" />
         </div> --}}
@@ -47,6 +49,8 @@
                     {{-- <x-empty-alert message="Belum ada data statistik yang dipublikasikan saat ini." /> --}}
                     @if(request('search'))
                         <x-empty-alert message="Data dengan judul '{{ request('search') }}' tidak ditemukan." />
+                    @elseif(request()->filled('publikasi'))
+                        <x-empty-alert message="Belum ada tabel statistik pada pilihan publikasi ini." />
                     @else
                         <x-empty-alert message="Belum ada tabel statistik yang ditambahkan." />
                     @endif
@@ -93,6 +97,9 @@
                                             @else <x-lucide-arrow-down class="w-4 h-4" /> @endif
                                         </button>
                                     </th>
+                                    @if($showPublicationColumn)
+                                        <th>Publikasi</th>
+                                    @endif
                                     <th>Sumber Data</th>
                                     <th class="text-center">Grafik</th>
                                     <th class="text-center">Unduh</th>
@@ -115,6 +122,11 @@
                                         <td class="font-medium whitespace-normal">
                                             {{ $table->title ?? $table->template->title }}
                                         </td>
+                                        @if($showPublicationColumn)
+                                            <td class="text-sm text-base-content/70 whitespace-normal">
+                                                {{ $table->publication?->title ?? '-' }}
+                                            </td>
+                                        @endif
                                         <td class="text-sm text-base-content/70">
                                             {{ $table->source ?: '-' }}
                                         </td>

@@ -16,7 +16,8 @@
                 
                 <div class="mb-4">
                     <h3 class="text-secondary
-                    font-bold text-lg mb-2">Kelurahan Baadia memiliki batas wilayah:</h3>
+                    {{-- font-bold text-lg mb-2">Kelurahan Baadia memiliki batas wilayah:</h3> --}}
+                    font-bold text-lg mb-2">{{ $currentVillage->display_name ?? 'Kelurahan' }} memiliki batas wilayah:</h3>
 
                     {{--o Table --}}
                     <div class="overflow-x-auto">

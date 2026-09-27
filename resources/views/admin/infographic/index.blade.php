@@ -30,7 +30,10 @@
                 </form>
             </div>
 
-            <div class="flex flex-row justify-between items-center">
+            {{-- <div class="flex flex-row justify-between items-center"> --}}
+            <div class="flex
+                flex-col-reverse items-end gap-3
+                md:flex-row md:justify-between md:items-center">
                 <x-pagination-dropdown :perPage="$perPage" />
         
                 <a class="btn btn-sm md:btn-md 

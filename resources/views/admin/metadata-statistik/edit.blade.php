@@ -25,6 +25,22 @@
                         <x-forms.error name="title" />
                     </fieldset>
 
+                    <fieldset class="fieldset w-full mb-6">
+                        <legend class="fieldset-legend text-base">Tahun</legend>
+                        <input type="number"
+                            name="tahun"
+                            value="{{ old('tahun', $metadataStatistik->tahun) }}"
+                            min="1900"
+                            max="{{ now()->year + 1 }}"
+                            required
+                            placeholder="Contoh: 2025"
+                            class="input w-full sm:w-48"/>
+                        @if(is_null($metadataStatistik->tahun))
+                            <p class="label text-warning">Data lama ini belum memiliki tahun. Isi agar muncul di filter tahun halaman publik.</p>
+                        @endif
+                        <x-forms.error name="tahun" />
+                    </fieldset>
+
                     <fieldset class="fieldset w-full mb-8">
                         <legend class="fieldset-legend text-base">Ganti File Metadata (Opsional)</legend>
                         <input

@@ -216,16 +216,38 @@
                 }
             }
 
+            // Escape nilai dari database (diisi admin) sebelum disisipkan ke HTML popup
+            function escapeHtml(s) {
+                return String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+            }
+
+            // Tambah prefix "Kelurahan"/"Kecamatan" kecuali admin sudah menulisnya sendiri
+            // (logika sama dengan $displayTitle di layout.blade.php)
+            function withPrefix(name, prefix) {
+                if (!name) return '';
+                return name.toLowerCase().includes(prefix.toLowerCase()) ? name : `${prefix} ${name}`;
+            }
+
             // Popup: nama kelurahan -> kecamatan -> RW/RT -> <hr> -> kolom & nilai (atau pesan netral)
             function buildPopupHtml(p, hasColumnData) {
                 const dataSection = hasColumnData
-                    ? `${p.column_label}: <strong>${p.value ?? 'Belum diisi'}</strong>`
+                    // ? `${p.column_label}: <strong>${p.value ?? 'Belum diisi'}</strong>`
+                    ? `${escapeHtml(p.column_label)}: <strong>${escapeHtml(p.value ?? 'Belum diisi')}</strong>`
                     : `<span class="text-base-content/50 italic text-xs">Pilih Tabel & Kolom untuk melihat data statistik</span>`;
 
+                // return `
+                //     <div class="text-sm">
+                //         <strong>${p.kelurahan ?? '-'}</strong><br>
+                //         ${p.kecamatan ? p.kecamatan + '<br>' : ''}
+                //         ${p.rw_label ?? ''} / ${p.rt_label ?? ''}
+                //         <hr>
+                //         ${dataSection}
+                //     </div>
+                // `;
                 return `
                     <div class="text-sm">
-                        <strong>${p.kelurahan ?? '-'}</strong><br>
-                        ${p.kecamatan ? p.kecamatan + '<br>' : ''}
+                        <strong>${escapeHtml(withPrefix(p.kelurahan, 'Kelurahan')) || '-'}</strong><br>
+                        ${p.kecamatan ? escapeHtml(withPrefix(p.kecamatan, 'Kecamatan')) + '<br>' : ''}
                         ${p.rw_label ?? ''} / ${p.rt_label ?? ''}
                         <hr>
                         ${dataSection}
