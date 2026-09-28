@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Actions\CreateStatisticTableEntry;
+use App\Models\Publication;
 use App\Models\StatisticTableEntry;
 use App\Models\StatisticTemplate;
 use App\Models\Village;
