@@ -104,7 +104,7 @@
                                     @endphp
                                     
                                     @if($coverSrc)
-                                        <img id="old-cover" src="{{ $coverSrc }}" class="w-48 rounded border shadow-md object-cover">
+                                        {{-- <img id="old-cover" src="{{ $coverSrc }}" class="w-48 rounded border shadow-md object-cover"> --}}
                                         <img id="old-cover" src="{{ $coverSrc }}" class="w-48 rounded border shadow-md object-cover" loading="lazy" decoding="async">
                                     @endif
                                 </div>
