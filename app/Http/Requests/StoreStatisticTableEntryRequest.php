@@ -59,6 +59,9 @@ class StoreStatisticTableEntryRequest extends FormRequest
             'publication_id.exists' => 'Publikasi yang dipilih tidak valid.',
             'values.*.numeric' => 'Kolom ini hanya boleh diisi angka.',
             'values.*.string' => 'Kolom ini hanya boleh diisi teks.',
+            // Batas panjang isian sel teks — :max otomatis terisi dari rule (saat ini 100).
+            'values.*.max' => 'Kolom ini maksimal :max karakter.',
+            'source.max' => 'Sumber data maksimal :max karakter.',
         ];
     }
 }
