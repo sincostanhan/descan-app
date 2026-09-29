@@ -61,6 +61,7 @@
                             </div>
                         </label>
                     </div>
+                    <x-forms.error name="row_source" />
                 {{-- </div>
             </div> --}}
             </x-section-card>

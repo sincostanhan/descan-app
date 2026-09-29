@@ -18,7 +18,8 @@ class UpdateStatisticTemplate
     public function handle(StatisticTemplate $template, array $attributes): StatisticTemplate
     {
         return DB::transaction(function () use ($template, $attributes) {
-            if ($template->row_source !== $attributes['row_source'] && $template->entries()->exists()) {
+            // if ($template->row_source !== $attributes['row_source'] && $template->entries()->exists()) {
+            if ($template->row_source !== $attributes['row_source'] && $template->isUsedByAnyVillage()) {
                 throw ValidationException::withMessages([
                     'row_source' => 'Mode sumber baris tidak bisa diubah karena template ini sudah dipakai Kelurahan.',
                 ]);

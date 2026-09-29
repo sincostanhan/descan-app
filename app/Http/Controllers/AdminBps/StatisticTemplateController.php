@@ -74,7 +74,8 @@ class StatisticTemplateController extends Controller
         // Soft delete. Jika masih ada Kelurahan yang memakainya, statistic_table_entries.statistic_template_id
         // pakai restrictOnDelete di level DB — tapi karena ini soft delete (bukan hard delete),
         // constraint itu TIDAK akan ke-trigger. Jadi kita cek manual di sini:
-        if ($statistic_template->entries()->exists()) {
+        // if ($statistic_template->entries()->exists()) {
+        if ($statistic_template->isUsedByAnyVillage()) {
             return back()->withErrors([
                 'template' => 'Template tidak bisa dihapus karena masih dipakai oleh Kelurahan.',
             ]);
@@ -123,7 +124,8 @@ class StatisticTemplateController extends Controller
         $skippedTitles = [];
 
         foreach ($templates as $template) {
-            if ($template->entries()->exists()) {
+            // if ($template->entries()->exists()) {
+            if ($template->isUsedByAnyVillage()) {
                 $skippedTitles[] = $template->title;
                 continue;
             }
@@ -144,11 +146,10 @@ class StatisticTemplateController extends Controller
 
     /**
      * Aktifkan/nonaktifkan "Tampil di Dashboard Peta" untuk beberapa template sekaligus.
-     * Saat mengaktifkan (is_mapped=true): template yang strukturnya belum layak dipetakan
-     * (lihat ValidateMappableStructure — belum punya baris RT/RW sama sekali, misal template
-     * rt_rw yang belum pernah dibuka Kelurahan manapun) OTOMATIS DILEWATI, bukan bikin
-     * seluruh proses gagal. Saat menonaktifkan (is_mapped=false), tidak ada validasi apa pun.
-     */
+     * Saat mengaktifkan (is_mapped=true): template yang ditolak ValidateMappableStructure
+     * OTOMATIS DILEWATI (bukan menggagalkan seluruh proses), dan alasan penolakan aslinya
+     * ditampilkan, dikelompokkan per alasan. Saat menonaktifkan, tidak ada validasi apa pun.
+    */
     public function bulkSetMapped(Request $request, ValidateMappableStructure $validateMappable)
     {
         $validated = $request->validate([
@@ -160,14 +161,17 @@ class StatisticTemplateController extends Controller
         $templates = StatisticTemplate::whereIn('id', $validated['ids'])->get();
 
         $updatedCount = 0;
-        $skippedTitles = [];
+        // $skippedTitles = [];
+        $rejectedByReason = []; // [pesan alasan => [judul template, ...]]
 
         foreach ($templates as $template) {
             if ($validated['is_mapped']) {
                 try {
                     $validateMappable->handle($template);
                 } catch (ValidationException $e) {
-                    $skippedTitles[] = $template->title;
+                    // $skippedTitles[] = $template->title;
+                    $reason = $e->errors()['is_mapped'][0] ?? 'Struktur baris tidak memenuhi syarat.';
+                    $rejectedByReason[$reason][] = $template->title;
                     continue;
                 }
             }
@@ -177,10 +181,19 @@ class StatisticTemplateController extends Controller
         }
 
         $actionLabel = $validated['is_mapped'] ? 'diaktifkan di peta' : 'dinonaktifkan dari peta';
-        $message = "{$updatedCount} template berhasil {$actionLabel}.";
-        if (!empty($skippedTitles)) {
-            $message .= ' Dilewati (struktur belum layak dipetakan): ' . implode(', ', $skippedTitles) . '.';
+        // $message = "{$updatedCount} template berhasil {$actionLabel}.";
+        // if (!empty($skippedTitles)) {
+        //     $message .= ' Dilewati (struktur belum layak dipetakan): ' . implode(', ', $skippedTitles) . '.';
+        // }
+
+        $parts = [];
+        if ($updatedCount > 0) {
+            $parts[] = "{$updatedCount} template berhasil {$actionLabel}.";
         }
+        foreach ($rejectedByReason as $reason => $titles) {
+            $parts[] = 'Perubahan ditolak untuk ' . implode(', ', $titles) . ': ' . $reason;
+        }
+        $message = implode(' ', $parts);
 
         return back()->with($updatedCount > 0 ? 'success' : 'error', $message);
     }

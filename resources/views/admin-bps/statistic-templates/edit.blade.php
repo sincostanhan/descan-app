@@ -101,6 +101,9 @@
                             </div>
                         </label>
                     </div>
+                    {{-- Menampilkan ValidationException dari UpdateStatisticTemplate
+                         ("Mode sumber baris tidak bisa diubah karena template ini sudah dipakai Kelurahan."). --}}
+                    <x-forms.error name="row_source" />
                 {{-- </div>
             </div> --}}
             </x-section-card>

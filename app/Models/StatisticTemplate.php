@@ -87,6 +87,17 @@ class StatisticTemplate extends Model
     }
 
     /**
+     * Apakah template ini sudah dipakai oleh Kelurahan MANA PUN.
+     * withoutGlobalScope('village') wajib: StatisticTableEntry memakai BelongsToVillage,
+     * yang akan memfilter ke satu kelurahan saja jika current_village_id ter-bind.
+     * Tanpa ini, template yang dipakai kelurahan lain bisa lolos dianggap "belum dipakai".
+     */
+    public function isUsedByAnyVillage(): bool
+    {
+        return $this->entries()->withoutGlobalScope('village')->exists();
+    }
+
+    /**
      * Riwayat perubahan struktur template.
      */
     public function logs(): HasMany
