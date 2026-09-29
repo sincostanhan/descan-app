@@ -9,7 +9,8 @@
         {{-- <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2"> --}}
         {{-- Baris cukup 1 field (label) sehingga lebarnya penuh; kolom tetap 2 grid (label + tipe data).
              Input "Nilai RT" dihapus: Dashboard Peta hanya mendukung mode rt_rw (lihat ValidateMappableStructure). --}}
-        <div class="flex-1 grid grid-cols-1 {{ $axis === 'column' ? 'md:grid-cols-2' : '' }} gap-2"></div>
+        {{-- <div class="flex-1 grid grid-cols-1 {{ $axis === 'column' ? 'md:grid-cols-2' : '' }} gap-2"></div> --}}
+        <div class="flex-1 grid grid-cols-1 {{ $axis === 'column' ? 'md:grid-cols-2' : '' }} gap-2">
             <input
                 type="text"
                 class="input input-sm node-label"

@@ -93,10 +93,10 @@
 
         return `
         <div class="header-node" data-axis="${axis}">
-            <div class="flex-1 grid grid-cols-1 ${gridCols} gap-2">
-                <input type="text" class="input input-sm node-label" placeholder="Label (misal: ${axis === 'row' ? 'Balita' : 'Laki-laki'})">
-                <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2">
-                    <input type="text" class="input input-sm node-label" placeholder="Label (misal: ${axis === 'row' ? 'RT 01' : 'Laki-laki'})">
+            <div class="node-row flex gap-2 items-start bg-base-200/40 p-3 rounded-box">
+                <input type="hidden" class="node-id" value="">
+                <div class="flex-1 grid grid-cols-1 ${gridCols} gap-2">
+                    <input type="text" class="input input-sm node-label" placeholder="Label (misal: ${axis === 'row' ? 'Balita' : 'Laki-laki'})">
                     ${secondField}
                 </div>
                 <div class="flex gap-1 shrink-0">
