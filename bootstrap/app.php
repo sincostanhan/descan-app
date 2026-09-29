@@ -11,8 +11,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        // Daftarkan Tenancy Middleware di grup web
-        $middleware->web(append: [
+        // // Daftarkan Tenancy Middleware di grup web
+        // $middleware->web(append: [
+        // PREPEND (bukan append): InitializeTenancy harus jalan SEBELUM SubstituteBindings,
+        // supaya global scope BelongsToVillage sudah aktif saat route model binding
+        // mengambil data. Dengan append, binding terjadi lebih dulu dan scope belum berlaku,
+        // sehingga data kelurahan lain bisa dibuka lewat ID di URL.
+        $middleware->web(prepend: [
             \App\Http\Middleware\InitializeTenancy::class,
         ]);
         // Alias middleware Spatie dan Custom

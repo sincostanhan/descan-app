@@ -18,4 +18,15 @@ class PotensiWisataPhoto extends Model
     {
         return $this->belongsTo(PotensiWisata::class);
     }
+
+    /**
+     * Sama seperti GalleryPhoto: dibatasi lewat induknya (PotensiWisata)
+     * yang sudah terfilter global scope BelongsToVillage.
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->whereHas('potensiWisata')
+            ->where($field ?? $this->getRouteKeyName(), $value)
+            ->firstOrFail();
+    }
 }

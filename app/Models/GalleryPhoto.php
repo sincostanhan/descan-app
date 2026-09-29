@@ -23,4 +23,16 @@ class GalleryPhoto extends Model
     {
         return $this->belongsTo(Gallery::class);
     }
+
+    /**
+     * Foto tidak punya village_id sendiri, jadi dibatasi lewat induknya (Gallery),
+     * yang sudah otomatis terfilter oleh global scope BelongsToVillage.
+     * Foto milik kelurahan lain → 404.
+     */
+    public function resolveRouteBinding($value, $field = null)
+    {
+        return $this->whereHas('gallery')
+            ->where($field ?? $this->getRouteKeyName(), $value)
+            ->firstOrFail();
+    }
 }
