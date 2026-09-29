@@ -41,8 +41,10 @@ class UpdateStatisticTableEntryRequest extends FormRequest
         foreach ($cells as $cell) {
             $rules["values.{$cell->id}"] = match ($cell->columnHeader->data_type) {
                 'numeric' => ['nullable', 'numeric'],
-                'text' => ['nullable', 'string', 'max:1000'],
-                default => ['nullable', 'string', 'max:1000'],
+                // 'text' => ['nullable', 'string', 'max:1000'],
+                // default => ['nullable', 'string', 'max:1000'],
+                'text' => ['nullable', 'string', 'max:100'],
+                default => ['nullable', 'string', 'max:100'],
             };
         }
 
