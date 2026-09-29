@@ -18,8 +18,9 @@ class PublicMapDashboardController extends Controller
      */
     public function index()
     {
-        $templates = StatisticTemplate::where('is_mapped', true)
-            ->where('is_active', true)
+        // $templates = StatisticTemplate::where('is_mapped', true)
+        //     ->where('is_active', true)
+        $templates = StatisticTemplate::mappable()
             ->orderBy('title')
             ->get(['id', 'title']);
 
@@ -31,7 +32,11 @@ class PublicMapDashboardController extends Controller
      */
     public function columns(StatisticTemplate $statistic_template): JsonResponse
     {
-        abort_unless($statistic_template->is_mapped && $statistic_template->is_active, 404);
+        // abort_unless($statistic_template->is_mapped && $statistic_template->is_active, 404);
+        abort_unless(
+            $statistic_template->is_mapped && $statistic_template->is_active && $statistic_template->isRtRwMode(),
+            404
+        );
 
         $columns = $statistic_template->headers()
             ->where('axis', 'column')
@@ -76,9 +81,10 @@ class PublicMapDashboardController extends Controller
             'rw' => ['required', 'string'],
         ]);
 
-        $template = StatisticTemplate::where('is_mapped', true)
-            ->where('is_active', true)
-            ->findOrFail($validated['template_id']);
+        // $template = StatisticTemplate::where('is_mapped', true)
+        //     ->where('is_active', true)
+        //     ->findOrFail($validated['template_id']);
+        $template = StatisticTemplate::mappable()->findOrFail($validated['template_id']);
 
         $columnHeader = StatisticTemplateHeader::where('statistic_template_id', $template->id)
             ->where('axis', 'column')
@@ -105,9 +111,10 @@ class PublicMapDashboardController extends Controller
             'column_id' => ['required', 'integer', 'exists:statistic_template_headers,id'],
         ]);
 
-        $template = StatisticTemplate::where('is_mapped', true)
-            ->where('is_active', true)
-            ->findOrFail($validated['template_id']);
+        // $template = StatisticTemplate::where('is_mapped', true)
+        //     ->where('is_active', true)
+        //     ->findOrFail($validated['template_id']);
+        $template = StatisticTemplate::mappable()->findOrFail($validated['template_id']);
 
         $columnHeader = StatisticTemplateHeader::where('statistic_template_id', $template->id)
             ->where('axis', 'column')

@@ -12,6 +12,10 @@
 
     $rowTree = $buildTree($statistic_template->headers, 'row');
     $columnTree = $buildTree($statistic_template->headers, 'column');
+
+    // Dashboard Peta hanya untuk mode rt_rw (lihat ValidateMappableStructure).
+    // Pakai old() supaya state checkbox tetap konsisten saat form kembali dengan error validasi.
+    $isRtRwMode = old('row_source', $statistic_template->row_source ?? 'manual') === 'rt_rw';
 @endphp
 
 <x-layout-admin-bps title="Panel Admin BPS | Edit Template">
@@ -48,11 +52,15 @@
                         </label>
 
                         <label class="label cursor-pointer justify-start gap-3 w-fit">
-                            <input type="checkbox" name="is_mapped" value="1" class="checkbox checkbox-sm checkbox-info" {{ old('is_mapped', $statistic_template->is_mapped) ? 'checked' : '' }}>
+                            {{-- <input type="checkbox" name="is_mapped" value="1" class="checkbox checkbox-sm checkbox-info" {{ old('is_mapped', $statistic_template->is_mapped) ? 'checked' : '' }}> --}}
+                            <input type="checkbox" name="is_mapped" id="is_mapped_checkbox" value="1" class="checkbox checkbox-sm checkbox-info"
+                                {{ $isRtRwMode && old('is_mapped', $statistic_template->is_mapped) ? 'checked' : '' }}
+                                {{ $isRtRwMode ? '' : 'disabled' }}>
                             <span class="label-text">Tampilkan di Dashboard Peta Publik</span>
                         </label>
                         <p class="text-xs text-base-content/60 -mt-2 ml-9">
-                            Hanya bisa diaktifkan jika minimal satu level struktur Baris diisi "Nilai RT".
+                            {{-- Hanya bisa diaktifkan jika minimal satu level struktur Baris diisi "Nilai RT". --}}
+                            Hanya tersedia untuk sumber baris "Otomatis dari RT/RW", dan minimal satu Kelurahan sudah membuka template ini.
                         </p>
                         <x-forms.error name="is_mapped" />
                     </div>

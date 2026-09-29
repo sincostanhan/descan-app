@@ -6,20 +6,25 @@
     <div class="node-row flex gap-2 items-start bg-base-200/40 p-3 rounded-box">
         <input type="hidden" class="node-id" value="{{ $node['id'] ?? '' }}">
 
-        <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2">
+        {{-- <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2"> --}}
+        {{-- Baris cukup 1 field (label) sehingga lebarnya penuh; kolom tetap 2 grid (label + tipe data).
+             Input "Nilai RT" dihapus: Dashboard Peta hanya mendukung mode rt_rw (lihat ValidateMappableStructure). --}}
+        <div class="flex-1 grid grid-cols-1 {{ $axis === 'column' ? 'md:grid-cols-2' : '' }} gap-2"></div>
             <input
                 type="text"
                 class="input input-sm node-label"
-                placeholder="Label (misal: {{ $axis === 'row' ? 'RT 01' : 'Laki-laki' }})"
+                {{-- placeholder="Label (misal: {{ $axis === 'row' ? 'RT 01' : 'Laki-laki' }})" --}}
+                placeholder="Label (misal: {{ $axis === 'row' ? 'Balita' : 'Laki-laki' }})"
                 value="{{ $node['label'] ?? '' }}">
 
-            @if($axis === 'row')
+            {{-- @if($axis === 'row')
                 <input
                     type="text"
                     class="input input-sm node-rt-value"
                     placeholder="Nilai RT (opsional, untuk Dashboard Peta)"
                     value="{{ $node['rt_value'] ?? '' }}">
-            @else
+            @else --}}
+            @if($axis === 'column')
                 <select class="select select-sm node-data-type">
                     <option value="numeric" {{ ($node['data_type'] ?? '') === 'numeric' ? 'selected' : '' }}>Hanya Angka</option>
                     <option value="text" {{ ($node['data_type'] ?? '') === 'text' ? 'selected' : '' }}>Hanya Teks</option>

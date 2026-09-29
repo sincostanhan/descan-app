@@ -20,6 +20,13 @@ class ValidateMappableStructure
      */
     public function handle(StatisticTemplate $template): void
     {
+        // Dashboard Peta hanya mendukung mode rt_rw — baris manual tidak punya pasangan
+        // rt_value+rw_value yang bisa di-JOIN ke region_geometries (lihat ResolveMapChoroplethData).
+        if (!$template->isRtRwMode()) {
+            throw ValidationException::withMessages([
+                'is_mapped' => 'Dashboard Peta hanya tersedia untuk template dengan sumber baris "Otomatis dari RT/RW".',
+            ]);
+        }
         $rowLeaves = $template->headers()->where('axis', 'row')->where('is_leaf', true)->get();
 
         if ($rowLeaves->isEmpty()) {

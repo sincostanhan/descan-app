@@ -66,9 +66,11 @@
             document.getElementById('modal_confirm_remove_node').close();
         });
 
-        // Preview ikut update saat label/rt_value/data_type diketik/diganti
+        // // Preview ikut update saat label/rt_value/data_type diketik/diganti
+        // Preview ikut update saat label/data_type diketik/diganti
         document.body.addEventListener('input', function (e) {
-            if (e.target.matches('.node-label, .node-rt-value')) renderPreview();
+            // if (e.target.matches('.node-label, .node-rt-value')) renderPreview();
+            if (e.target.matches('.node-label')) renderPreview();
         });
         document.body.addEventListener('change', function (e) {
             if (e.target.matches('.node-data-type')) renderPreview();
@@ -76,18 +78,23 @@
     });
 
     function nodeTemplate(axis) {
-        const secondField = axis === 'row'
-            ? `<input type="text" class="input input-sm node-rt-value" placeholder="Nilai RT (opsional, untuk Dashboard Peta)">`
-            : `<select class="select select-sm node-data-type">
+        // const secondField = axis === 'row'
+        //     ? `<input type="text" class="input input-sm node-rt-value" placeholder="Nilai RT (opsional, untuk Dashboard Peta)">`
+        //     : `<select class="select select-sm node-data-type">
+        // Mirror _header-node.blade.php: baris hanya punya label, kolom punya label + tipe data.
+        const secondField = axis === 'column'
+            ? `<select class="select select-sm node-data-type">
                     <option value="numeric">Hanya Angka</option>
                     <option value="text">Hanya Teks</option>
                     <option value="both">Angka & Teks</option>
-               </select>`;
+               </select>`
+            : '';
+        const gridCols = axis === 'column' ? 'md:grid-cols-2' : '';
 
         return `
         <div class="header-node" data-axis="${axis}">
-            <div class="node-row flex gap-2 items-start bg-base-200/40 p-3 rounded-box">
-                <input type="hidden" class="node-id" value="">
+            <div class="flex-1 grid grid-cols-1 ${gridCols} gap-2">
+                <input type="text" class="input input-sm node-label" placeholder="Label (misal: ${axis === 'row' ? 'Balita' : 'Laki-laki'})">
                 <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-2">
                     <input type="text" class="input input-sm node-label" placeholder="Label (misal: ${axis === 'row' ? 'RT 01' : 'Laki-laki'})">
                     ${secondField}
@@ -125,10 +132,10 @@
         const obj = { label };
         if (id) obj.id = id;
 
-        if (axis === 'row') {
-            const rt = row.querySelector('.node-rt-value')?.value.trim();
-            obj.rt_value = rt ? rt : null;
-        }
+        // if (axis === 'row') {
+        //     const rt = row.querySelector('.node-rt-value')?.value.trim();
+        //     obj.rt_value = rt ? rt : null;
+        // }
 
         if (axis === 'column' && children.length === 0) {
             obj.data_type = row.querySelector('.node-data-type')?.value || 'text';
@@ -326,13 +333,29 @@
     function toggleRowSourceMode(mode) {
         const panel = document.getElementById('row-headers-panel');
         const addRowBtn = document.getElementById('btn-add-row-root');
+        const totalsPanel = document.getElementById('rt-rw-totals-panel');
+        const mappedCheckbox = document.getElementById('is_mapped_checkbox'); // hanya ada di edit.blade.php
 
-        if (mode === 'rt_rw') {
-            panel.classList.add('hidden');
-            if (addRowBtn) addRowBtn.disabled = true;
-        } else {
-            panel.classList.remove('hidden');
-            if (addRowBtn) addRowBtn.disabled = false;
+        // if (mode === 'rt_rw') {
+        //     panel.classList.add('hidden');
+        //     if (addRowBtn) addRowBtn.disabled = true;
+        // } else {
+        //     panel.classList.remove('hidden');
+        //     if (addRowBtn) addRowBtn.disabled = false;
+        // }
+        const isRtRw = mode === 'rt_rw';
+
+        panel.classList.toggle('hidden', isRtRw);
+        if (addRowBtn) addRowBtn.disabled = isRtRw;
+
+        // Bug fix: sebelumnya panel ini hanya di-hide dari Blade saat page load,
+        // tidak ikut berubah saat radio diganti.
+        if (totalsPanel) totalsPanel.classList.toggle('hidden', !isRtRw);
+
+        // Dashboard Peta hanya untuk mode rt_rw (lihat ValidateMappableStructure).
+        if (mappedCheckbox) {
+            mappedCheckbox.disabled = !isRtRw;
+            if (!isRtRw) mappedCheckbox.checked = false;
         }
         renderPreview();
     }

@@ -108,4 +108,16 @@ class StatisticTemplate extends Model
 
         return $leaves->max(fn (StatisticTemplateHeader $leaf) => $leaf->depth()) + 1;
     }
+
+    /**
+     * Template yang layak tampil di Dashboard Peta Publik.
+     * row_source ikut difilter sebagai pertahanan kedua, untuk template manual lama
+     * yang sempat is_mapped=true sebelum aturan "hanya rt_rw" diberlakukan.
+     */
+    public function scopeMappable($query)
+    {
+        return $query->where('is_mapped', true)
+            ->where('is_active', true)
+            ->where('row_source', 'rt_rw');
+    }
 }

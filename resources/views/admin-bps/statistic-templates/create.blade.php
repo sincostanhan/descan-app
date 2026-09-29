@@ -75,7 +75,8 @@
                             <x-lucide-plus class="w-4 h-4" /> Tambah Baris Utama
                         </button>
                     </div>
-                    <p class="text-sm text-base-content/60 mb-4">Klik "Sub" untuk header bertingkat. Isi "Nilai RT" hanya jika baris ini mewakili RT tertentu.</p>
+                    {{-- <p class="text-sm text-base-content/60 mb-4">Klik "Sub" untuk header bertingkat. Isi "Nilai RT" hanya jika baris ini mewakili RT tertentu.</p> --}}
+                    <p class="text-sm text-base-content/60 mb-4">Klik "Sub" untuk header bertingkat.</p>
                     <div id="row-headers-container" class="space-y-2"></div>
                     <x-forms.error name="row_headers" />
                 </div>
