@@ -113,7 +113,8 @@
                 .then(res => res.json())
                 .then(options => {
                     if (options.length === 0) {
-                        resetSelect(wilayahSelect, '-- Belum ada wilayah dengan peta --');
+                        // resetSelect(wilayahSelect, '-- Belum ada wilayah dengan peta --');
+                        resetSelect(wilayahSelect, '-- Peta wilayah RT/RW belum tersedia --');
                         return;
                     }
                     wilayahSelect.innerHTML = '<option value="">-- Pilih Wilayah --</option>';
