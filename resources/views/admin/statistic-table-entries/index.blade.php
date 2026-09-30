@@ -297,16 +297,35 @@
                     const countBadge = trigger.querySelector('.unread-count');
                     if (!countBadge) return; // sudah tidak ada notif baru, tidak perlu request apa pun
 
-                    fetch(`{{ url('/admin/statistik/templates') }}/${templateId}/logs/read`, {
+                    // fetch(`{{ url('/admin/statistik/templates') }}/${templateId}/logs/read`, {
+                    //     method: 'POST',
+                    //     headers: {
+                    //         'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                    //         'Accept': 'application/json',
+                    //     },
+                    // }).catch(() => {});
+
+                    // countBadge.remove();
+                    // trigger.querySelector('.bell-icon')?.classList.remove('text-error');
+                    
+                    // Pakai named route agar prefix kelurahan (/{subdomain}) otomatis terisi
+                    // dari URL::defaults() di InitializeTenancy — tidak lagi hardcode path.
+                    const readUrl = @json(route('admin.statistic-table-entries.logs.read', ['statistic_template' => '__ID__']))
+                        .replace('__ID__', templateId);
+
+                    fetch(readUrl, {
                         method: 'POST',
                         headers: {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}',
                             'Accept': 'application/json',
                         },
-                    }).catch(() => {});
-
-                    countBadge.remove();
-                    trigger.querySelector('.bell-icon')?.classList.remove('text-error');
+                    }).then(function (response) {
+                        // Penanda hanya dihapus jika server benar-benar mencatat status terbaca,
+                        // supaya kegagalan seperti 404 ini tidak lagi tersembunyi.
+                        if (!response.ok) return;
+                        countBadge.remove();
+                        trigger.querySelector('.bell-icon')?.classList.remove('text-error');
+                    }).catch(function () {});
                 });
             });
         });
