@@ -180,11 +180,16 @@ class PublicStatisticController extends Controller
 
         if ($format === 'json') {
             return response()->streamDownload(function () use ($title, $statistic, $columns, $rows) {
+                // Urutan disamakan dengan Excel/CSV: judul → data → keterangan → sumber.
+                // description berupa array per baris (sama dengan pemecahan di halaman publik & Excel),
+                // null jika kosong — konsisten dengan source yang juga null jika tidak diisi.
                 echo json_encode([
                     'title' => $title,
-                    'source' => $statistic->source,
+                    // 'source' => $statistic->source,
                     'columns' => $columns,
                     'data' => $rows,
+                    'description' => $statistic->description_lines ?: null,
+                    'source' => $statistic->source,
                 ], JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE);
             }, "{$filename}.json", ['Content-Type' => 'application/json']);
         }
