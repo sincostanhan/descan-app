@@ -27,15 +27,31 @@
                         @php $existingValues = $statistic->values->pluck('value', 'statistic_template_cell_id')->all(); @endphp
                         <x-statistic-table-readonly :template="$statistic->template" :values="$existingValues" :hide-empty-columns="true" />
 
-                        @if($statistic->source)
+                        {{-- @if($statistic->source)
                             <p class="mt-4 text-base-content text-sm">
                                 <strong>Sumber Data:</strong><br>{{ $statistic->source }}
                             </p>
-                        @endif
+                        @endif --}}
 
-                        @if($statistic->description)
+                        {{-- @if($statistic->description)
                             <p class="mt-2 text-base-content text-sm leading-relaxed">
                                 <strong>Keterangan:</strong><br>{{ $statistic->description }}
+                            </p>
+                        @endif --}}
+                        {{-- Tiap baris keterangan (dipisah Enter saat input) tampil di baris sendiri --}}
+                        @if(count($statistic->description_lines))
+                            {{-- <div class="mt-2 text-base-content text-sm leading-relaxed"> --}}
+                                <div class="mt-4 text-base-content text-sm leading-relaxed">
+                                <strong>Keterangan:</strong>
+                                @foreach($statistic->description_lines as $line)
+                                    <p>{{ $line }}</p>
+                                @endforeach
+                            </div>
+                        @endif
+
+                        @if($statistic->source)
+                            <p class="mt-2 text-base-content text-sm">
+                                <strong>Sumber Data:</strong><br>{{ $statistic->source }}
                             </p>
                         @endif
                     </div>

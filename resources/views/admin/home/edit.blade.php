@@ -165,9 +165,9 @@
             <div class="tab-content border-base-300 bg-base-50 p-6">
                 {{-- <form action="{{ route('admin.home.update', $home->id ?? 1) }}" method="POST"> --}}
                 {{-- Route home.update (POST /{subdomain}/admin/beranda) tidak punya parameter {home}.
-+                     Argumen posisional akan menimpa {subdomain}, sehingga URL menjadi /{id}/admin/beranda.
-+                     Method mengikuti route (POST), sama seperti history.update. --}}
-+                <form action="{{ route('admin.home.update') }}" method="POST">
+                     Argumen posisional akan menimpa {subdomain}, sehingga URL menjadi /{id}/admin/beranda.
+                     Method mengikuti route (POST), sama seperti history.update. --}}
+                <form action="{{ route('admin.home.update') }}" method="POST">
                     @csrf
                     {{-- @method('PATCH') --}}
 

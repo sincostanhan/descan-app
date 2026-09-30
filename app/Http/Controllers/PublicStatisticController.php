@@ -197,7 +197,14 @@ class PublicStatisticController extends Controller
         //     $exportFormat
         // );
         return Excel::download(
-            new StatisticTableExport($columns, $rows, $title, $statistic->source),
+            // new StatisticTableExport($columns, $rows, $title, $statistic->source),
+            new StatisticTableExport(
+                $columns,
+                $rows,
+                $title,
+                $statistic->source,
+                descriptionLines: $statistic->description_lines,
+            ),
             "{$filename}.{$format}",
             $exportFormat
         );

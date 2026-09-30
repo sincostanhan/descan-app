@@ -19,6 +19,8 @@ class StatisticTableExport implements FromArray, WithTitle, WithStyles, WithEven
     protected int $headerRow = 1;
     protected int $lastDataRow = 1;
     protected ?int $sourceRow = null;
+    /** Nomor baris sheet yang berisi keterangan (untuk styling & merge). */
+    protected array $descriptionRows = [];
 
     public function __construct(
         protected array $columns,
@@ -27,6 +29,8 @@ class StatisticTableExport implements FromArray, WithTitle, WithStyles, WithEven
         protected ?string $source = null,
         // false untuk CSV: biar tetap tabular murni (header + data saja), aman untuk di-import ulang
         protected bool $richLayout = true,
+        // Keterangan per baris (dari StatisticTableEntry::description_lines)
+        protected array $descriptionLines = [],
     ) {}
 
     public function title(): string
@@ -85,9 +89,45 @@ class StatisticTableExport implements FromArray, WithTitle, WithStyles, WithEven
         }
         $this->lastDataRow = count($grid);
 
-        // Baris sumber data (di bawah tabel)
+        // // Baris sumber data (di bawah tabel)
+        // if ($this->richLayout && !empty($this->source)) {
+        //     $grid[] = ['']; // pemisah kosong — sama, pakai [''] bukan []
+        //     $this->sourceRow = count($grid) + 1;
+        //     $grid[] = ["Sumber Data: {$this->source}"];
+        // }
+
+        // // Baris keterangan: 1 baris → inline "Keterangan: ...",
+        // // >1 baris → judul "Keterangan:" lalu tiap baris di baris sheet sendiri
+        // if ($this->richLayout && !empty($this->descriptionLines)) {
+        //     if ($this->sourceRow === null) {
+        //         $grid[] = ['']; // pemisah kosong hanya jika belum ada baris sumber
+        //     }
+
+        //     if (count($this->descriptionLines) === 1) {
+
+        // Baris keterangan (di bawah tabel): 1 baris → inline "Keterangan: ...",
+        // >1 baris → judul "Keterangan:" lalu tiap baris di baris sheet sendiri
+        if ($this->richLayout && !empty($this->descriptionLines)) {
+            $grid[] = ['']; // pemisah kosong antara tabel dan keterangan
+
+            if (count($this->descriptionLines) === 1) {
+                $this->descriptionRows[] = count($grid) + 1;
+                $grid[] = ["Keterangan: {$this->descriptionLines[0]}"];
+            } else {
+                $this->descriptionRows[] = count($grid) + 1;
+                $grid[] = ['Keterangan:'];
+
+                foreach ($this->descriptionLines as $line) {
+                    $this->descriptionRows[] = count($grid) + 1;
+                    $grid[] = [$line];
+                }
+            }
+        }
+
+        // Baris sumber data (setelah keterangan). Pemisah kosong di sini sekaligus
+        // menjadi pemisah antara keterangan dan sumber jika keduanya ada.
         if ($this->richLayout && !empty($this->source)) {
-            $grid[] = ['']; // pemisah kosong — sama, pakai [''] bukan []
+            $grid[] = ['']; // pemisah kosong — pakai [''] bukan [], agar baris tetap tertulis fisik
             $this->sourceRow = count($grid) + 1;
             $grid[] = ["Sumber Data: {$this->source}"];
         }
@@ -135,6 +175,12 @@ class StatisticTableExport implements FromArray, WithTitle, WithStyles, WithEven
             ]);
         }
 
+        foreach ($this->descriptionRows as $row) {
+            $sheet->getStyle("A{$row}")->applyFromArray([
+                'font' => ['size' => 10],
+            ]);
+        }
+
         return [];
     }
 
@@ -155,6 +201,10 @@ class StatisticTableExport implements FromArray, WithTitle, WithStyles, WithEven
 
                 if ($this->sourceRow) {
                     $event->sheet->mergeCells("A{$this->sourceRow}:{$lastColumn}{$this->sourceRow}");
+                }
+
+                foreach ($this->descriptionRows as $row) {
+                    $event->sheet->mergeCells("A{$row}:{$lastColumn}{$row}");
                 }
             },
         ];

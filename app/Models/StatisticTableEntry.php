@@ -95,6 +95,20 @@ class StatisticTableEntry extends Model
     }
 
     /**
+     * Keterangan dipecah per baris (Enter), baris kosong dibuang.
+     * Dipakai halaman publik (tiap baris tampil terpisah) dan export Excel
+     * (tiap baris keterangan = 1 baris sheet), supaya aturan pemecahannya satu sumber.
+     */
+    public function getDescriptionLinesAttribute(): array
+    {
+        return collect(preg_split('/\r\n|\r|\n/', (string) $this->description))
+            ->map(fn ($line) => trim($line))
+            ->filter(fn ($line) => $line !== '')
+            ->values()
+            ->all();
+    }
+
+    /**
      * PENTING: Accessor ini membentuk ulang data ternormalisasi menjadi bentuk lama
      * ['Nama Kolom' => ...] agar resources/views/statistic/show.blade.php dan seluruh
      * kode Chart.js (yang loop $statistic->columns / $row[$col]) TIDAK PERLU diubah sama sekali.
