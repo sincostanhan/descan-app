@@ -116,7 +116,13 @@
             @if($textColumns->isEmpty())
                 <p class="text-sm text-base-content/40 italic">Tabel ini tidak punya kolom bertipe teks.</p>
             @else
-                @php $savedCategoryColumns = collect($chart?->category_columns ?? [])->keyBy('column'); @endphp
+                {{-- @php $savedCategoryColumns = collect($chart?->category_columns ?? [])->keyBy('column'); @endphp --}}
+                @php
+                    // Toleran data lama berformat ["Kolom"] supaya kotak centang tetap tercentang di form Ubah.
+                    $savedCategoryColumns = collect($chart?->category_columns ?? [])
+                        ->map(fn ($c) => is_string($c) ? ['column' => $c, 'chart_type' => 'pie'] : $c)
+                        ->keyBy('column');
+                @endphp
                 <div class="grid grid-cols-1 gap-3 border p-4 rounded-lg bg-base-200/30">
                     @foreach($textColumns as $col)
                         @php $saved = $savedCategoryColumns->get($col); @endphp

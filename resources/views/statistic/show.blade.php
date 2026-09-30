@@ -276,7 +276,11 @@
 
                 // ===== BARU: RENDERING LOGIC (kategori/teks) — jalan independen dari grafik numerik =====
                 (chartConfig.category_columns || []).forEach((cat) => {
-                    renderCategoryChart(cat.column, cat.chart_type);
+                    // renderCategoryChart(cat.column, cat.chart_type);
+                    // Toleran data lama berformat ["Kolom"] yang tersimpan sebelum perbaikan CreateStatisticChart.
+                    const column = typeof cat === 'string' ? cat : cat.column;
+                    const catType = typeof cat === 'string' ? 'pie' : cat.chart_type;
+                    renderCategoryChart(column, catType);
                 });
             });
         </script>
