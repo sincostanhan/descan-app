@@ -7,7 +7,8 @@
             <div class="text-center mb-2">
                 {{-- <span class="text gradient font-bold tracking-wide block">Gen-Descan 695</span> --}}
                 {{-- <span class="text gradient font-bold tracking-wide block">Gen-Descan 695</span> --}}
-                <span class="text gradient font-bold tracking-wide block">Gen-Descan 7472</span>
+                {{-- <span class="text gradient font-bold tracking-wide block">Gen-Descan 7472</span> --}}
+                <span class="text gradient font-bold tracking-wide block">SI-Descan</span>
             </div>
 
             {{-- <h2 class="card-title text-2xl font-bold mb-4 justify-center">Login Sistem</h2> --}}
