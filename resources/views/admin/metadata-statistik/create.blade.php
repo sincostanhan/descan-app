@@ -31,7 +31,7 @@
                             id="tahun"
                             name="tahun"
                             value="{{ old('tahun', now()->year) }}"
-                            min="1900"
+                            min="2021"
                             max="{{ now()->year + 1 }}"
                             required
                             placeholder="Contoh: 2025"

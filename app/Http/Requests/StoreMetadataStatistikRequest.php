@@ -15,7 +15,7 @@ class StoreMetadataStatistikRequest extends FormRequest
     {
         return [
             'title' => ['required', 'string', 'max:255'],
-            'tahun' => ['required', 'integer', 'digits:4', 'between:1900,' . (now()->year + 1)],
+            'tahun' => ['required', 'integer', 'digits:4', 'between:2021,' . (now()->year + 1)],
             'file' => ['required', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:5120'], // PDF atau Foto
             'cover_base64' => ['nullable', 'string'],
         ];

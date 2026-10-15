@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 
 class SettingController extends Controller
 {
@@ -17,15 +18,33 @@ class SettingController extends Controller
         // kosong dikirim ke view, baru benar-benar disimpan saat form di-submit.
         $setting = Setting::first() ?? new Setting();
         $checklist = $checklistAction->handle();
+        $regions = config('kelurahan_kecamatan');
 
-        return view('admin.setting.edit', compact('setting', 'checklist'));
+        // return view('admin.setting.edit', compact('setting', 'checklist'));
+        return view('admin.setting.edit', compact('setting', 'checklist', 'regions'));
     }
 
     public function update(Request $request)
     {
+        // $request->validate([
+        //     'village_name' => 'required|string|max:255',
+        //     'kecamatan'    => 'nullable|string|max:255',
+        //     'village_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
+        //     'theme_name'   => 'required|string',
+        // ]);
+        $regions = config('kelurahan_kecamatan');
+
         $request->validate([
-            'village_name' => 'required|string|max:255',
-            'kecamatan'    => 'nullable|string|max:255',
+            'kecamatan'    => ['required', 'string', Rule::in(array_keys($regions))],
+            'village_name' => [
+                'required', 'string', 'max:255',
+                function ($attribute, $value, $fail) use ($request, $regions) {
+                    $daftarKelurahan = $regions[$request->kecamatan] ?? [];
+                    if (!in_array($value, $daftarKelurahan, true)) {
+                        $fail('Kelurahan yang dipilih tidak sesuai dengan Kecamatan yang dipilih.');
+                    }
+                },
+            ],
             'village_logo' => 'nullable|image|mimes:jpeg,png,jpg|max:2048',
             'theme_name'   => 'required|string',
         ]);

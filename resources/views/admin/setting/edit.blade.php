@@ -20,7 +20,7 @@
                     
                     <fieldset class="fieldset 
                     w-full mb-6">
-                        <legend class="fieldset-legend">Nama Kelurahan</legend>
+                        {{-- <legend class="fieldset-legend">Nama Kelurahan</legend>
                         <input 
                             type="text" 
                             id="village_name" 
@@ -44,6 +44,30 @@
                             placeholder="Masukkan nama kecamatan ..." />
                         <div class="fieldset-label mt-1 text-sm text-base-content/60">Ditampilkan pada popup Dashboard Peta Publik.</div>
                         <x-forms.error name="kecamatan" />
+                    </fieldset> --}}
+                    <fieldset class="fieldset 
+                    w-full mb-6">
+                        <legend class="fieldset-legend">Kecamatan</legend>
+                        <select id="kecamatan" name="kecamatan" class="select w-full" required>
+                            <option value="">-- Pilih Kecamatan --</option>
+                            @foreach(array_keys($regions) as $kecamatanOption)
+                                <option value="{{ $kecamatanOption }}"
+                                    {{ old('kecamatan', $setting->kecamatan) == $kecamatanOption ? 'selected' : '' }}>
+                                    Kecamatan {{ $kecamatanOption }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <div class="fieldset-label mt-1 text-sm text-base-content/60">Ditampilkan pada popup Dashboard Peta Publik.</div>
+                        <x-forms.error name="kecamatan" />
+                    </fieldset>
+
+                    <fieldset class="fieldset 
+                    w-full mb-6">
+                        <legend class="fieldset-legend">Nama Kelurahan</legend>
+                        <select id="village_name" name="village_name" class="select w-full" required>
+                            <option value="">-- Pilih Kecamatan terlebih dahulu --</option>
+                        </select>
+                        <x-forms.error name="village_name" />
                     </fieldset>
 
                     <fieldset class="fieldset 
@@ -196,5 +220,40 @@
             </div> --}}
             </x-section-card>
         </form>
+        @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const REGIONS = @json($regions);
+                const selectedKelurahan = @json(old('village_name', $setting->village_name));
+
+                const kecamatanSelect = document.getElementById('kecamatan');
+                const kelurahanSelect = document.getElementById('village_name');
+
+                function populateKelurahan(kecamatan, preselect) {
+                    const daftar = REGIONS[kecamatan] ?? [];
+                    kelurahanSelect.innerHTML = '';
+
+                    if (daftar.length === 0) {
+                        kelurahanSelect.appendChild(new Option('-- Pilih Kecamatan terlebih dahulu --', ''));
+                        return;
+                    }
+
+                    kelurahanSelect.appendChild(new Option('-- Pilih Kelurahan --', ''));
+                    daftar.forEach(function (nama) {
+                        kelurahanSelect.appendChild(new Option(nama, nama, false, nama === preselect));
+                    });
+                }
+
+                kecamatanSelect.addEventListener('change', function () {
+                    populateKelurahan(this.value, null);
+                });
+
+                // Isi ulang saat halaman dimuat (mode edit, atau form reload setelah validation error)
+                if (kecamatanSelect.value) {
+                    populateKelurahan(kecamatanSelect.value, selectedKelurahan);
+                }
+            });
+        </script>
+        @endpush
     </div>
 </x-layout-admin>

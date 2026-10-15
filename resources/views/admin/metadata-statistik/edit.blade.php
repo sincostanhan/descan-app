@@ -30,7 +30,7 @@
                         <input type="number"
                             name="tahun"
                             value="{{ old('tahun', $metadataStatistik->tahun) }}"
-                            min="1900"
+                            min="2021"
                             max="{{ now()->year + 1 }}"
                             required
                             placeholder="Contoh: 2025"
